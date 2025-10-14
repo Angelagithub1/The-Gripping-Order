@@ -23,11 +23,11 @@
 
 [The Gripping Order	0]
 
-[**Índice	1**]
+[**Índice	1**](#índice)
 
-[**Introducción	3**]
+[**Introducción	3**](#introducción)
 
-[Concepto del juego	3]
+[Concepto del juego	3](#concepto-del-juego)
 
 [Características principales	3](#características-principales)
 
