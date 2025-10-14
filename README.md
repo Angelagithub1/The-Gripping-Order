@@ -131,17 +131,17 @@ Por un lado, una vez que a la garra le aparezca la pieza, debe intentar soltarla
 
 Por otro lado, el bicho tendrá libertad de movimiento dentro de los límites de la pantalla, ya sea moviéndose de un lado a otro o saltando sobre las piezas que le lancen encima. Además, podrá obtener Power Ups pasando sobre estos cuando aparezcan en la pantalla. 
 
-## **Género** {#género}
+## **Género** 
 
 El género del juego se clasifica como plataforma, survival y competitivo.
 
-## **Propósito y Público objetivo** {#propósito-y-público-objetivo}
+## **Propósito y Público objetivo** 
 
 El propósito principal del juego es ofrecer una experiencia divertida, accesible y competitiva para dos jugadores, a través de mecánicas simples a contrarreloj, lo que añade un toque de tensión a la experiencia.
 
 El juego está pensado para todos los públicos, con mecánicas sencillas de entender y fácil jugabilidad, procurando dar un reto pero sin llegar a ser frustrante. 
 
-## **Estilo visual** {#estilo-visual}
+## **Estilo visual** 
 
 El estilo visual del juego será pixel art con colores saturados y animaciones dinámicas para transmitir una sensación de viveza y emoción a los jugadores. 
 
@@ -149,15 +149,15 @@ La paleta de colores cambiará según se avance en los niveles, y los espacios e
 
 Se han tomado como referencia las máquinas  de los recreativos en las que se maneja un gancho para recoger objetos, pero la idea se invirtió para que este los lanzara y el personaje los esquivara.
 
-## **Alcance** {#alcance}
+## **Alcance** 
 
 Está pensado para ser un único juego para PC sin una posible segunda parte por su sencillez. Sin embargo, no se descarta la posibilidad de realizar expansiones como diferentes mapas o hacerlo accesible para otras plataformas.
 
-## **Plataforma** {#plataforma}
+## **Plataforma** 
 
 Crush Factory será desarrollado para ordenador permitiendo jugar con personas desde cualquier lugar.
 
-## **Categoría** {#categoría}
+## **Categoría** 
 
 Análisis DAFO:
 
@@ -166,11 +166,11 @@ Análisis DAFO:
 | Negativos  | Debilidades: Limitado a multijugador local Mecánicas repetitivas a largo plazo Curva de aprendizaje limitada Poca personalización de personajes | Amenazas: Competencia en el mercado Falta de recursos para marketing Desinterés de los jugadores por juegos locales |
 | Positivos | Fortalezas: Dinámica Competitiva Variedad de jugabilidad dependiendo del rol elegido Juego de duración corta Power Ups y elementos interactivos | Oportunidades: Multijugador online Ampliación de mapas Integración con redes sociales |
 
-## **Licencia** {#licencia}
+## **Licencia** 
 
 Crush Factory es un juego en su totalidad original, sin estar basado en ninguna otra franquicia o adaptación de otro tipo de producto multimedia. Con planes a futuro de contenidos adicionales para esta entrega. 
 
-# **Escenario** {#escenario}
+# **Escenario** 
 
 ## **Objetivo** {#objetivo}
 
@@ -188,96 +188,96 @@ Crush Factory es un juego en su totalidad original, sin estar basado en ninguna 
 
 ## **Power Ups** {#power-ups}
 
-# **Estados e interfaces** {#estados-e-interfaces}
+# **Estados e interfaces** 
 
-## **Diagrama de estados** {#diagrama-de-estados}
+## **Diagrama de estados** 
 
 ![][image1]
 
-## **Interfaces** {#interfaces}
+## **Interfaces** 
 
-### Pantalla de inicio {#pantalla-de-inicio}
+### Pantalla de inicio 
 
 ![][image2]
 
-### Tutorial {#tutorial}
+### Tutorial 
 
 ![][image3]
 
-### Créditos {#créditos}
+### Créditos 
 
 ![][image4]
 
-### Elección de jugador {#elección-de-jugador}
+### Elección de jugador 
 
 ![][image5]
 
-### Pantalla de juego {#pantalla-de-juego}
+### Pantalla de juego 
 
 ![][image6]
 
-### Pantalla de victoria {#pantalla-de-victoria}
+### Pantalla de victoria 
 
-### Pantalla de derrota {#pantalla-de-derrota}
+### Pantalla de derrota 
 
-### Menú de pausa {#menú-de-pausa}
+### Menú de pausa 
 
 ![][image7]
 
-# **Mecánicas \- Diagrama de Flujo** {#mecánicas---diagrama-de-flujo}
+# **Mecánicas \- Diagrama de Flujo** 
 
-## **Jugabilidad y controles** {#jugabilidad-y-controles}
+## **Jugabilidad y controles** 
 
 Al inicio, los jugadores tendrán que elegir entre los dos personajes del juego, y cada uno poseerá diferentes mecánicas y objetivos:
 
 * Bicho: se mueve con las teclas a (moverse a la izquierda), d (moverse a la derecha), y la barra espaciadora para el salto. Su objetivo es sobrevivir durante un tiempo limitado indicado por un cronómetro, mientras esquiva las diferentes piezas que le tira el jugador. Durante la partida, el jugador podrá coger diferentes Power Ups que le darán distintos poderes durante 10 segundos.  
 * Gancho: se mueve con la flecha ← (moverse a la izquierda), → (moverse a la derecha), y el enter para lanzarla. Su objetivo es aplastar al jugador antes de que se acabe el tiempo.
 
-  ## **Flujo del Juego** {#flujo-del-juego}
+  ## **Flujo del Juego** 
 
 AQUÍ VA EL DIAGRAMA DE FLUJO DEL AVERNO
 
-## **Mecánicas y Físicas** {#mecánicas-y-físicas}
+## **Mecánicas y Físicas** 
 
-### Mecánicas de movimiento {#mecánicas-de-movimiento}
+### Mecánicas de movimiento 
 
 Tanto el bicho como el gancho se mueven exclusivamente de izquierda a derecha, con la excepción de que el bicho puede saltar también para llegar a distintas plataformas.
 
-### Mecánica de lanzamiento de piezas {#mecánica-de-lanzamiento-de-piezas}
+### Mecánica de lanzamiento de piezas 
 
 Es una mecánica exclusiva del gancho que consiste en lanzar las piezas presionando el enter para intentar aplastar al jugador y ganar la partida.
 
-### Mecánica de recolección de Power Ups {#mecánica-de-recolección-de-power-ups}
+### Mecánica de recolección de Power Ups 
 
 Es una mecánica exclusiva del bicho que consiste en colisionar con distintos Power Ups que aparecerán de manera aleatoria por la pantalla de juego para poder obtener poderes durante un limitado período de tiempo. 
 
-### Mecánica de Tiempo {#mecánica-de-tiempo}
+### Mecánica de Tiempo 
 
 Cada partida dura 1 minuto y 30 segundos, y es una de las claves de la supervivencia. Cuando finalice ese tiempo, se mostrará la partida de victoria para el bicho, dado que si antes el gancho consigue aplastar al bicho, el tiempo no llegará a terminar.
 
-### Mecánicas de supervivencia {#mecánicas-de-supervivencia}
+### Mecánicas de supervivencia 
 
 Es una mecánica exclusiva del bicho consistente en sobrevivir el tiempo indicado esquivando las piezas que va tirando el gancho. Si no logra esquivarlas, perderá la partida.
 
-### Gravedad {#gravedad}
+### Gravedad 
 
 Tanto las piezas que tira el gancho como el bicho sufren de gravedad, por lo que caen hacia abajo cuando están en el aire, ya sea porque sean soltadas por el gancho o porque el jugador haya decidido saltar con el bicho.
 
 # **Narrativa** {#narrativa}
 
-# **Sonido** {#sonido}
+# **Sonido** 
 
 El sonido en Crush Factory juega un papel fundamental para mayor inmersión, dando una experiencia más tensa y dinámica. El uso de música ambiental, efectos sonoros y sonidos puntuales están diseñados para intensificar la competitividad de la partida y destacando el paso del tiempo como una constante amenaza. 
 
 La música de fondo mostrará una progresión que aumentará en intensidad a medida que el tiempo avance. Durante los primeros momentos, la música será sutil y relajada pero conforme el reloj se acerque al final la intensidad incrementará con melodías más rápidas y tensas creando una atmósfera de urgencia. 
 
-# **Comunicación** {#comunicación}
+# **Comunicación** 
 
 Se buscará construir una base de jugadores comprometidos mediante el uso de redes sociales. Se crearán perfiles oficiales del juego en plataformas como Twitter e Instagram donde se irán publicando contenidos adicionales o arte oficial del juego. 
 
 Además de realizar encuestas o preguntas para que el público objetivo pueda interactuar con los desarrolladores y que estos puedan escuchar sus opiniones y feedback para mejorar el juego. Buscando hacer sentir que la opinión del jugador es importante para el equipo de desarrollo. 
 
-# **Bibliografía** {#bibliografía}
+# **Bibliografía** 
 
 [image1]: <data:image/png;base64,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>
 
