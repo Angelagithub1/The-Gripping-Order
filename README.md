@@ -2,7 +2,7 @@
 
 # **Crush Factory**
 
-## **The Gripping Order** {#the-gripping-order}
+## **The Gripping Order** 
 
 **Grupo 3 Nombre de equipo:**
 
@@ -21,7 +21,7 @@
 
 # **Índice** {#índice}
 
-[The Gripping Order	0](#the-gripping-order)
+[The Gripping Order	0]
 
 [**Índice	1**](#índice)
 
