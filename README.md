@@ -19,15 +19,15 @@
   * [**a.alcalad.2022@alumnos.urjc.es**](mailto:a.alcalad.2022@alumnos.urjc.es)  
   * [https://github.com/AlejandraAD](https://github.com/AlejandraAD)
 
-# **Índice** {#índice}
+# **Índice** 
 
 [The Gripping Order	0]
 
-[**Índice	1**](#índice)
+[**Índice	1**]
 
-[**Introducción	3**](#introducción)
+[**Introducción	3**]
 
-[Concepto del juego	3](#concepto-del-juego)
+[Concepto del juego	3]
 
 [Características principales	3](#características-principales)
 
