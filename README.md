@@ -115,15 +115,15 @@
 
 # 
 
-# **Introducción** {#introducción}
+# **Introducción** 
 
 Este documento acerca del videojuego Crush Factory contiene todas las características y especificaciones del videojuego diseñado para PC.
 
-## **Concepto del juego** {#concepto-del-juego}
+## **Concepto del juego** 
 
 Crush Factory es un videojuego competitivo para dos jugadores en el que cada uno asume el rol de gancho o de bicho. El objetivo del gancho es aplastar al bicho tirando piezas sobre él, mientras que el bicho deberá sobrevivir hasta que se acabe el tiempo.                                                                                                    
 
-## **Características principales** {#características-principales}
+## **Características principales** 
 
 Dentro de Crush Factory, al gancho le irán apareciendo diferentes piezas para dejarlas caer sobre el bicho, mientras que este deberá esquivar y saltar estas piezas para sobrevivir hasta que finalice el tiempo. Además, el bicho tendrá a su disposición diversos Power Ups que le ayudarán a sobrevivir. Una vez iniciada la partida, el tiempo comenzará a correr de forma constante hasta que el bicho muera o este finalice. 
 
