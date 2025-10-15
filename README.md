@@ -221,7 +221,7 @@ Los Power Ups serán llamas de diferentes colores, y son exclusivos para el juga
 
 ## **Diagrama de estados** 
 
-![][image2]
+![](./Assets/DiagramaDeInterfaces.jpg)
 
 Este diagrama irá creciendo con el tiempo según se añadan nuevas pantallas en las próximas entregas, como un futuro chat y la selección de jugar en local u online.
 
@@ -231,31 +231,30 @@ Actualmente solo se tiene el diseño de cómo serán las interfaces, aunque su e
 
 ### Pantalla de inicio 
 
-![][image3]
+![](./Assets/PantallaInicio.jpg)
 
 ### Tutorial 
 
-![][image4]
+![](./Assets/Tutorial.jpg)
 
 ### Créditos 
 
-![][image5]
-
+![](./Assets/Creditos.jpg)
 ### Elección de jugador 
 
-![][image6]
+![](./Assets/EleccionDeJugador.jpg)
 
 ### Pantalla de juego 
 
-![][image7]
+![](./Assets/PantallaDeJuego.jpg)
 
 ### Pantalla de victoria/derrota 
 
-![][image8] 
+![](./Assets/VictoriaDerrota.jpg)
 
 ### Menú de pausa
 
-![][image9]
+![](./Assets/MenuDePausa.jpg)
 
 # **Mecánicas \- Diagrama de Flujo** 
 
@@ -268,7 +267,7 @@ Al inicio, los jugadores tendrán que elegir entre los dos personajes del juego,
 
   ## **Flujo del Juego** 
 
-AQUÍ VA EL DIAGRAMA DE FLUJO DEL AVERNO
+![](./Assets/DiagramaDeFlujo.jpg)
 
 ## **Mecánicas y Físicas** 
 
@@ -312,13 +311,4 @@ Además de realizar encuestas o preguntas para que el público objetivo pueda in
 
 # **Bibliografía** 
 
-[image1]: (./Assets/logo.png)
-[image2]: (./Assets/DiagramaDeInterfaces.jpg)
-[image3]: (./Assets/PantallaInicio.jpg)
-[image4]: (./Assets/Tutorial.jpg)
-[image5]: (./Assets/Creditos.jpg)
-[image6]: (./Assets/EleccionDeJugador.jpg)
-[image7]: (./Assets/PantallaDeJuego.jpg)
-[image8]: (./Assets/VictoriaDerrota.jpg)
-[image9]: (./Assets/MenuDePausa.jpg)
-[image9]: (./Assets/DiagramaDeFlujo.jpg)
+ 
