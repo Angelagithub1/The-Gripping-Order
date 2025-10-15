@@ -190,7 +190,7 @@ El escenario toma como referencias las máquinas arkade de los años 80 y 90, co
 
 ## **Arte**
 
-![][image1]
+![][(./Assets/logo.png)]
 
 # **Personajes** 
 
@@ -229,7 +229,7 @@ Este diagrama irá creciendo con el tiempo según se añadan nuevas pantallas en
 
 Actualmente solo se tiene el diseño de cómo serán las interfaces, aunque su estilo combinará lo retro con una temática oscura, unificando los dos conceptos principales del juego.
 
-### Pantalla de inicio {#pantalla-de-inicio}
+### Pantalla de inicio 
 
 ![][image3]
 
@@ -296,7 +296,7 @@ Es una mecánica exclusiva del bicho consistente en sobrevivir el tiempo indicad
 
 Tanto las piezas que tira el gancho como el bicho sufren de gravedad, por lo que caen hacia abajo cuando están en el aire, ya sea porque sean soltadas por el gancho o porque el jugador haya decidido saltar con el bicho.
 
-# **Narrativa** {#narrativa}
+# **Narrativa** 
 
 # **Sonido** 
 
