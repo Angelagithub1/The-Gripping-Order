@@ -200,7 +200,7 @@ Es uno de los personajes que puede llevar un jugador. Consiste en una garra insp
 
 ## **Bicho** 
 
-Es el otro personaje que puede llevar un jugador. Consiste en 
+Es el otro personaje que puede llevar un jugador. Consiste en una pequeña criatura bípeda de colores vivos y compuesta por fragmentos de sprites corrompidos. Dando así la apariencia de un glitch viviente.
 
 # **Items** 
 
@@ -296,6 +296,10 @@ Es una mecánica exclusiva del bicho consistente en sobrevivir el tiempo indicad
 Tanto las piezas que tira el gancho como el bicho sufren de gravedad, por lo que caen hacia abajo cuando están en el aire, ya sea porque sean soltadas por el gancho o porque el jugador haya decidido saltar con el bicho.
 
 # **Narrativa** 
+
+Ania baja al sótano de su abuelo, un obsesionado de los videojuegos que guarda un montón de máquinas relacionadas con estos, desde consolas actuales hasta máquinas arcade. Una de estas parece estar todavía encendida, así que se acerca a ver que juego contiene, pero en cuanto pone la mano encima de la palanca, la máquina la absorbe y se ve transformada en un bicho. 
+Al mirar hacia arriba, ve un gancho oscilando sobre su cabeza. Lo que no sabe es que ese gancho encierra el alma de uno de sus antepasados que al igual que ella había quedado atrapado en aquella máquina  hace muchos años y había muerto allí, condenado a permanecer como parte del mecanismo. 
+La única forma de que su antepasado pueda descansar en paz es que otro tome su lugar. Sin dudarlo, lanza una pieza sobre Ania, con intención de matarla y liberar su propia alma. Pero Ania reacciona a tiempo y salta hacia un lado para esquivarla, dando inicio así al juego.
 
 # **Sonido** 
 
