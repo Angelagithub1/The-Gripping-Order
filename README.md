@@ -1,4 +1,4 @@
-# `Documento del diseño del juego`
+# `Documento del Diseño del Juego (GDD)`
 
 # **Crush Factory**
 
