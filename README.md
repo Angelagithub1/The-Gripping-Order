@@ -190,8 +190,6 @@ El escenario toma como referencias las máquinas arkade de los años 80 y 90, co
 
 ## **Arte**
 
-![](./Assets/logo.png)
-
 # **Personajes** 
 
 ## **Gancho** 
