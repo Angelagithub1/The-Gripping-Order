@@ -180,15 +180,38 @@ Análisis DAFO:
 
 ## **Licencia** 
 
-Crush Factory es un juego en su totalidad original, sin estar basado en ninguna otra franquicia o adaptación de otro tipo de producto multimedia. Con planes a futuro de contenidos adicionales para esta entrega. 
+Crush Factory es un juego en su totalidad original, desarrollado desde cero y sin estar basado en ninguna otra franquicia, marca o adaptación de otro tipo de producto multimedia preexistente. Su diseño, personajes, mecánicas y estética son fruto de una creación única y autónoma, lo que garantiza una identidad propia y distintiva en el mercado.
+Además se contemplan planes a futuro  para el lanzamiento de contenidos adicionales que expandan y enriquezcan esta entrega, manteniendo la originalidad y coherencia del universo creado. 
+Esta independencia creativa permite al proyecto tener libertad para evolucionar según las necesidades y el feedback de la comunidad, asegurando un desarrollo alineado con la visión original del juego y las expectativas de sus jugadores.
+ 
 
 # **Escenario** 
 
 ## **Descripción** 
 
-El escenario toma como referencias las máquinas arkade de los años 80 y 90, con un fondo oscuro aunque plano en el que destacarán el gancho y el bicho, además de los colores vivos de los Power Ups. 
+El escenario en Crush Factory está inspirado en la estética clásica de las máquinas arcade de los años 80 y 90, evocando la nostalgia de esa época dorada de los videojuegos. El entorno presenta un fondo oscuro, diseñado para no distraer la atención y dando protagonismo al gancho y el bicho, pero al mismo tiempo creando una atmósfera intensa. 
+En este fondo sobrio y plano, se destacan claramente los elementos clave del juego. Para añadir dinamismo visual y ayudar en la accesibilidad, los Power Ups y otros objetos interactivos cuentan con colores vivos y brillantes, que contrastan fuertemente con el fondo para facilitar su identificación rápida durante la partida.
+Esta combinación de un diseño simple pero efectivo, con referencias retro y un uso inteligente del color, contribuye a crear un escenario que es a la vez funcional y atractivo, invitando a los jugadores a sumergirse en partidas rápidas y emocionantes.
+
 
 ## **Arte**
+![](./Assets/Fondo.jpg)
+
+## **Niveles**
+Nivel 1: Cementerio abandonado
+* Ambiente: Niebla espesa, lápidas rotas, árboles secos y cuervos que observan desde las ramas.
+* Estética: Colores apagados y menos saturados para transmitir una atmósfera melancólica.
+* Jugabilidad: Ania puede interactuar con las lápidas, usándolas como plataformas para subir y saltar.
+Nivel 2: Morgue subterránea
+* Ambiente: Pasillos estrechos, luces parpadeantes, refrigeradores abiertos y sonidos metálicos constantes.
+* Estética: Fría y clínica, con tonos azulados y grises. El sonido juega un papel importante en la tensión.
+* Jugabilidad: Ania puede saltar sobre los cajones de cadáveres abiertos
+Nivel 3: Fiesta fúnebre en el más allá
+* Ambiente: Una dimensión surrealista donde los muertos celebran su paso al otro mundo. Espíritus bailan, mesas flotan y la música lúgubre llena el aire.
+* Estética: Colores vivos y contrastantes, con elementos visuales extravagantes como velas negras, humo de colores y luces flotantes.
+* Jugabilidad: Ania puede caminar sobre mesas y sillas.
+
+
 
 # **Personajes** 
 
@@ -198,7 +221,7 @@ Es uno de los personajes que puede llevar un jugador. Consiste en una garra insp
 
 ## **Bicho** 
 
-Es el otro personaje que puede llevar un jugador. Consiste en una pequeña criatura bípeda de colores vivos y compuesta por fragmentos de sprites corrompidos. Dando así la apariencia de un glitch viviente.
+Es el otro personaje que puede llevar un jugador. Consiste en una pequeña criatura de colores vivos parecida a un escarabajo. Esta compuesta por fragmentos de sprites corrompidos, dando así la apariencia de un glitch. Su supervivencia depende por completo de su capacidad para predecir los movimientos de su oponente.
 
 # **Items** 
 
