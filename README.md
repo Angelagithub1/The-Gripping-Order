@@ -39,7 +39,7 @@
 
 6. [Alcance	4](#alcance)
 
-7. Plataforma	4](#plataforma)
+7. [Plataforma	4](#plataforma)
 
 8. [Categoría	4](#categoría)
 
@@ -51,7 +51,7 @@
 
 2. [Arte	6](#arte)
    
-3. [Arte	6](#niveles)
+3. [Niveles	6](#niveles)
 
 [**Personajes	6**](#personajes)
 
@@ -222,6 +222,7 @@ Nivel 3: Fiesta fúnebre en el más allá
 ## **Gancho** 
 
 Es uno de los personajes que puede llevar un jugador. Consiste en una garra inspirada en los juegos de gancho de las salas de recreativos, que, al contrario que estos, dejará caer piezas en vez de cogerlas.
+
 ![](./Assets/Gancho.png)
 
 ## **Bicho** 
