@@ -27,85 +27,85 @@
 
 [**Introducción	3**](#introducción)
 
-1. [Concepto del juego	3](#concepto-del-juego)
+1. [Concepto del juego](#concepto-del-juego)
 
-2. [Características principales	3](#características-principales)
+2. [Características principales](#características-principales)
 
-3. [Género	3](#género)
+3. [Género](#género)
 
-4. [Propósito y Público objetivo	4](#propósito-y-público-objetivo)
+4. [Propósito y Público objetivo](#propósito-y-público-objetivo)
 
-5. [Estilo visual	4](#estilo-visual)
+5. [Estilo visual](#estilo-visual)
 
-6. [Alcance	4](#alcance)
+6. [Alcance](#alcance)
 
-7. [Plataforma	4](#plataforma)
+7. [Plataforma](#plataforma)
 
-8. [Categoría	4](#categoría)
+8. [Categoría](#categoría)
 
-9. [Licencia	5](#licencia)
+9. [Licencia](#licencia)
 
 [**Escenario	6**](#escenario)
 
-1. [Objetivo	6](#objetivo)
+1. [Objetivo](#objetivo)
 
-2. [Arte	6](#arte)
+2. [Arte](#arte)
    
-3. [Niveles	6](#niveles)
+3. [Niveles](#niveles)
 
 [**Personajes	6**](#personajes)
 
-1. [Gancho	6](#gancho)
+1. [Gancho](#gancho)
 
-2. [Bicho	6](#bicho)
+2. [Bicho](#bicho)
 
 [**Items	6**](#items)
 
-1. [Piezas	6](#piezas)
+1. [Piezas](#piezas)
 
-2. [Power Ups	6](#power-ups)
+2. [Power Ups](#power-ups)
 
 [**Estados e interfaces	6**](#estados-e-interfaces)
 
-1. [Diagrama de estados	6](#diagrama-de-estados)
+1. [Diagrama de estados](#diagrama-de-estados)
 
-2. [Interfaces	7](#interfaces)
+2. [Interfaces](#interfaces)
 
-3. [Pantalla de inicio	7](#pantalla-de-inicio)
+3. [Pantalla de inicio](#pantalla-de-inicio)
 
-4. [Tutorial	8](#tutorial)
+4. [Tutorial](#tutorial)
 
-5. [Créditos	8](#créditos)
+5. [Créditos](#créditos)
 
-6. [Elección de jugador	9](#elección-de-jugador)
+6. [Elección de jugador](#elección-de-jugador)
 
-7. [Pantalla de juego	9](#pantalla-de-juego)
+7. [Pantalla de juego](#pantalla-de-juego)
 
-8. [Pantalla de victoria	10](#pantalla-de-victoria)
+8. [Pantalla de victoria](#pantalla-de-victoria)
 
-9. [Pantalla de derrota	10](#pantalla-de-derrota)
+9. [Pantalla de derrota](#pantalla-de-derrota)
 
-10. [Menú de pausa	10](#menú-de-pausa)
+10. [Menú de pausa](#menú-de-pausa)
 
 [**Mecánicas \- Diagrama de Flujo	10**](#mecánicas---diagrama-de-flujo)
 
-1. [Jugabilidad y controles	10](#jugabilidad-y-controles)
+1. [Jugabilidad y controles](#jugabilidad-y-controles)
 
-2. [Flujo del Juego	10](#flujo-del-juego)
+2. [Flujo del Juego](#flujo-del-juego)
 
-3. [Mecánicas y Físicas	11](#mecánicas-y-físicas)
+3. [Mecánicas y Físicas](#mecánicas-y-físicas)
 
-4. [Mecánicas de movimiento	11](#mecánicas-de-movimiento)
+4. [Mecánicas de movimiento](#mecánicas-de-movimiento)
 
-5. [Mecánica de lanzamiento de piezas	11](#mecánica-de-lanzamiento-de-piezas)
+5. [Mecánica de lanzamiento de piezas](#mecánica-de-lanzamiento-de-piezas)
 
-6. [Mecánica de recolección de Power Ups	11](#mecánica-de-recolección-de-power-ups)
+6. [Mecánica de recolección de Power Ups](#mecánica-de-recolección-de-power-ups)
 
-7. [Mecánica de Tiempo	11](#mecánica-de-tiempo)
+7. [Mecánica de Tiempo](#mecánica-de-tiempo)
 
-8. [Mecánicas de supervivencia	11](#mecánicas-de-supervivencia)
+8. [Mecánicas de supervivencia](#mecánicas-de-supervivencia)
 
-9. [Gravedad	11](#gravedad)
+9. [Gravedad](#gravedad)
 
 [**Narrativa	12**](#narrativa)
 
