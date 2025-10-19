@@ -21,7 +21,7 @@
 
 # **Índice** 
 
-## [The Gripping Order]
+## The Gripping Order
 
 [**Índice**](#índice)
 
