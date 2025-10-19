@@ -113,8 +113,6 @@
 
 [**Comunicación**](#comunicación)
 
-[**Bibliografía**](#bibliografía)
-
 # 
 
 # **Introducción** 
@@ -340,6 +338,3 @@ Se buscará construir una base de jugadores comprometidos mediante el uso de red
 
 Además de realizar encuestas o preguntas para que el público objetivo pueda interactuar con los desarrolladores y que estos puedan escuchar sus opiniones y feedback para mejorar el juego. Buscando hacer sentir que la opinión del jugador es importante para el equipo de desarrollo. 
 
-# **Bibliografía** 
-
- 
