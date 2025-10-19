@@ -27,83 +27,85 @@
 
 [**Introducción	3**](#introducción)
 
-[Concepto del juego	3](#concepto-del-juego)
+1. [Concepto del juego	3](#concepto-del-juego)
 
-[Características principales	3](#características-principales)
+2. [Características principales	3](#características-principales)
 
-[Género	3](#género)
+3. [Género	3](#género)
 
-[Propósito y Público objetivo	4](#propósito-y-público-objetivo)
+4. [Propósito y Público objetivo	4](#propósito-y-público-objetivo)
 
-[Estilo visual	4](#estilo-visual)
+5. [Estilo visual	4](#estilo-visual)
 
-[Alcance	4](#alcance)
+6. [Alcance	4](#alcance)
 
-[Plataforma	4](#plataforma)
+7. Plataforma	4](#plataforma)
 
-[Categoría	4](#categoría)
+8. [Categoría	4](#categoría)
 
-[Licencia	5](#licencia)
+9. [Licencia	5](#licencia)
 
 [**Escenario	6**](#escenario)
 
-[Objetivo	6](#objetivo)
+1. [Objetivo	6](#objetivo)
 
-[Arte	6](#arte)
+2. [Arte	6](#arte)
+   
+3. [Arte	6](#niveles)
 
 [**Personajes	6**](#personajes)
 
-[Gancho	6](#gancho)
+1. [Gancho	6](#gancho)
 
-[Bicho	6](#bicho)
+2. [Bicho	6](#bicho)
 
 [**Items	6**](#items)
 
-[Piezas	6](#piezas)
+1. [Piezas	6](#piezas)
 
-[Power Ups	6](#power-ups)
+2. [Power Ups	6](#power-ups)
 
 [**Estados e interfaces	6**](#estados-e-interfaces)
 
-[Diagrama de estados	6](#diagrama-de-estados)
+1. [Diagrama de estados	6](#diagrama-de-estados)
 
-[Interfaces	7](#interfaces)
+2. [Interfaces	7](#interfaces)
 
-[Pantalla de inicio	7](#pantalla-de-inicio)
+3. [Pantalla de inicio	7](#pantalla-de-inicio)
 
-[Tutorial	8](#tutorial)
+4. [Tutorial	8](#tutorial)
 
-[Créditos	8](#créditos)
+5. [Créditos	8](#créditos)
 
-[Elección de jugador	9](#elección-de-jugador)
+6. [Elección de jugador	9](#elección-de-jugador)
 
-[Pantalla de juego	9](#pantalla-de-juego)
+7. [Pantalla de juego	9](#pantalla-de-juego)
 
-[Pantalla de victoria	10](#pantalla-de-victoria)
+8. [Pantalla de victoria	10](#pantalla-de-victoria)
 
-[Pantalla de derrota	10](#pantalla-de-derrota)
+9. [Pantalla de derrota	10](#pantalla-de-derrota)
 
-[Menú de pausa	10](#menú-de-pausa)
+10. [Menú de pausa	10](#menú-de-pausa)
 
 [**Mecánicas \- Diagrama de Flujo	10**](#mecánicas---diagrama-de-flujo)
 
-[Jugabilidad y controles	10](#jugabilidad-y-controles)
+1. [Jugabilidad y controles	10](#jugabilidad-y-controles)
 
-[Flujo del Juego	10](#flujo-del-juego)
+2. [Flujo del Juego	10](#flujo-del-juego)
 
-[Mecánicas y Físicas	11](#mecánicas-y-físicas)
+3. [Mecánicas y Físicas	11](#mecánicas-y-físicas)
 
-[Mecánicas de movimiento	11](#mecánicas-de-movimiento)
+4. [Mecánicas de movimiento	11](#mecánicas-de-movimiento)
 
-[Mecánica de lanzamiento de piezas	11](#mecánica-de-lanzamiento-de-piezas)
+5. [Mecánica de lanzamiento de piezas	11](#mecánica-de-lanzamiento-de-piezas)
 
-[Mecánica de recolección de Power Ups	11](#mecánica-de-recolección-de-power-ups)
+6. [Mecánica de recolección de Power Ups	11](#mecánica-de-recolección-de-power-ups)
 
-[Mecánica de Tiempo	11](#mecánica-de-tiempo)
+7. [Mecánica de Tiempo	11](#mecánica-de-tiempo)
 
-[Mecánicas de supervivencia	11](#mecánicas-de-supervivencia)
+8. [Mecánicas de supervivencia	11](#mecánicas-de-supervivencia)
 
-[Gravedad	11](#gravedad)
+9. [Gravedad	11](#gravedad)
 
 [**Narrativa	12**](#narrativa)
 
@@ -195,17 +197,19 @@ Esta combinación de un diseño simple pero efectivo, con referencias retro y un
 
 
 ## **Arte**
-![](./Assets/Fondo.jpg)
+![](./Assets/Fondo.JPG)
 
 ## **Niveles**
 Nivel 1: Cementerio abandonado
 * Ambiente: Niebla espesa, lápidas rotas, árboles secos y cuervos que observan desde las ramas.
 * Estética: Colores apagados y menos saturados para transmitir una atmósfera melancólica.
 * Jugabilidad: Ania puede interactuar con las lápidas, usándolas como plataformas para subir y saltar.
+  
 Nivel 2: Morgue subterránea
 * Ambiente: Pasillos estrechos, luces parpadeantes, refrigeradores abiertos y sonidos metálicos constantes.
 * Estética: Fría y clínica, con tonos azulados y grises. El sonido juega un papel importante en la tensión.
 * Jugabilidad: Ania puede saltar sobre los cajones de cadáveres abiertos
+  
 Nivel 3: Fiesta fúnebre en el más allá
 * Ambiente: Una dimensión surrealista donde los muertos celebran su paso al otro mundo. Espíritus bailan, mesas flotan y la música lúgubre llena el aire.
 * Estética: Colores vivos y contrastantes, con elementos visuales extravagantes como velas negras, humo de colores y luces flotantes.
@@ -218,6 +222,7 @@ Nivel 3: Fiesta fúnebre en el más allá
 ## **Gancho** 
 
 Es uno de los personajes que puede llevar un jugador. Consiste en una garra inspirada en los juegos de gancho de las salas de recreativos, que, al contrario que estos, dejará caer piezas en vez de cogerlas.
+![](./Assets/Gancho.png)
 
 ## **Bicho** 
 
