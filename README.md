@@ -1,4 +1,4 @@
-# `***Documento del diseño del juego***`
+# `Documento del diseño del juego`
 
 # **Crush Factory**
 
