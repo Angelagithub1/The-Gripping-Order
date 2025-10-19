@@ -21,11 +21,11 @@
 
 # **Índice** 
 
-[The Gripping Order	0]
+[The Gripping Order]
 
-[**Índice	1**](#índice)
+[**Índice**](#índice)
 
-[**Introducción	3**](#introducción)
+[**Introducción**](#introducción)
 
 1. [Concepto del juego](#concepto-del-juego)
 
@@ -45,7 +45,7 @@
 
 9. [Licencia](#licencia)
 
-[**Escenario	6**](#escenario)
+[**Escenario**](#escenario)
 
 1. [Objetivo](#objetivo)
 
@@ -53,19 +53,19 @@
    
 3. [Niveles](#niveles)
 
-[**Personajes	6**](#personajes)
+[**Personajes**](#personajes)
 
 1. [Gancho](#gancho)
 
 2. [Bicho](#bicho)
 
-[**Items	6**](#items)
+[**Items**](#items)
 
 1. [Piezas](#piezas)
 
 2. [Power Ups](#power-ups)
 
-[**Estados e interfaces	6**](#estados-e-interfaces)
+[**Estados e interfaces**](#estados-e-interfaces)
 
 1. [Diagrama de estados](#diagrama-de-estados)
 
@@ -87,7 +87,7 @@
 
 10. [Menú de pausa](#menú-de-pausa)
 
-[**Mecánicas \- Diagrama de Flujo	10**](#mecánicas---diagrama-de-flujo)
+[**Mecánicas \- Diagrama de Flujo**](#mecánicas---diagrama-de-flujo)
 
 1. [Jugabilidad y controles](#jugabilidad-y-controles)
 
@@ -107,13 +107,13 @@
 
 9. [Gravedad](#gravedad)
 
-[**Narrativa	12**](#narrativa)
+[**Narrativa**](#narrativa)
 
-[**Sonido	12**](#sonido)
+[**Sonido**](#sonido)
 
-[**Comunicación	12**](#comunicación)
+[**Comunicación**](#comunicación)
 
-[**Bibliografía	12**](#bibliografía)
+[**Bibliografía**](#bibliografía)
 
 # 
 
