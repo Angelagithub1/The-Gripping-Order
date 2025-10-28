@@ -1,4 +1,4 @@
-# 
+# `Documento del Diseño del Juego (GDD)`
 
 # **Crush Factory**
 
@@ -21,97 +21,97 @@
 
 # **Índice** 
 
-[The Gripping Order	0]
+## The Gripping Order
 
-[**Índice	1**](#índice)
+[**Índice**](#índice)
 
-[**Introducción	3**](#introducción)
+[**Introducción**](#introducción)
 
-[Concepto del juego	3](#concepto-del-juego)
+1. [Concepto del juego](#concepto-del-juego)
 
-[Características principales	3](#características-principales)
+2. [Características principales](#características-principales)
 
-[Género	3](#género)
+3. [Género](#género)
 
-[Propósito y Público objetivo	4](#propósito-y-público-objetivo)
+4. [Propósito y Público objetivo](#propósito-y-público-objetivo)
 
-[Estilo visual	4](#estilo-visual)
+5. [Estilo visual](#estilo-visual)
 
-[Alcance	4](#alcance)
+6. [Alcance](#alcance)
 
-[Plataforma	4](#plataforma)
+7. [Plataforma](#plataforma)
 
-[Categoría	4](#categoría)
+8. [Categoría](#categoría)
 
-[Licencia	5](#licencia)
+9. [Licencia](#licencia)
 
-[**Escenario	6**](#escenario)
+[**Escenario**](#escenario)
 
-[Objetivo	6](#objetivo)
+1. [Objetivo](#objetivo)
 
-[Arte	6](#arte)
+2. [Arte](#arte)
+   
+3. [Niveles](#niveles)
 
-[**Personajes	6**](#personajes)
+[**Personajes**](#personajes)
 
-[Gancho	6](#gancho)
+1. [Gancho](#gancho)
 
-[Bicho	6](#bicho)
+2. [Bicho](#bicho)
 
-[**Items	6**](#items)
+[**Items**](#items)
 
-[Piezas	6](#piezas)
+1. [Piezas](#piezas)
 
-[Power Ups	6](#power-ups)
+2. [Power Ups](#power-ups)
 
-[**Estados e interfaces	6**](#estados-e-interfaces)
+[**Estados e interfaces**](#estados-e-interfaces)
 
-[Diagrama de estados	6](#diagrama-de-estados)
+1. [Diagrama de estados](#diagrama-de-estados)
 
-[Interfaces	7](#interfaces)
+2. [Interfaces](#interfaces)
 
-[Pantalla de inicio	7](#pantalla-de-inicio)
+3. [Pantalla de inicio](#pantalla-de-inicio)
 
-[Tutorial	8](#tutorial)
+4. [Tutorial](#tutorial)
 
-[Créditos	8](#créditos)
+5. [Créditos](#créditos)
 
-[Elección de jugador	9](#elección-de-jugador)
+6. [Elección de jugador](#elección-de-jugador)
 
-[Pantalla de juego	9](#pantalla-de-juego)
+7. [Pantalla de juego](#pantalla-de-juego)
 
-[Pantalla de victoria	10](#pantalla-de-victoria)
+8. [Pantalla de victoria](#pantalla-de-victoria)
 
-[Pantalla de derrota	10](#pantalla-de-derrota)
+9. [Pantalla de derrota](#pantalla-de-derrota)
 
-[Menú de pausa	10](#menú-de-pausa)
+10. [Menú de pausa](#menú-de-pausa)
 
-[**Mecánicas \- Diagrama de Flujo	10**](#mecánicas---diagrama-de-flujo)
+[**Mecánicas \- Diagrama de Flujo**](#mecánicas---diagrama-de-flujo)
 
-[Jugabilidad y controles	10](#jugabilidad-y-controles)
+1. [Jugabilidad y controles](#jugabilidad-y-controles)
 
-[Flujo del Juego	10](#flujo-del-juego)
+2. [Flujo del Juego](#flujo-del-juego)
 
-[Mecánicas y Físicas	11](#mecánicas-y-físicas)
+3. [Mecánicas y Físicas](#mecánicas-y-físicas)
 
-[Mecánicas de movimiento	11](#mecánicas-de-movimiento)
+4. [Mecánicas de movimiento](#mecánicas-de-movimiento)
 
-[Mecánica de lanzamiento de piezas	11](#mecánica-de-lanzamiento-de-piezas)
+5. [Mecánica de lanzamiento de piezas](#mecánica-de-lanzamiento-de-piezas)
 
-[Mecánica de recolección de Power Ups	11](#mecánica-de-recolección-de-power-ups)
+6. [Mecánica de recolección de Power Ups](#mecánica-de-recolección-de-power-ups)
 
-[Mecánica de Tiempo	11](#mecánica-de-tiempo)
+7. [Mecánica de Tiempo](#mecánica-de-tiempo)
 
-[Mecánicas de supervivencia	11](#mecánicas-de-supervivencia)
+8. [Mecánicas de supervivencia](#mecánicas-de-supervivencia)
 
-[Gravedad	11](#gravedad)
+9. [Gravedad](#gravedad)
 
-[**Narrativa	12**](#narrativa)
+[**Narrativa**](#narrativa)
 
-[**Sonido	12**](#sonido)
+[**Sonido**](#sonido)
 
-[**Comunicación	12**](#comunicación)
-
-[**Bibliografía	12**](#bibliografía)
+[**Comunicación**](#comunicación)
 
 # 
 
@@ -180,15 +180,40 @@ Análisis DAFO:
 
 ## **Licencia** 
 
-Crush Factory es un juego en su totalidad original, sin estar basado en ninguna otra franquicia o adaptación de otro tipo de producto multimedia. Con planes a futuro de contenidos adicionales para esta entrega. 
+Crush Factory es un juego en su totalidad original, desarrollado desde cero y sin estar basado en ninguna otra franquicia, marca o adaptación de otro tipo de producto multimedia preexistente. Su diseño, personajes, mecánicas y estética son fruto de una creación única y autónoma, lo que garantiza una identidad propia y distintiva en el mercado.
+Además se contemplan planes a futuro  para el lanzamiento de contenidos adicionales que expandan y enriquezcan esta entrega, manteniendo la originalidad y coherencia del universo creado. 
+Esta independencia creativa permite al proyecto tener libertad para evolucionar según las necesidades y el feedback de la comunidad, asegurando un desarrollo alineado con la visión original del juego y las expectativas de sus jugadores.
+ 
 
 # **Escenario** 
 
 ## **Descripción** 
 
-El escenario toma como referencias las máquinas arkade de los años 80 y 90, con un fondo oscuro aunque plano en el que destacarán el gancho y el bicho, además de los colores vivos de los Power Ups. 
+El escenario en Crush Factory está inspirado en la estética clásica de las máquinas arcade de los años 80 y 90, evocando la nostalgia de esa época dorada de los videojuegos. El entorno presenta un fondo oscuro, diseñado para no distraer la atención y dando protagonismo al gancho y el bicho, pero al mismo tiempo creando una atmósfera intensa. 
+En este fondo sobrio y plano, se destacan claramente los elementos clave del juego. Para añadir dinamismo visual y ayudar en la accesibilidad, los Power Ups y otros objetos interactivos cuentan con colores vivos y brillantes, que contrastan fuertemente con el fondo para facilitar su identificación rápida durante la partida.
+Esta combinación de un diseño simple pero efectivo, con referencias retro y un uso inteligente del color, contribuye a crear un escenario que es a la vez funcional y atractivo, invitando a los jugadores a sumergirse en partidas rápidas y emocionantes.
+
 
 ## **Arte**
+![](./Assets/Fondo.JPG)
+
+## **Niveles**
+Nivel 1: Cementerio abandonado
+* Ambiente: Niebla espesa, lápidas rotas, árboles secos y cuervos que observan desde las ramas.
+* Estética: Colores apagados y menos saturados para transmitir una atmósfera melancólica.
+* Jugabilidad: Ania puede interactuar con las lápidas, usándolas como plataformas para subir y saltar.
+  
+Nivel 2: Morgue subterránea
+* Ambiente: Pasillos estrechos, luces parpadeantes, refrigeradores abiertos y sonidos metálicos constantes.
+* Estética: Fría y clínica, con tonos azulados y grises. El sonido juega un papel importante en la tensión.
+* Jugabilidad: Ania puede saltar sobre los cajones de cadáveres abiertos
+  
+Nivel 3: Fiesta fúnebre en el más allá
+* Ambiente: Una dimensión surrealista donde los muertos celebran su paso al otro mundo. Espíritus bailan, mesas flotan y la música lúgubre llena el aire.
+* Estética: Colores vivos y contrastantes, con elementos visuales extravagantes como velas negras, humo de colores y luces flotantes.
+* Jugabilidad: Ania puede caminar sobre mesas y sillas.
+
+
 
 # **Personajes** 
 
@@ -196,9 +221,11 @@ El escenario toma como referencias las máquinas arkade de los años 80 y 90, co
 
 Es uno de los personajes que puede llevar un jugador. Consiste en una garra inspirada en los juegos de gancho de las salas de recreativos, que, al contrario que estos, dejará caer piezas en vez de cogerlas.
 
+![](./Assets/Gancho.png)
+
 ## **Bicho** 
 
-Es el otro personaje que puede llevar un jugador. Consiste en una pequeña criatura bípeda de colores vivos y compuesta por fragmentos de sprites corrompidos. Dando así la apariencia de un glitch viviente.
+Es el otro personaje que puede llevar un jugador. Consiste en una pequeña criatura de colores vivos parecida a un escarabajo. Esta compuesta por fragmentos de sprites corrompidos, dando así la apariencia de un glitch. Su supervivencia depende por completo de su capacidad para predecir los movimientos de su oponente.
 
 # **Items** 
 
@@ -311,6 +338,3 @@ Se buscará construir una base de jugadores comprometidos mediante el uso de red
 
 Además de realizar encuestas o preguntas para que el público objetivo pueda interactuar con los desarrolladores y que estos puedan escuchar sus opiniones y feedback para mejorar el juego. Buscando hacer sentir que la opinión del jugador es importante para el equipo de desarrollo. 
 
-# **Bibliografía** 
-
- 
