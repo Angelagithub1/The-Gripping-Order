@@ -1,0 +1,9 @@
+# Node
+node_modules
+
+# Build (generado por Vite)
+dist
+
+# Archivos de sistema o del editor
+.DS_Store
+.vscode
