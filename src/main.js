@@ -3,8 +3,8 @@ import { MenuPrincipal } from './scenes/MenuPrincipal.js';
 
 const config = {
     type: Phaser.AUTO,  //Phaser elige WebGL, no canvas siemopre que sea posible
-    width: 1200, //Tamaño del juego
-    height: 720,
+    width: 960, //Tamaño del juego ESENCIAL QUE SEA ESTA MEDIDA PORQUE QUEDA PROPORCIONADO
+    height: 540,
     parent: 'game-container',   //Div donde se renderiza el juego
     physics: {
         default: 'arcade',  //Sin gravedad, HABRA QUE CAMBIARLO EN EL FUTURO

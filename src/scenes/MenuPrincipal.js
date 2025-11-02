@@ -5,18 +5,64 @@ export class MenuPrincipal extends Phaser.Scene {   //Crear clase que hereda de 
     }
 
     preload(){  //Se ejecuta antes de que empiece la escena
-        this.load.image('Menus', 'Assets/Backgrounds/nivel1.png'); //Cargar imagen de fondo
+        //Fondo
+        this.load.image('Menus', 'Assets/Backgrounds/Menus.jpeg'); //Cargar imagen de fondo
+
+        //Nombre del juego
+        this.load.image('NombreJuego', 'Assets/Interfaz/titulo.png'); 
         
+        //Boton Jugar
+        this.load.image('BotonJugarN', 'Assets/Interfaz/Botones/jugarNormal.png'); 
+        this.load.image('BotonJugarE', 'Assets/Interfaz/Botones/jugarEncima.png'); 
+        this.load.image('BotonJugarP', 'Assets/Interfaz/Botones/jugarPulsado.png'); 
+
+        //Boton Tutorial
+        this.load.image('BotonTutorialN', 'Assets/Interfaz/Botones/tutorialNormal.png'); 
+        this.load.image('BotonTutorialE', 'Assets/Interfaz/Botones/tutorialEncima.png'); 
+        this.load.image('BotonTutorialP', 'Assets/Interfaz/Botones/tutorialPulsado.png'); 
+
+        //Boton Creditos
+        this.load.image('BotonCreditosN', 'Assets/Interfaz/Botones/creditosNormal.png'); 
+        this.load.image('BotonCreditosE', 'Assets/Interfaz/Botones/creditosEncima.png'); 
+        this.load.image('BotonCreditosP', 'Assets/Interfaz/Botones/creditosPulsado.png');
+
+        //Boton Salir
+        this.load.image('BotonSalirN', 'Assets/Interfaz/Botones/salirNormal.png'); 
+        this.load.image('BotonSalirE', 'Assets/Interfaz/Botones/salirEncima.png'); 
+        this.load.image('BotonSalirP', 'Assets/Interfaz/Botones/salirPulsado.png');
     }
     create(){   //Se ejecuta al iniciar la escena
-        const background = this.add.image(0, 0, 'Menus').setOrigin(0, 0); //Añadir imagen de fondo
-        background.setScale(
-            Math.max(this.scale.width / background.width, this.scale.height / background.height)
-        );
+        //Fondo
+        const background = this.add.image(0, 0, 'Menus').setOrigin(0); //Añadir imagen de fondo
+        background.setScale(Math.max(this.scale.width / background.width, this.scale.height / background.height));
+        const nombreJuego = this.add.image(this.scale.width / 2, this.scale.height / 4, 'NombreJuego').setScale(1.5);  //Nombre del juego
+        //Boton Jugar
+        const botonJugar = this.add.image(this.scale.width / 2, this.scale.height / 2, 'BotonJugarN').setScale(1.5).setInteractive(); 
+        botonJugar.on('pointerover', () => { botonJugar.setTexture('BotonJugarE')}); //Efecto hover
+        botonJugar.on('pointerout', () => { botonJugar.setTexture('BotonJugarN')}); //Efecto salir
+        botonJugar.on('pointerdown', () => { botonJugar.setTexture('BotonJugarP') }); //Efecto encima
+        //botonJugar.on('pointerup', () => { this.scene.start('EscenaPrincipal'); }); //Al hacer click, iniciar escena principal
+
+        //Boton Tutorial
+        const botonTutorial = this.add.image(this.scale.width / 2, this.scale.height / 2 + 80, 'BotonTutorialN').setScale(1.5).setInteractive(); 
+        botonTutorial.on('pointerover', () => { botonTutorial.setTexture('BotonTutorialE')}); //Efecto hover
+        botonTutorial.on('pointerout', () => { botonTutorial.setTexture('BotonTutorialN')});
+        botonTutorial.on('pointerdown', () => { botonTutorial.setTexture('BotonTutorialP') }); 
+
+        //Boton Creditos
+        const botonCreditos = this.add.image(this.scale.width / 2, this.scale.height / 2 + 160, 'BotonCreditosN').setScale(1.5).setInteractive(); 
+        botonCreditos.on('pointerover', () => { botonCreditos.setTexture('BotonCreditosE')}); 
+        botonCreditos.on('pointerout', () => { botonCreditos.setTexture('BotonCreditosN')});
+        botonCreditos.on('pointerdown', () => { botonCreditos.setTexture('BotonCreditosP') }); 
+
+        //Boton Salir
+        const botonSalir = this.add.image(130, 55, 'BotonSalirN').setScale(1.5).setInteractive(); 
+        botonSalir.on('pointerover', () => { botonSalir.setTexture('BotonSalirE')}); 
+        botonSalir.on('pointerout', () => { botonSalir.setTexture('BotonSalirN')});
+        botonSalir.on('pointerdown', () => { botonSalir.setTexture('BotonSalirP') }); 
+
+
     }
-    /*
-    update(){  //Bucle de la escena, se ejecuta continuamente
-    }*/
 }
 
     
