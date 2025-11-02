@@ -35,25 +35,27 @@ export class MenuPrincipal extends Phaser.Scene {   //Crear clase que hereda de 
         //Fondo
         const background = this.add.image(0, 0, 'Menus').setOrigin(0); //Añadir imagen de fondo
         background.setScale(Math.max(this.scale.width / background.width, this.scale.height / background.height));
-        const nombreJuego = this.add.image(this.scale.width / 2, this.scale.height / 4, 'NombreJuego').setScale(1.5);  //Nombre del juego
+        const nombreJuego = this.add.image(this.scale.width / 2, this.scale.height / 4, 'NombreJuego').setScale(2);  //Nombre del juego
         //Boton Jugar
-        const botonJugar = this.add.image(this.scale.width / 2, this.scale.height / 2, 'BotonJugarN').setScale(1.5).setInteractive(); 
+        const botonJugar = this.add.image(this.scale.width / 2, this.scale.height / 2, 'BotonJugarN').setScale(2).setInteractive(); 
         botonJugar.on('pointerover', () => { botonJugar.setTexture('BotonJugarE')}); //Efecto hover
         botonJugar.on('pointerout', () => { botonJugar.setTexture('BotonJugarN')}); //Efecto salir
         botonJugar.on('pointerdown', () => { botonJugar.setTexture('BotonJugarP') }); //Efecto encima
-        //botonJugar.on('pointerup', () => { this.scene.start('EscenaPrincipal'); }); //Al hacer click, iniciar escena principal
+        botonJugar.on('pointerup', () => { this.scene.start('MenuEleccionJugador'); }); //Al hacer click, iniciar escena principal
 
         //Boton Tutorial
-        const botonTutorial = this.add.image(this.scale.width / 2, this.scale.height / 2 + 80, 'BotonTutorialN').setScale(1.5).setInteractive(); 
+        const botonTutorial = this.add.image(this.scale.width / 2, this.scale.height / 2 + 80, 'BotonTutorialN').setScale(2).setInteractive(); 
         botonTutorial.on('pointerover', () => { botonTutorial.setTexture('BotonTutorialE')}); //Efecto hover
         botonTutorial.on('pointerout', () => { botonTutorial.setTexture('BotonTutorialN')});
         botonTutorial.on('pointerdown', () => { botonTutorial.setTexture('BotonTutorialP') }); 
+        botonTutorial.on('pointerup', () => { this.scene.start('MenuTutorial'); });
 
         //Boton Creditos
-        const botonCreditos = this.add.image(this.scale.width / 2, this.scale.height / 2 + 160, 'BotonCreditosN').setScale(1.5).setInteractive(); 
+        const botonCreditos = this.add.image(this.scale.width / 2, this.scale.height / 2 + 160, 'BotonCreditosN').setScale(2).setInteractive(); 
         botonCreditos.on('pointerover', () => { botonCreditos.setTexture('BotonCreditosE')}); 
         botonCreditos.on('pointerout', () => { botonCreditos.setTexture('BotonCreditosN')});
         botonCreditos.on('pointerdown', () => { botonCreditos.setTexture('BotonCreditosP') }); 
+        botonCreditos.on('pointerup', () => { this.scene.start('MenuCreditos'); });
 
         //Boton Salir
         const botonSalir = this.add.image(130, 55, 'BotonSalirN').setScale(1.5).setInteractive(); 

@@ -1,5 +1,11 @@
 import Phaser from 'phaser';
 import { MenuPrincipal } from './scenes/MenuPrincipal.js';
+import { MenuCreditos } from './scenes/MenuCreditos.js';
+import { MenuEleccionJugador } from './scenes/MenuEleccionJugador';
+import { MenuPausa } from './scenes/MenuPausa';
+import { PantallaJuego } from './scenes/PantallaJuego.js';
+import { MenuTutorial } from './scenes/MenuTutorial.js';
+import { PantallaFinal} from './scenes/PantallaFinal.js';
 
 const config = {
     type: Phaser.AUTO,  //Phaser elige WebGL, no canvas siemopre que sea posible
@@ -17,7 +23,7 @@ const config = {
     mode: Phaser.Scale.FIT,          // ajusta al tamaño de la ventana
     autoCenter: Phaser.Scale.CENTER_BOTH // centra automáticamente
   },
-    scene: [MenuPrincipal],  //Lista de escenas del juego
+    scene: [MenuPrincipal, MenuCreditos, MenuTutorial, MenuEleccionJugador, MenuPausa, PantallaJuego, PantallaFinal],  //Lista de escenas del juego
     backgroundColor: '#1a1a2e', //Color de fondo del juego
 }
 
