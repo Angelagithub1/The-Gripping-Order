@@ -28,3 +28,4 @@ const config = {
 }
 
 const game = new Phaser.Game(config);   //Crea y lanza el juego con esa configuración
+let Ania,floor, keys;
