@@ -15,7 +15,7 @@ const config = {
     physics: {
         default: 'arcade',  //Sin gravedad, HABRA QUE CAMBIARLO EN EL FUTURO
         arcade: {
-            gravity: { y: 0 },
+            gravity: { y: 600 },
             debug: false
         }
     },
@@ -28,4 +28,3 @@ const config = {
 }
 
 const game = new Phaser.Game(config);   //Crea y lanza el juego con esa configuración
-let Ania,floor, keys;
