@@ -16,6 +16,8 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.load.image('BotonSalirE', 'Assets/Interfaz/Botones/salirEncima.png');
         this.load.image('BotonSalirP', 'Assets/Interfaz/Botones/salirPulsado.png');
         this.load.image('BackgroundGraveyard', 'Assets/Backgrounds/nivel1.png');
+
+        //Plataformas
         this.load.image('PlataformasAltas', 'Assets/Backgrounds/plat2.png');
         this.load.image('PlataformasBajas', 'Assets/Backgrounds/plat1.png');
 
@@ -76,6 +78,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
 
         //Tubo del gancho
         this.TuboGancho = this.add.rectangle(this.scale.width/2, 80, this.scale.width-180, 20, 0x00ff00);
+        this.physics.add.existing(this.TuboGancho, true);
 
         //Crear Ania
         this.Ania = this.physics.add.sprite(42, 25, 'AniaIdle'); //Crear sprite de Ania
@@ -85,19 +88,72 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.Ania.name = "Ania";
 
         //Crear Gancho
-        this.Gancho = this.physics.add.sprite(108, 50, 'GanchoIdle');
+        this.Gancho = this.physics.add.sprite(108, 50, 'GanchoIdle').setImmovable(true);
         this.Gancho.setScale(1.5).setFrame(1);
         this.Gancho.y = 80;
         this.Gancho.x = this.scale.width/2;
         this.Gancho.setOrigin(0.5, 0.1); // 0.1 lo pone el pivote cerca de la parte superior
         this.Gancho.body.setAllowGravity(false); //Desactivar gravedad
         this.Gancho.anims.play('Anim_GanchoIdle', true);
-        
+
+        //Crear plataformas
+        this.platform1 = this.physics.add.image(146, 14, 'PlataformasBajas').setScale(1.5).setImmovable(true);
+        this.platform1.body.setAllowGravity(false);
+        this.platform1.x=250;
+        this.platform1.y=420;
+
+        this.platform2 = this.physics.add.image(146, 14, 'PlataformasBajas').setScale(1.5).setImmovable(true);
+        this.platform2.body.setAllowGravity(false);
+        this.platform2.x=this.scale.width-250;
+        this.platform2.y=420;
+
+        this.platform3 = this.physics.add.image(183, 14, 'PlataformasBajas').setScale(1.5).setImmovable(true);
+        this.platform3.body.setAllowGravity(false);
+        this.platform3.x=this.scale.width/2-35;
+        this.platform3.y=330;
+
+        this.platform4 = this.physics.add.image(183, 14, 'PlataformasBajas').setScale(1.5).setImmovable(true);
+        this.platform4.body.setAllowGravity(false);
+        this.platform4.x=this.scale.width/2+35;
+        this.platform4.y=330;
+
+        this.platform5 = this.physics.add.image(183, 14, 'PlataformasBajas').setScale(1.5).setImmovable(true);
+        this.platform5.body.setAllowGravity(false);
+        this.platform5.x=315;
+        this.platform5.y=265;
+
+        this.platform6 = this.physics.add.image(183, 14, 'PlataformasAltas').setScale(1.5).setImmovable(true);
+        this.platform6.body.setAllowGravity(false);
+        this.platform6.x=this.scale.width - 315;
+        this.platform6.y=265;
+
+        this.platform7 = this.physics.add.image(this.scale.width/2, 14, 'PlataformasBajas').setScale(1.5).setImmovable(true);
+        this.platform7.body.setAllowGravity(false);
+        this.platform7.x= 150;
+        this.platform7.y=220;
+
+        this.platform8 = this.physics.add.image(this.scale.width/2 + 100, 14, 'PlataformasAltas').setScale(1.5).setImmovable(true);
+        this.platform8.body.setAllowGravity(false);
+        this.platform8.x= this.scale.width -150;
+        this.platform8.y=220;
+
         //Colisiones 
         //Ania con limites de mundo
         this.physics.add.collider(this.Ania, this.floor);
         this.physics.add.collider(this.Ania, this.LeftWall);
         this.physics.add.collider(this.Ania, this.RightWall/*, this.onHitFloor, null, this*/); //Lo ultimo es para llamara alguna funcion al chocar util para cuando choque con piezas
+        this.physics.add.collider(this.Ania, this.TuboGancho);
+        this.physics.add.collider(this.Ania, this.Gancho);
+
+        //Colision Ania con plataformas
+        this.physics.add.collider(this.Ania, this.platform1);
+        this.physics.add.collider(this.Ania, this.platform2);
+        this.physics.add.collider(this.Ania, this.platform3);
+        this.physics.add.collider(this.Ania, this.platform4);
+        this.physics.add.collider(this.Ania, this.platform5);
+        this.physics.add.collider(this.Ania, this.platform6);
+        this.physics.add.collider(this.Ania, this.platform7);
+        this.physics.add.collider(this.Ania, this.platform8);
 
         //Gancho con limites de mundo
         this.physics.add.collider(this.Gancho, this.LeftWall);
