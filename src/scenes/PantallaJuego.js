@@ -74,6 +74,9 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this. RightWall = this.add.rectangle(this.scale.width, this.scale.height / 2, 180, this.scale.height/*,0x00ff00*/);
         this.physics.add.existing(this.RightWall, true);
 
+        //Tubo del gancho
+        this.TuboGancho = this.add.rectangle(this.scale.width/2, 80, this.scale.width-180, 20, 0x00ff00);
+
         //Crear Ania
         this.Ania = this.physics.add.sprite(42, 25, 'AniaIdle'); //Crear sprite de Ania
         this.Ania.setScale(1.5).setFrame(1); //Escalar y poner frame inicial
@@ -81,12 +84,24 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.Ania.x=this.scale.width/2; //Posición inicial X
         this.Ania.name = "Ania";
 
+        //Crear Gancho
+        this.Gancho = this.physics.add.sprite(108, 50, 'GanchoIdle');
+        this.Gancho.setScale(1.5).setFrame(1);
+        this.Gancho.y = 80;
+        this.Gancho.x = this.scale.width/2;
+        this.Gancho.setOrigin(0.5, 0.1); // 0.1 lo pone el pivote cerca de la parte superior
+        this.Gancho.body.setAllowGravity(false); //Desactivar gravedad
+        this.Gancho.anims.play('Anim_GanchoIdle', true);
+        
         //Colisiones 
         //Ania con limites de mundo
         this.physics.add.collider(this.Ania, this.floor);
         this.physics.add.collider(this.Ania, this.LeftWall);
         this.physics.add.collider(this.Ania, this.RightWall/*, this.onHitFloor, null, this*/); //Lo ultimo es para llamara alguna funcion al chocar util para cuando choque con piezas
 
+        //Gancho con limites de mundo
+        this.physics.add.collider(this.Gancho, this.LeftWall);
+        this.physics.add.collider(this.Gancho, this.RightWall);
 
         //Botones
         this.keys = {
@@ -115,6 +130,16 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             }
             if(this.keys.SPACE.isDown && this.Ania.body.touching.down){
                 this.Ania.setVelocityY(-350);//Salto
+            }
+
+            // Mover el gancho
+            if (this.keys.Right.isDown) {
+                this.Gancho.setVelocityX(160);
+            }
+            else if (this.keys.Left.isDown) {
+                this.Gancho.setVelocityX(-160);
+            }else{
+                this.Gancho.setVelocityX(0);
             }
         
     }
