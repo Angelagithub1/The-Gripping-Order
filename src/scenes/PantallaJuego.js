@@ -323,7 +323,6 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
     }
 
     DamageAnia(ania,objeto) {
-        console.log(objeto.name);
         if(!objeto.canDamage) return; // Evitar daño múltiple
         objeto.canDamage=false; // Marcar el objeto como ya usado para daño
         this.Ania.lives -= 1; // Restar una vida a Ania
