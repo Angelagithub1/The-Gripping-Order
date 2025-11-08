@@ -31,6 +31,12 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.load.image('guadana', 'Assets/Piezas/guadaña.png');
         this.load.image('hueso', 'Assets/Piezas/hueso.png');
         this.load.image('libro', 'Assets/Piezas/libro.png');
+
+        //Power Ups
+        this.load.image('PowerUpAmarillo', 'Assets/PowerUps/amarillo.png');
+        this.load.image('PowerUpAzul', 'Assets/PowerUps/azul.png');
+        this.load.image('PowerUpRojo', 'Assets/PowerUps/rojo.png');
+        this.load.image('PowerUpVerde', 'Assets/PowerUps/verde.png');
     }
     create() {
 
@@ -223,14 +229,31 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.timerText.setDepth(10);         // Establecer la profundidad para asegurarse de que se dibuje encima de otros elementos
 
         // Configurar el temporizador
-        this.remainingTime = 30; // 30 segundos
+        this.remainingTime = 90; // 30 segundos
         this.time.addEvent({
             delay: 1000, // Cada segundo
             callback: this.updateTimer,
             callbackScope: this,
             loop: true,
         });
+
+        //PowerUps
+        this.powerUps = this.physics.add.group();
+        this.physics.add.overlap(this.Ania, this.powerUps, this.RecogerPowerUp, null, this); //Colision Ania con PowerUps
+        this.maxPowerUps = 2;   //Limite de PowerUps en pantalla
+        this.AparicionesPowerUp(); //Evento para crear PowerUps cada cierto tiempo
+
+
+
+
+
+
+
+
     }
+
+
+
     update() {
 
         if (this.Gancho.objeto == null) {
@@ -333,6 +356,32 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             this.scene.start("PantallaFinal"); // Cambiar a la escena ResultScreen
         }
         console.log("Ania ha sido dañada");
+    }
+
+
+    AparicionesPowerUp(){
+        console.log("Funcion base PowerUp");
+        const tiempo = Phaser.Math.Between(10000, 20000); // Tiempo aleatorio entre 10 y 20 segundos
+        this.time.delayedCall(tiempo, () => { this.SpawnPowerUp(); this.AparicionesPowerUp(); }, [], this); //Se usa delayedCall en vez de loop pq cada vez se quiere un ritmo distinto
+    }
+
+    SpawnPowerUp(){
+        console.log("Aparece Power Up");
+        if(this.powerUps.countActive(true) >= this.maxPowerUps){
+            return; //Si ya hay el maximo de power ups no hace nada
+        }
+        const margen = 30;
+        const x = Phaser.Math.Between(margen, this.scale.width - margen);
+        const y = Phaser.Math.Between(margen, this.scale.height - margen);
+        const powerUpActual = this.powerUps.create(x, y, 'PowerUpAmarillo');
+        powerUpActual.setOrigin(0.5, 0.5);
+        //powerUpActual.body.setAllowGravity(true);
+    }
+
+    RecogerPowerUp(jugador, powerUp){
+        powerUp.destroy(); //Eliminar el power up
+        console.log("Power Up recogido");
+        //Aquí se puede añadir el efecto del power up
     }
 
 }
