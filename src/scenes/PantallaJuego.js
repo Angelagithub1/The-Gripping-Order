@@ -82,7 +82,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.physics.add.existing(this.RightWall, true);
 
         //Tubo del gancho
-        this.TuboGancho = this.add.rectangle(this.scale.width / 2, 74, this.scale.width - 180, 10, 0x00ff00);
+        this.TuboGancho = this.add.rectangle(this.scale.width / 2, 74, this.scale.width - 180, 10/*, 0x00ff00*/);
         this.physics.add.existing(this.TuboGancho, true);
         this.TuboGancho.setAlpha(0.5); //Hacer el tubo semi-transparente
 
