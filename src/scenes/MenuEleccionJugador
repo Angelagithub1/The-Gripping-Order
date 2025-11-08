@@ -14,6 +14,8 @@ export class MenuEleccionJugador extends Phaser.Scene {   //Crear clase que here
         //Personajes
         this.load.image('Ania', 'Assets/Sprites/Personajes/Ania.png'); 
         this.load.image('Gancho', 'Assets/Sprites/Personajes/Gancho.png');
+        this.load.image('ContenedorNormal', 'Assets/Interfaz/interfazMedianoNormal.png');
+        this.load.image('ContenedorPulsado', 'Assets/Interfaz/interfazMedianoPulsado.png');
 
         //Boton Salir
         this.load.image('BotonSalirN', 'Assets/Interfaz/Botones/salirNormal.png'); 
@@ -25,19 +27,26 @@ export class MenuEleccionJugador extends Phaser.Scene {   //Crear clase que here
         //Fondo
         const background = this.add.image(0, 0, 'Menus').setOrigin(0); //Añadir imagen de fondo
         background.setScale(Math.max(this.scale.width / background.width, this.scale.height / background.height));
-        const nombreJuego = this.add.image(this.scale.width / 2, this.scale.height / 4, 'NombreJuego').setScale(1.5);  //Nombre del juego
+        const nombreJuego = this.add.image(this.scale.width / 2, this.scale.height / 4, 'NombreJuego').setScale(2);  //Nombre del juego
 
-        const botonAnia = this.add.image(300, 300, 'Ania').setScale(4).setInteractive(); 
+        //const contenedorAnia = this.add.image(this.scale.width / 2 - 200, this.scale.height / 2 + 75, 'Contenedor');
+        //const contenedorGancho = this.add.image(this.scale.width / 2 + 200, this.scale.height / 2 + 75, 'Contenedor');
+
+        const botonAnia = this.add.image(300, 350, 'ContenedorNormal').setScale(2).setInteractive(); 
        // botonAnia.on('pointerover', () => { botonSalir.setTexture('BotonSalirE')}); 
         //botonAnia.on('pointerout', () => { botonSalir.setTexture('BotonSalirN')});
-        //botonAnia.on('pointerdown', () => { botonSalir.setTexture('BotonSalirP') }); 
+        botonAnia.on('pointerdown', () => { botonAnia.setTexture('ContenedorPulsado') }); 
         botonAnia.on('pointerup', () => { this.scene.start('PantallaJuego'); });
 
-        const botonGancho = this.add.image(700, 300, 'Gancho').setScale(4).setInteractive(); 
+        const Ania = this.add.image(300, 350, 'Ania').setScale(2);
+        
+        const botonGancho = this.add.image(650, 350, 'ContenedorNormal').setScale(2).setInteractive(); 
         //botonGancho.on('pointerover', () => { botonSalir.setTexture('BotonSalirE')}); 
         //botonGancho.on('pointerout', () => { botonSalir.setTexture('BotonSalirN')});
-        //botonGancho.on('pointerdown', () => { botonSalir.setTexture('BotonSalirP') }); 
+        botonGancho.on('pointerdown', () => { botonGancho.setTexture('ContenedorPulsado') }); 
         botonGancho.on('pointerup', () => { this.scene.start('PantallaJuego'); });
+
+        const Gancho = this.add.image(650, 350, 'Gancho').setScale(2);
 
         //Boton Salir
         const botonSalir = this.add.image(130, 55, 'BotonSalirN').setScale(1.5).setInteractive(); 
