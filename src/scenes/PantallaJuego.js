@@ -26,6 +26,10 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.load.spritesheet('AniaWalk', 'Assets/Sprites/Ania/Ania-WALK.png', { frameWidth: 42, frameHeight: 25 });
         this.load.spritesheet('GanchoIdle', 'Assets/Sprites/gancho.png', { frameWidth: 108, frameHeight: 50 });
 
+        //Vidas
+        this.load.image('Heart','Assets/Interfaz/Otros/VidaEncendida.png')
+        this.load.image('HeartEmpty','Assets/Interfaz/Otros/VidaApagada.png')
+
         //Objetos
         this.load.image('Ataud', 'Assets/Piezas/ataúd.png');
         this.load.image('guadana', 'Assets/Piezas/guadaña.png');
@@ -102,9 +106,9 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
 
         //Vidas de ania
         this.hearts=[
-            this.add.circle(this.scale.width-120, 50, 10, 0xff0000).setOrigin(0.5),
-            this.add.circle(this.scale.width-150, 50, 10, 0xff0000).setOrigin(0.5),
-            this.add.circle(this.scale.width-180, 50, 10, 0xff0000).setOrigin(0.5)
+            this.add.sprite(this.scale.width-120, 50,'Heart').setOrigin(0.5).setScale(1.5),
+            this.add.sprite(this.scale.width-150, 50, 'Heart').setOrigin(0.5).setScale(1.5),
+            this.add.sprite(this.scale.width-180, 50, 'Heart').setOrigin(0.5).setScale(1.5)
         ];
         //Crear Gancho
         this.Gancho = this.physics.add.sprite(108, 50, 'GanchoIdle').setImmovable(true).setDepth(1);
@@ -243,7 +247,15 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.maxPowerUps = 2;   //Limite de PowerUps en pantalla
         this.AparicionesPowerUp(); //Evento para crear PowerUps cada cierto tiempo
 
-
+        this.physics.add.collider(this.powerUps, this.floor);
+        this.physics.add.collider(this.powerUps, this.platform1);
+        this.physics.add.collider(this.powerUps, this.platform2);
+        this.physics.add.collider(this.powerUps, this.platform3);
+        this.physics.add.collider(this.powerUps, this.platform4);
+        this.physics.add.collider(this.powerUps, this.platform5);
+        this.physics.add.collider(this.powerUps, this.platform6);
+        this.physics.add.collider(this.powerUps, this.platform7);
+        this.physics.add.collider(this.powerUps, this.platform8);
 
 
 
@@ -351,7 +363,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.Ania.lives -= 1; // Restar una vida a Ania
         if(this.hearts.length > 0) {
             const heart = this.hearts.pop();
-            heart.destroy();
+            heart.setTexture('HeartEmpty'); // Cambiar la textura a corazón vacío
         }else{
             this.scene.start("PantallaFinal"); // Cambiar a la escena ResultScreen
         }
