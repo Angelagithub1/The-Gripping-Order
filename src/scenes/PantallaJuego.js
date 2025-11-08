@@ -26,6 +26,11 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.load.spritesheet('AniaWalk', 'Assets/Sprites/Ania/Ania-WALK.png', { frameWidth: 42, frameHeight: 25 });
         this.load.spritesheet('GanchoIdle', 'Assets/Sprites/gancho.png', { frameWidth: 108, frameHeight: 50 });
 
+        //Objetos
+        this.load.image('Ataud', 'Assets/Piezas/ataúd.png');
+        this.load.image('guadana', 'Assets/Piezas/guadaña.png');
+        this.load.image('hueso', 'Assets/Piezas/hueso.png');
+        this.load.image('libro', 'Assets/Piezas/libro.png');
     }
     create() {
 
@@ -84,18 +89,42 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         //Crear Ania
         this.Ania = this.physics.add.sprite(42, 25, 'AniaIdle'); //Crear sprite de Ania
         this.Ania.setScale(1.5).setFrame(1); //Escalar y poner frame inicial
-        this.Ania.y = 150; //Posición inicial Y
+        this.Ania.y = this.scale.height/2; //Posición inicial Y
         this.Ania.x = this.scale.width / 2; //Posición inicial X
         this.Ania.name = "Ania";
 
         //Crear Gancho
-        this.Gancho = this.physics.add.sprite(108, 50, 'GanchoIdle').setImmovable(true);
+        this.Gancho = this.physics.add.sprite(108, 50, 'GanchoIdle').setImmovable(true).setDepth(1);
         this.Gancho.setScale(1.5).setFrame(1);
         this.Gancho.y = 80;
         this.Gancho.x = this.scale.width / 2;
         this.Gancho.setOrigin(0.5, 0.1); // 0.1 lo pone el pivote cerca de la parte superior
         this.Gancho.body.setAllowGravity(false); //Desactivar gravedad
         this.Gancho.anims.play('Anim_GanchoIdle', true);
+        this.Gancho.objeto = null;
+        this.Gancho.Soltar = false;
+
+        // Punto visual que sigue la parte visible del gancho
+        this.ganchoPoint = this.add.circle(this.Gancho.x, this.Gancho.y + 50, 5/*, 0x00ff00*/).setDepth(50);
+
+        this.positions = [
+            { x: 0, y: 0, z: 0 },
+            { x: 20, y: -2, z: -30 },
+            { x: 60, y: -15,z:-45 },
+            { x: 55, y: -10, z: 30 },
+            { x: 20, y: -2, z: 15 },
+            { x: 0, y: 0, z: 0 },
+            { x: -20, y: -2, z: -15 },
+            { x: -60, y: -15, z:-45 },
+            { x: -55, y: -10,z:30 },
+            { x: -20, y: -2, z: 15 }
+        ]
+        //Cambia la posicion del punto dependiendo del frame
+        this.Gancho.on(Phaser.Animations.Events.ANIMATION_UPDATE, (animation, frame) => {
+            this.ganchoPoint.x = this.Gancho.x + this.positions[frame.index - 1].x;
+            this.ganchoPoint.y = this.Gancho.y + 50 + this.positions[frame.index - 1].y;
+        });
+
 
         //Crear plataformas
         this.platform1 = this.physics.add.image(146, 14, 'PlataformasBajas').setScale(1.5).setImmovable(true);
@@ -138,6 +167,9 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.platform8.x = this.scale.width - 150;
         this.platform8.y = 220;
 
+        //Objetos
+        this.objects = this.physics.add.group();
+
         //Colisiones 
         //Ania con limites de mundo
         this.physics.add.collider(this.Ania, this.floor);
@@ -145,6 +177,9 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.physics.add.collider(this.Ania, this.RightWall/*, this.onHitFloor, null, this*/); //Lo ultimo es para llamara alguna funcion al chocar util para cuando choque con piezas
         this.physics.add.collider(this.Ania, this.TuboGancho);
         this.physics.add.collider(this.Ania, this.Gancho);
+        this.physics.add.overlap(this.Ania, this.objects, (obj)=>{
+            this.DamageAnia(obj);
+        }, null, this);
 
         //Colision Ania con plataformas
         this.physics.add.collider(this.Ania, this.platform1);
@@ -190,19 +225,28 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             callbackScope: this,
             loop: true,
         });
-
     }
     update() {
+
+        if (this.Gancho.objeto == null) {
+            //Si no hay objeto lo crea
+            this.CreateObject(this.ganchoPoint.x, this.ganchoPoint.y);
+        } else if (this.Gancho.Soltar == false) {
+            // Si no ha soltado el objeto lo mantiene pegado al gancho
+            this.Gancho.objeto.x=this.ganchoPoint.x;
+            this.Gancho.objeto.y=this.ganchoPoint.y;
+            //this.Gancho.objeto.rotation = Phaser.Math.DegToRad(this.ganchoPoint.z);
+        }
+
         //Hay un bug si ania salta y colisiona con el gancho, este le empuja fuera de la pantalla
-        if(this.Ania.x < this.Ania.width / 2 +100){
+        if (this.Ania.x < this.Ania.width / 2 + 100) {
             console.log("Fuera");
             this.Ania.x = 121.5;
         }
-        if(this.Ania.x > this.scale.width - this.Ania.width / 2 -100){
+        if (this.Ania.x > this.scale.width - this.Ania.width / 2 - 100) {
             console.log("Fuera");
             this.Ania.x = this.scale.width - 121.5;
         }
-        console.log(this.Ania.x);
         if (this.keys.D.isDown) { //Si presiona D
             this.Ania.setVelocityX(160); //Se mueve a la derecha
             this.Ania.anims.play('Anim_AniaWalk', true); //Reproducir animación de caminar
@@ -231,6 +275,21 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         }
 
 
+
+        //Solo detecta una pulsación
+        if (Phaser.Input.Keyboard.JustDown(this.keys.ENTER) && this.Gancho.objeto != null && this.Gancho.Soltar == false) {
+            //Se avisa que se ha soltado el objeto y se activa la gravedad
+            this.Gancho.Soltar = true;
+            this.Gancho.objeto.body.setAllowGravity(true);
+            this.time.delayedCall(800, () => {
+                //Se espera un tiempo para avisar que no hay objeto para que no 
+                //se cree uno nuevo inmediatamente
+                this.Gancho.objeto = null;
+                this.Gancho.Soltar = false;
+            });
+        }
+
+
     }
     updateTimer() {
         this.remainingTime -= 1; // Decrementar el tiempo restante
@@ -247,6 +306,20 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
     timeUp() {
 
         this.scene.start("PantallaFinal"); // Cambiar a la escena ResultScreen
+    }
+    CreateObject(x, y) {
+        let tipoObjeto = Phaser.Math.RND.pick(['Ataud', 'guadana', 'hueso', 'libro'])
+        let objeto = this.objects.create(x, y + 30, tipoObjeto).setDepth(0);
+        objeto.canDamage=true;
+        objeto.setOrigin(0.5, 0.1);
+        objeto.body.setAllowGravity(false);
+        this.Gancho.objeto = objeto;
+    }
+
+    DamageAnia(objeto) {
+        if(!objeto.canDamage) return; // Evitar daño múltiple
+        objeto.canDamage=false; // Marcar el objeto como ya usado para daño
+        console.log("Ania ha sido dañada");
     }
 
 }
