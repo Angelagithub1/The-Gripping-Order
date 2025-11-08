@@ -15,7 +15,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.load.image('BotonSalirN', 'Assets/Interfaz/Botones/salirNormal.png');
         this.load.image('BotonSalirE', 'Assets/Interfaz/Botones/salirEncima.png');
         this.load.image('BotonSalirP', 'Assets/Interfaz/Botones/salirPulsado.png');
-        this.load.image('BackgroundGraveyard', 'Assets/Backgrounds/nivel1.png');
+        this.load.image('BackgroundGraveyard', 'Assets/Backgrounds/Nivel1ConTubo.png');
 
         //Plataformas
         this.load.image('PlataformasAltas', 'Assets/Backgrounds/plat2.png');
@@ -77,8 +77,9 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.physics.add.existing(this.RightWall, true);
 
         //Tubo del gancho
-        this.TuboGancho = this.add.rectangle(this.scale.width / 2, 80, this.scale.width - 180, 20, 0x00ff00);
+        this.TuboGancho = this.add.rectangle(this.scale.width / 2, 74, this.scale.width - 180, 10, 0x00ff00);
         this.physics.add.existing(this.TuboGancho, true);
+        this.TuboGancho.setAlpha(0.5); //Hacer el tubo semi-transparente
 
         //Crear Ania
         this.Ania = this.physics.add.sprite(42, 25, 'AniaIdle'); //Crear sprite de Ania
@@ -192,6 +193,16 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
 
     }
     update() {
+        //Hay un bug si ania salta y colisiona con el gancho, este le empuja fuera de la pantalla
+        if(this.Ania.x < this.Ania.width / 2 +100){
+            console.log("Fuera");
+            this.Ania.x = 121.5;
+        }
+        if(this.Ania.x > this.scale.width - this.Ania.width / 2 -100){
+            console.log("Fuera");
+            this.Ania.x = this.scale.width - 121.5;
+        }
+        console.log(this.Ania.x);
         if (this.keys.D.isDown) { //Si presiona D
             this.Ania.setVelocityX(160); //Se mueve a la derecha
             this.Ania.anims.play('Anim_AniaWalk', true); //Reproducir animación de caminar
@@ -210,10 +221,10 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         }
 
         // Mover el gancho
-        if (this.keys.Right.isDown) {
+        if (this.keys.Right.isDown && this.Gancho.x < this.Gancho.width / 2 + this.scale.width - 225) {
             this.Gancho.setVelocityX(160);
         }
-        else if (this.keys.Left.isDown) {
+        else if (this.keys.Left.isDown && this.Gancho.x > this.Gancho.width / 2 + 115) {
             this.Gancho.setVelocityX(-160);
         } else {
             this.Gancho.setVelocityX(0);
