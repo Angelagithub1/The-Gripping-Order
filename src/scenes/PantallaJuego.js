@@ -92,7 +92,14 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.Ania.y = this.scale.height/2; //Posición inicial Y
         this.Ania.x = this.scale.width / 2; //Posición inicial X
         this.Ania.name = "Ania";
+        this.Ania.lives = 3; //Vidas de Ania
 
+        //Vidas de ania
+        this.hearts=[
+            this.add.circle(this.scale.width-120, 50, 10, 0xff0000).setOrigin(0.5),
+            this.add.circle(this.scale.width-150, 50, 10, 0xff0000).setOrigin(0.5),
+            this.add.circle(this.scale.width-180, 50, 10, 0xff0000).setOrigin(0.5)
+        ];
         //Crear Gancho
         this.Gancho = this.physics.add.sprite(108, 50, 'GanchoIdle').setImmovable(true).setDepth(1);
         this.Gancho.setScale(1.5).setFrame(1);
@@ -319,6 +326,13 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         console.log(objeto.name);
         if(!objeto.canDamage) return; // Evitar daño múltiple
         objeto.canDamage=false; // Marcar el objeto como ya usado para daño
+        this.Ania.lives -= 1; // Restar una vida a Ania
+        if(this.hearts.length > 0) {
+            const heart = this.hearts.pop();
+            heart.destroy();
+        }else{
+            this.scene.start("PantallaFinal"); // Cambiar a la escena ResultScreen
+        }
         console.log("Ania ha sido dañada");
     }
 
