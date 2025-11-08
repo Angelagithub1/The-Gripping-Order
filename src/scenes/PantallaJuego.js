@@ -177,9 +177,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.physics.add.collider(this.Ania, this.RightWall/*, this.onHitFloor, null, this*/); //Lo ultimo es para llamara alguna funcion al chocar util para cuando choque con piezas
         this.physics.add.collider(this.Ania, this.TuboGancho);
         this.physics.add.collider(this.Ania, this.Gancho);
-        this.physics.add.overlap(this.Ania, this.objects, (obj)=>{
-            this.DamageAnia(obj);
-        }, null, this);
+        this.physics.add.overlap(this.Ania, this.objects, this.DamageAnia, null, this);
 
         //Colision Ania con plataformas
         this.physics.add.collider(this.Ania, this.platform1);
@@ -313,10 +311,12 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         objeto.canDamage=true;
         objeto.setOrigin(0.5, 0.1);
         objeto.body.setAllowGravity(false);
+        objeto.name = tipoObjeto;
         this.Gancho.objeto = objeto;
     }
 
-    DamageAnia(objeto) {
+    DamageAnia(ania,objeto) {
+        console.log(objeto.name);
         if(!objeto.canDamage) return; // Evitar daño múltiple
         objeto.canDamage=false; // Marcar el objeto como ya usado para daño
         console.log("Ania ha sido dañada");
