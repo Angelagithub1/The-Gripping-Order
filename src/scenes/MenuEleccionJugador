@@ -17,11 +17,15 @@ export class MenuEleccionJugador extends Phaser.Scene {   //Crear clase que here
         this.load.image('ContenedorNormal', 'Assets/Interfaz/interfazMedianoNormal.png');
         this.load.image('ContenedorPulsado', 'Assets/Interfaz/interfazMedianoPulsado.png');
 
+        //Boton Pausa
+        this.load.image('BotonPausaN', 'Assets/Interfaz/Botones/pausarNormal.png');
+        this.load.image('BotonPausaE', 'Assets/Interfaz/Botones/pausarEncima.png');
+        this.load.image('BotonPausaP', 'Assets/Interfaz/Botones/pausarPulsado.png');
+        
         //Boton Salir
         this.load.image('BotonSalirN', 'Assets/Interfaz/Botones/salirNormal.png'); 
         this.load.image('BotonSalirE', 'Assets/Interfaz/Botones/salirEncima.png'); 
         this.load.image('BotonSalirP', 'Assets/Interfaz/Botones/salirPulsado.png');
-        
     }
     create(){   //Se ejecuta al iniciar la escena
         //Fondo
@@ -47,6 +51,13 @@ export class MenuEleccionJugador extends Phaser.Scene {   //Crear clase que here
         botonGancho.on('pointerup', () => { this.scene.start('PantallaJuego'); });
 
         const Gancho = this.add.image(650, 350, 'Gancho').setScale(2);
+
+        //Boton Pausa
+        const botonPausa = this.add.image(850, 55, 'BotonPausaN').setScale(1.5).setInteractive().setScale(2); 
+        botonPausa.on('pointerover', () => { botonPausa.setTexture('BotonPausaE')}); 
+        botonPausa.on('pointerout', () => { botonPausa.setTexture('BotonPausaN')});
+        botonPausa.on('pointerdown', () => { botonPausa.setTexture('BotonPausaP') }); 
+        botonPausa.on('pointerup', () => { this.scene.start('MenuPausa'); });
 
         //Boton Salir
         const botonSalir = this.add.image(130, 55, 'BotonSalirN').setScale(1.5).setInteractive(); 

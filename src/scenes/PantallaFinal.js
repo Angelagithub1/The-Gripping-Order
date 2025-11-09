@@ -11,6 +11,11 @@ export class PantallaFinal extends Phaser.Scene {   //Crear clase que hereda de 
         //Nombre del juego
         this.load.image('NombreJuego', 'Assets/Interfaz/titulo.png'); 
 
+        //Boton Pausa
+        this.load.image('BotonPausaN', 'Assets/Interfaz/Botones/pausarNormal.png');
+        this.load.image('BotonPausaE', 'Assets/Interfaz/Botones/pausarEncima.png');
+        this.load.image('BotonPausaP', 'Assets/Interfaz/Botones/pausarPulsado.png');
+
         //Boton Salir
         this.load.image('BotonSalirN', 'Assets/Interfaz/Botones/salirNormal.png'); 
         this.load.image('BotonSalirE', 'Assets/Interfaz/Botones/salirEncima.png'); 
@@ -22,6 +27,13 @@ export class PantallaFinal extends Phaser.Scene {   //Crear clase que hereda de 
         const background = this.add.image(0, 0, 'Menus').setOrigin(0); //Añadir imagen de fondo
         background.setScale(Math.max(this.scale.width / background.width, this.scale.height / background.height));
         const nombreJuego = this.add.image(this.scale.width / 2, this.scale.height / 4, 'NombreJuego').setScale(3);  //Nombre del juego
+
+        //Boton Pausa
+        const botonPausa = this.add.image(850, 55, 'BotonPausaN').setScale(1.5).setInteractive().setScale(2); 
+        botonPausa.on('pointerover', () => { botonPausa.setTexture('BotonPausaE')}); 
+        botonPausa.on('pointerout', () => { botonPausa.setTexture('BotonPausaN')});
+        botonPausa.on('pointerdown', () => { botonPausa.setTexture('BotonPausaP') }); 
+        botonPausa.on('pointerup', () => { this.scene.start('MenuPausa'); });
 
         //Boton Salir
         const botonSalir = this.add.image(130, 55, 'BotonSalirN').setScale(1.5).setInteractive(); 

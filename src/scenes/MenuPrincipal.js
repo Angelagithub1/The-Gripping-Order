@@ -26,6 +26,11 @@ export class MenuPrincipal extends Phaser.Scene {   //Crear clase que hereda de 
         this.load.image('BotonCreditosE', 'Assets/Interfaz/Botones/creditosEncima.png'); 
         this.load.image('BotonCreditosP', 'Assets/Interfaz/Botones/creditosPulsado.png');
 
+        //Boton Pausa
+        this.load.image('BotonPausaN', 'Assets/Interfaz/Botones/pausarNormal.png');
+        this.load.image('BotonPausaE', 'Assets/Interfaz/Botones/pausarEncima.png');
+        this.load.image('BotonPausaP', 'Assets/Interfaz/Botones/pausarPulsado.png');
+
         //Boton Salir
         this.load.image('BotonSalirN', 'Assets/Interfaz/Botones/salirNormal.png'); 
         this.load.image('BotonSalirE', 'Assets/Interfaz/Botones/salirEncima.png'); 
@@ -57,6 +62,13 @@ export class MenuPrincipal extends Phaser.Scene {   //Crear clase que hereda de 
         botonCreditos.on('pointerdown', () => { botonCreditos.setTexture('BotonCreditosP') }); 
         botonCreditos.on('pointerup', () => { this.scene.start('MenuCreditos'); });
 
+        //Boton Pausa
+        const botonPausa = this.add.image(850, 55, 'BotonPausaN').setScale(1.5).setInteractive().setScale(2); 
+        botonPausa.on('pointerover', () => { botonPausa.setTexture('BotonPausaE')}); 
+        botonPausa.on('pointerout', () => { botonPausa.setTexture('BotonPausaN')});
+        botonPausa.on('pointerdown', () => { botonPausa.setTexture('BotonPausaP') }); 
+        botonPausa.on('pointerup', () => { this.scene.start('MenuPausa'); });
+        
         //Boton Salir
         const botonSalir = this.add.image(130, 55, 'BotonSalirN').setScale(1.5).setInteractive(); 
         botonSalir.on('pointerover', () => { botonSalir.setTexture('BotonSalirE')}); 

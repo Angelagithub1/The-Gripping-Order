@@ -11,6 +11,11 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         //Nombre del juego
         this.load.image('NombreJuego', 'Assets/Interfaz/titulo.png');
 
+        //Boton Pausa
+        this.load.image('BotonPausaN', 'Assets/Interfaz/Botones/pausarNormal.png');
+        this.load.image('BotonPausaE', 'Assets/Interfaz/Botones/pausarEncima.png');
+        this.load.image('BotonPausaP', 'Assets/Interfaz/Botones/pausarPulsado.png');
+
         //Boton Salir
         this.load.image('BotonSalirN', 'Assets/Interfaz/Botones/salirNormal.png');
         this.load.image('BotonSalirE', 'Assets/Interfaz/Botones/salirEncima.png');
@@ -48,6 +53,12 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         const background = this.add.image(0, 0, 'BackgroundGraveyard').setOrigin(0); //Añadir imagen de fondo
         background.setScale(Math.max(this.scale.width / background.width, this.scale.height / background.height));
 
+        const botonPausa = this.add.image(850, 55, 'BotonPausaN').setScale(1.5).setInteractive().setScale(2); 
+        botonPausa.on('pointerover', () => { botonPausa.setTexture('BotonPausaE')}); 
+        botonPausa.on('pointerout', () => { botonPausa.setTexture('BotonPausaN')});
+        botonPausa.on('pointerdown', () => { botonPausa.setTexture('BotonPausaP') }); 
+        botonPausa.on('pointerup', () => { this.scene.start('MenuPausa'); });
+        
         //Boton Salir
         const botonSalir = this.add.image(130, 55, 'BotonSalirN').setScale(1.5).setInteractive();
         botonSalir.on('pointerover', () => { botonSalir.setTexture('BotonSalirE') });
@@ -110,9 +121,9 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
 
         //Vidas de ania
         this.hearts=[
-            this.add.sprite(this.scale.width-120, 50,'Heart').setOrigin(0.5).setScale(1.5),
-            this.add.sprite(this.scale.width-150, 50, 'Heart').setOrigin(0.5).setScale(1.5),
-            this.add.sprite(this.scale.width-180, 50, 'Heart').setOrigin(0.5).setScale(1.5)
+            this.add.sprite(this.scale.width-220, 50,'Heart').setOrigin(0.5).setScale(1.5),
+            this.add.sprite(this.scale.width-250, 50, 'Heart').setOrigin(0.5).setScale(1.5),
+            this.add.sprite(this.scale.width-280, 50, 'Heart').setOrigin(0.5).setScale(1.5)
         ];
         //Crear Gancho
         this.Gancho = this.physics.add.sprite(108, 50, 'GanchoIdle').setImmovable(true).setDepth(1);
@@ -225,7 +236,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         }
 
         //Cronometro
-        this.timerText = this.add.text(this.scale.width / 2, 30, "30", {
+        this.timerText = this.add.text(this.scale.width / 2, 30, "90", {
             fontSize: "32px",       // Tamaño de la fuente
             color: "#111111",       // Color del texto
             fontWeight: "bold",     // Hacer la fuente más gruesa
