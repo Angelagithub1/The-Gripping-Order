@@ -103,6 +103,10 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.Ania.x = this.scale.width / 2; //Posición inicial X
         this.Ania.name = "Ania";
         this.Ania.lives = 3; //Vidas de Ania
+        this.Ania.canDoubleJump = false; //Capacidad de doble salto
+        this.Ania.canMove = true; //Capacidad de moverse
+        this.Ania.invulnerable = false; //Estado de invulnerabilidad
+        this.Ania.masVelocidad = false; //Estado de aumento de velocidad
 
         //Vidas de ania
         this.hearts=[
@@ -257,6 +261,8 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.physics.add.collider(this.powerUps, this.platform7);
         this.physics.add.collider(this.powerUps, this.platform8);
 
+        this.powerUpsLista = ['PowerUpAmarillo', 'PowerUpAzul', 'PowerUpRojo', 'PowerUpVerde'];
+
 
 
 
@@ -287,21 +293,36 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             console.log("Fuera");
             this.Ania.x = this.scale.width - 121.5;
         }
-        if (this.keys.D.isDown) { //Si presiona D
-            this.Ania.setVelocityX(160); //Se mueve a la derecha
+        if (this.keys.D.isDown && this.Ania.canMove) { //Si presiona D
+            if (!this.Ania.masVelocidad) {
+                this.Ania.setVelocityX(160); //Se mueve a la derecha
+            } else {
+                this.Ania.setVelocityX(250); //Se mueve a la derecha
+            }
             this.Ania.anims.play('Anim_AniaWalk', true); //Reproducir animación de caminar
             this.Ania.flipX = false; //No voltear sprite
-        } else if (this.keys.A.isDown) { //Si presiona A
-            this.Ania.setVelocityX(-160);//se mueve a la izquierda
+            
+        } else if (this.keys.A.isDown && this.Ania.canMove) { //Si presiona A
+            if (!this.Ania.masVelocidad) {
+                this.Ania.setVelocityX(-160);//se mueve a la izquierda  
+            } else {
+                this.Ania.setVelocityX(-250); //Se mueve a la izquierda
+            }
             this.Ania.anims.play('Anim_AniaWalk', true); //Reproducir animación de caminar
             this.Ania.flipX = true;//Voltear sprite
-
+        } else if (!this.Ania.canMove) {
+            this.Ania.setVelocityX(0); //No se mueve
+            this.Ania.anims.play('Anim_AniaIdle', true);//Reproducir animación de idle
         } else {
             this.Ania.setVelocityX(0); //No se mueve
             this.Ania.anims.play('Anim_AniaIdle', true);//Reproducir animación de idle
         }
-        if (this.keys.SPACE.isDown && this.Ania.body.touching.down) {
+
+        //Salto de Ania
+        if (this.keys.SPACE.isDown && this.Ania.body.touching.down && !this.Ania.canDoubleJump && this.Ania.canMove) {
             this.Ania.setVelocityY(-350);//Salto
+        } else if(this.keys.SPACE.isDown && this.Ania.body.touching.down && this.Ania.canDoubleJump && this.Ania.canMove){
+            this.Ania.setVelocityY(-550);
         }
 
         // Mover el gancho
@@ -358,7 +379,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
     }
 
     DamageAnia(ania,objeto) {
-        if(!objeto.canDamage) return; // Evitar daño múltiple
+        if(!objeto.canDamage || ania.invulnerable) return; // Evitar daño múltiple
         objeto.canDamage=false; // Marcar el objeto como ya usado para daño
         this.Ania.lives -= 1; // Restar una vida a Ania
         if(this.hearts.length > 0) {
@@ -382,18 +403,75 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         if(this.powerUps.countActive(true) >= this.maxPowerUps){
             return; //Si ya hay el maximo de power ups no hace nada
         }
+        //Aparicion
         const margen = 30;
         const x = Phaser.Math.Between(margen, this.scale.width - margen);
         const y = Phaser.Math.Between(margen, this.scale.height - margen);
-        const powerUpActual = this.powerUps.create(x, y, 'PowerUpAmarillo');
-        powerUpActual.setOrigin(0.5, 0.5);
-        //powerUpActual.body.setAllowGravity(true);
+
+        const tipoPowerUp = Phaser.Math.RND.pick(this.powerUpsLista);
+        const powerUpActual = this.powerUps.create(x, y, tipoPowerUp);
+        powerUpActual.setOrigin(0.5, 0.5).setScale(1.5);
+        powerUpActual.type= tipoPowerUp;
+        
     }
 
     RecogerPowerUp(jugador, powerUp){
+        switch(powerUp.type){
+            case 'PowerUpAmarillo':
+                console.log("Efecto Power Up Amarillo");
+                this.Congelación(jugador);
+                break;
+            case 'PowerUpAzul':
+                console.log("Efecto Power Up Azul");   
+                this.DobleSalto(jugador);
+                break;
+            case 'PowerUpRojo':
+                console.log("Efecto Power Up Rojo");    
+                this.Invulnerabilidad(jugador); 
+                break;
+            case 'PowerUpVerde':
+                console.log("Efecto Power Up Verde");    
+                this.AumentoVelocidad(jugador); 
+                break;
+            default:
+                console.log("Power Up desconocido");
+        }
+        
         powerUp.destroy(); //Eliminar el power up
         console.log("Power Up recogido");
-        //Aquí se puede añadir el efecto del power up
     }
+
+    DobleSalto(jugador){
+        console.log("Efecto Doble Salto");
+        jugador.canDoubleJump = true; // Permitir doble salto
+        this.time.delayedCall(5000, () => {
+            jugador.canDoubleJump = false; // Desactivar doble salto después de 15 segundos
+        });
+    }
+
+    Congelación(jugador){
+        console.log("Efecto Congelación");
+        jugador.canMove= false; // Detener el movimiento
+        this.time.delayedCall(5000, () => {
+            jugador.canMove = true; // Desactivar doble salto después de 15 segundos
+        });
+    }
+
+    Invulnerabilidad(jugador){
+        console.log("Efecto Invulnerabilidad");
+        jugador.invulnerable= true; // Detener el movimiento
+        this.time.delayedCall(5000, () => {
+            jugador.invulnerable= false; // Desactivar doble salto después de 15 segundos
+        });
+    }
+
+    AumentoVelocidad(jugador){
+        console.log("Efecto Aumento Velocidad");
+        jugador.masVelocidad= true; // Detener el movimiento
+        this.time.delayedCall(5000, () => {
+            jugador.masVelocidad= false; // Desactivar doble salto después de 15 segundos
+        });
+    }
+
 
 }
