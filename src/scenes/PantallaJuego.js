@@ -32,8 +32,8 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.load.spritesheet('GanchoIdle', 'Assets/Sprites/gancho.png', { frameWidth: 108, frameHeight: 50 });
 
         //Vidas
-        this.load.image('Heart','Assets/Interfaz/Otros/VidaEncendida.png')
-        this.load.image('HeartEmpty','Assets/Interfaz/Otros/VidaApagada.png')
+        this.load.image('Heart', 'Assets/Interfaz/Otros/VidaEncendida.png')
+        this.load.image('HeartEmpty', 'Assets/Interfaz/Otros/VidaApagada.png')
 
         //Objetos
         this.load.image('Ataud', 'Assets/Piezas/ataúd.png');
@@ -53,12 +53,12 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         const background = this.add.image(0, 0, 'BackgroundGraveyard').setOrigin(0); //Añadir imagen de fondo
         background.setScale(Math.max(this.scale.width / background.width, this.scale.height / background.height));
 
-        const botonPausa = this.add.image(850, 55, 'BotonPausaN').setScale(1.5).setInteractive().setScale(2); 
-        botonPausa.on('pointerover', () => { botonPausa.setTexture('BotonPausaE')}); 
-        botonPausa.on('pointerout', () => { botonPausa.setTexture('BotonPausaN')});
-        botonPausa.on('pointerdown', () => { botonPausa.setTexture('BotonPausaP') }); 
+        const botonPausa = this.add.image(850, 55, 'BotonPausaN').setScale(1.5).setInteractive().setScale(2);
+        botonPausa.on('pointerover', () => { botonPausa.setTexture('BotonPausaE') });
+        botonPausa.on('pointerout', () => { botonPausa.setTexture('BotonPausaN') });
+        botonPausa.on('pointerdown', () => { botonPausa.setTexture('BotonPausaP') });
         botonPausa.on('pointerup', () => { this.scene.start('MenuPausa'); });
-        
+
         //Boton Salir
         const botonSalir = this.add.image(130, 55, 'BotonSalirN').setScale(1.5).setInteractive();
         botonSalir.on('pointerover', () => { botonSalir.setTexture('BotonSalirE') });
@@ -110,7 +110,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         //Crear Ania
         this.Ania = this.physics.add.sprite(42, 25, 'AniaIdle'); //Crear sprite de Ania
         this.Ania.setScale(1.5).setFrame(1); //Escalar y poner frame inicial
-        this.Ania.y = this.scale.height/2; //Posición inicial Y
+        this.Ania.y = this.scale.height / 2; //Posición inicial Y
         this.Ania.x = this.scale.width / 2; //Posición inicial X
         this.Ania.name = "Ania";
         this.Ania.lives = 3; //Vidas de Ania
@@ -120,10 +120,10 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.Ania.masVelocidad = false; //Estado de aumento de velocidad
 
         //Vidas de ania
-        this.hearts=[
-            this.add.sprite(this.scale.width-220, 50,'Heart').setOrigin(0.5).setScale(1.5),
-            this.add.sprite(this.scale.width-250, 50, 'Heart').setOrigin(0.5).setScale(1.5),
-            this.add.sprite(this.scale.width-280, 50, 'Heart').setOrigin(0.5).setScale(1.5)
+        this.hearts = [
+            this.add.sprite(this.scale.width - 220, 50, 'Heart').setOrigin(0.5).setScale(1.5),
+            this.add.sprite(this.scale.width - 250, 50, 'Heart').setOrigin(0.5).setScale(1.5),
+            this.add.sprite(this.scale.width - 280, 50, 'Heart').setOrigin(0.5).setScale(1.5)
         ];
         //Crear Gancho
         this.Gancho = this.physics.add.sprite(108, 50, 'GanchoIdle').setImmovable(true).setDepth(1);
@@ -142,13 +142,13 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.positions = [
             { x: 0, y: 0, z: 0 },
             { x: 20, y: -2, z: -30 },
-            { x: 60, y: -15,z:-45 },
+            { x: 60, y: -15, z: -45 },
             { x: 55, y: -10, z: 30 },
             { x: 20, y: -2, z: 15 },
             { x: 0, y: 0, z: 0 },
             { x: -20, y: -2, z: -15 },
-            { x: -60, y: -15, z:-45 },
-            { x: -55, y: -10,z:30 },
+            { x: -60, y: -15, z: -45 },
+            { x: -55, y: -10, z: 30 },
             { x: -20, y: -2, z: 15 }
         ]
         //Cambia la posicion del punto dependiendo del frame
@@ -272,6 +272,8 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.physics.add.collider(this.powerUps, this.platform7);
         this.physics.add.collider(this.powerUps, this.platform8);
 
+        this.physics.add.overlap(this.powerUps, this.objects, this.DestroyPowrUp, null, this);
+
         this.powerUpsLista = ['PowerUpAmarillo', 'PowerUpAzul', 'PowerUpRojo', 'PowerUpVerde'];
 
 
@@ -290,8 +292,8 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             this.CreateObject(this.ganchoPoint.x, this.ganchoPoint.y);
         } else if (this.Gancho.Soltar == false) {
             // Si no ha soltado el objeto lo mantiene pegado al gancho
-            this.Gancho.objeto.x=this.ganchoPoint.x;
-            this.Gancho.objeto.y=this.ganchoPoint.y;
+            this.Gancho.objeto.x = this.ganchoPoint.x;
+            this.Gancho.objeto.y = this.ganchoPoint.y;
             //this.Gancho.objeto.rotation = Phaser.Math.DegToRad(this.ganchoPoint.z);
         }
 
@@ -312,7 +314,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             }
             this.Ania.anims.play('Anim_AniaWalk', true); //Reproducir animación de caminar
             this.Ania.flipX = false; //No voltear sprite
-            
+
         } else if (this.keys.A.isDown && this.Ania.canMove) { //Si presiona A
             if (!this.Ania.masVelocidad) {
                 this.Ania.setVelocityX(-160);//se mueve a la izquierda  
@@ -332,7 +334,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         //Salto de Ania
         if (this.keys.SPACE.isDown && this.Ania.body.touching.down && !this.Ania.canDoubleJump && this.Ania.canMove) {
             this.Ania.setVelocityY(-350);//Salto
-        } else if(this.keys.SPACE.isDown && this.Ania.body.touching.down && this.Ania.canDoubleJump && this.Ania.canMove){
+        } else if (this.keys.SPACE.isDown && this.Ania.body.touching.down && this.Ania.canDoubleJump && this.Ania.canMove) {
             this.Ania.setVelocityY(-550);
         }
 
@@ -382,77 +384,83 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
     CreateObject(x, y) {
         let tipoObjeto = Phaser.Math.RND.pick(['Ataud', 'guadana', 'hueso', 'libro'])
         let objeto = this.objects.create(x, y + 30, tipoObjeto).setDepth(0);
-        objeto.canDamage=true;
+        objeto.canDamage = true;
         objeto.setOrigin(0.5, 0.1);
         objeto.body.setAllowGravity(false);
         objeto.name = tipoObjeto;
         this.Gancho.objeto = objeto;
     }
 
-    DamageAnia(ania,objeto) {
-        if(!objeto.canDamage || ania.invulnerable) return; // Evitar daño múltiple
-        objeto.canDamage=false; // Marcar el objeto como ya usado para daño
+    DamageAnia(ania, objeto) {
+        if (this.Gancho.Soltar == false) return; // Evitar daño si el gancho no ha soltado el objeto
+        if (!objeto.canDamage || ania.invulnerable) return; // Evitar daño múltiple
+        objeto.canDamage = false; // Marcar el objeto como ya usado para daño
         this.Ania.lives -= 1; // Restar una vida a Ania
-        if(this.hearts.length > 0) {
+        if (this.hearts.length > 0) {
             const heart = this.hearts.pop();
             heart.setTexture('HeartEmpty'); // Cambiar la textura a corazón vacío
-        }else{
+        } else {
             this.scene.start("PantallaFinal"); // Cambiar a la escena ResultScreen
         }
         console.log("Ania ha sido dañada");
     }
+    DestroyPowrUp(powerUp, objeto) {
+        if(this.Gancho.Soltar==false) return; // Evitar daño si el gancho no ha soltado el objeto
+        powerUp.destroy();
+    }
 
-
-    AparicionesPowerUp(){
+    AparicionesPowerUp() {
         console.log("Funcion base PowerUp");
         const tiempo = Phaser.Math.Between(10000, 20000); // Tiempo aleatorio entre 10 y 20 segundos
         this.time.delayedCall(tiempo, () => { this.SpawnPowerUp(); this.AparicionesPowerUp(); }, [], this); //Se usa delayedCall en vez de loop pq cada vez se quiere un ritmo distinto
     }
 
-    SpawnPowerUp(){
+    SpawnPowerUp() {
         console.log("Aparece Power Up");
-        if(this.powerUps.countActive(true) >= this.maxPowerUps){
+        if (this.powerUps.countActive(true) >= this.maxPowerUps) {
             return; //Si ya hay el maximo de power ups no hace nada
         }
         //Aparicion
         const margen = 30;
-        const x = Phaser.Math.Between(margen, this.scale.width - margen);
-        const y = Phaser.Math.Between(margen, this.scale.height - margen);
+        
+        const x = Phaser.Math.Between(this.LeftWall.getBounds().right, this.RightWall.getBounds().left);
+        const y = Phaser.Math.Between(this.TuboGancho.getBounds().bottom, this.floor.getBounds().top);
 
+        console.log("Power Up en: " + x + ", " + y);
         const tipoPowerUp = Phaser.Math.RND.pick(this.powerUpsLista);
         const powerUpActual = this.powerUps.create(x, y, tipoPowerUp);
         powerUpActual.setOrigin(0.5, 0.5).setScale(1.5);
-        powerUpActual.type= tipoPowerUp;
-        
+        powerUpActual.type = tipoPowerUp;
+
     }
 
-    RecogerPowerUp(jugador, powerUp){
-        switch(powerUp.type){
+    RecogerPowerUp(jugador, powerUp) {
+        switch (powerUp.type) {
             case 'PowerUpAmarillo':
                 console.log("Efecto Power Up Amarillo");
                 this.Congelación(jugador);
                 break;
             case 'PowerUpAzul':
-                console.log("Efecto Power Up Azul");   
+                console.log("Efecto Power Up Azul");
                 this.DobleSalto(jugador);
                 break;
             case 'PowerUpRojo':
-                console.log("Efecto Power Up Rojo");    
-                this.Invulnerabilidad(jugador); 
+                console.log("Efecto Power Up Rojo");
+                this.Invulnerabilidad(jugador);
                 break;
             case 'PowerUpVerde':
-                console.log("Efecto Power Up Verde");    
-                this.AumentoVelocidad(jugador); 
+                console.log("Efecto Power Up Verde");
+                this.AumentoVelocidad(jugador);
                 break;
             default:
                 console.log("Power Up desconocido");
         }
-        
+
         powerUp.destroy(); //Eliminar el power up
         console.log("Power Up recogido");
     }
 
-    DobleSalto(jugador){
+    DobleSalto(jugador) {
         console.log("Efecto Doble Salto");
         jugador.canDoubleJump = true; // Permitir doble salto
         this.time.delayedCall(5000, () => {
@@ -460,27 +468,27 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         });
     }
 
-    Congelación(jugador){
+    Congelación(jugador) {
         console.log("Efecto Congelación");
-        jugador.canMove= false; // Detener el movimiento
+        jugador.canMove = false; // Detener el movimiento
         this.time.delayedCall(5000, () => {
             jugador.canMove = true; // Desactivar doble salto después de 15 segundos
         });
     }
 
-    Invulnerabilidad(jugador){
+    Invulnerabilidad(jugador) {
         console.log("Efecto Invulnerabilidad");
-        jugador.invulnerable= true; // Detener el movimiento
+        jugador.invulnerable = true; // Detener el movimiento
         this.time.delayedCall(5000, () => {
-            jugador.invulnerable= false; // Desactivar doble salto después de 15 segundos
+            jugador.invulnerable = false; // Desactivar doble salto después de 15 segundos
         });
     }
 
-    AumentoVelocidad(jugador){
+    AumentoVelocidad(jugador) {
         console.log("Efecto Aumento Velocidad");
-        jugador.masVelocidad= true; // Detener el movimiento
+        jugador.masVelocidad = true; // Detener el movimiento
         this.time.delayedCall(5000, () => {
-            jugador.masVelocidad= false; // Desactivar doble salto después de 15 segundos
+            jugador.masVelocidad = false; // Desactivar doble salto después de 15 segundos
         });
     }
 
