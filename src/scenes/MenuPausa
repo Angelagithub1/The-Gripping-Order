@@ -4,6 +4,10 @@ export class MenuPausa extends Phaser.Scene {   //Crear clase que hereda de Phas
         super('MenuPausa'); //Asignación de un nombre interno
     }
 
+    init(data) {
+        this.escenaPrevia = data.escenaPrevia; // Guardar el nombre de la escena en pausa
+    }
+
     preload(){  //Se ejecuta antes de que empiece la escena
         //Fondo
         this.load.image('Menus', 'Assets/Backgrounds/Menus.jpeg'); //Cargar imagen de fondo
@@ -28,8 +32,12 @@ export class MenuPausa extends Phaser.Scene {   //Crear clase que hereda de Phas
         botonSalir.on('pointerover', () => { botonSalir.setTexture('BotonSalirE')}); 
         botonSalir.on('pointerout', () => { botonSalir.setTexture('BotonSalirN')});
         botonSalir.on('pointerdown', () => { botonSalir.setTexture('BotonSalirP') }); 
-        botonSalir.on('pointerup', () => { this.scene.start('PantallaJuego'); });
+        botonSalir.on('pointerup', () => { 
+            this.scene.stop();
+            this.scene.resume(this.escenaPrevia); 
+        });
         
+        this.scene.bringToTop(); // Asegura que el menú de pausa esté en la parte superior
 
 
     }

@@ -57,7 +57,11 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         botonPausa.on('pointerover', () => { botonPausa.setTexture('BotonPausaE') });
         botonPausa.on('pointerout', () => { botonPausa.setTexture('BotonPausaN') });
         botonPausa.on('pointerdown', () => { botonPausa.setTexture('BotonPausaP') });
-        botonPausa.on('pointerup', () => { this.scene.start('MenuPausa'); });
+        botonPausa.on('pointerup', () => {
+            console.log("Pausa");
+            this.scene.pause();
+            this.scene.launch('MenuPausa', { escenaPrevia: this.scene.key });
+        });
 
         //Boton Salir
         const botonSalir = this.add.image(130, 55, 'BotonSalirN').setScale(1.5).setInteractive();
@@ -296,48 +300,49 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             this.Gancho.objeto.y = this.ganchoPoint.y;
             //this.Gancho.objeto.rotation = Phaser.Math.DegToRad(this.ganchoPoint.z);
         }
-
-        //Hay un bug si ania salta y colisiona con el gancho, este le empuja fuera de la pantalla
-        if (this.Ania.x < this.Ania.width / 2 + 100) {
-            console.log("Fuera");
-            this.Ania.x = 121.5;
-        }
-        if (this.Ania.x > this.scale.width - this.Ania.width / 2 - 100) {
-            console.log("Fuera");
-            this.Ania.x = this.scale.width - 121.5;
-        }
-        if (this.keys.D.isDown && this.Ania.canMove) { //Si presiona D
-            if (!this.Ania.masVelocidad) {
-                this.Ania.setVelocityX(160); //Se mueve a la derecha
-            } else {
-                this.Ania.setVelocityX(250); //Se mueve a la derecha
+        if (this.Ania) {
+            //Hay un bug si ania salta y colisiona con el gancho, este le empuja fuera de la pantalla
+            if (this.Ania.x < this.Ania.width / 2 + 100) {
+                console.log("Fuera");
+                this.Ania.x = 121.5;
             }
-            this.Ania.anims.play('Anim_AniaWalk', true); //Reproducir animación de caminar
-            this.Ania.flipX = false; //No voltear sprite
-
-        } else if (this.keys.A.isDown && this.Ania.canMove) { //Si presiona A
-            if (!this.Ania.masVelocidad) {
-                this.Ania.setVelocityX(-160);//se mueve a la izquierda  
-            } else {
-                this.Ania.setVelocityX(-250); //Se mueve a la izquierda
+            if (this.Ania.x > this.scale.width - this.Ania.width / 2 - 100) {
+                console.log("Fuera");
+                this.Ania.x = this.scale.width - 121.5;
             }
-            this.Ania.anims.play('Anim_AniaWalk', true); //Reproducir animación de caminar
-            this.Ania.flipX = true;//Voltear sprite
-        } else if (!this.Ania.canMove) {
-            this.Ania.setVelocityX(0); //No se mueve
-            this.Ania.anims.play('Anim_AniaIdle', true);//Reproducir animación de idle
-        } else {
-            this.Ania.setVelocityX(0); //No se mueve
-            this.Ania.anims.play('Anim_AniaIdle', true);//Reproducir animación de idle
-        }
+            if (this.keys.D.isDown && this.Ania.canMove) { //Si presiona D
+                if (!this.Ania.masVelocidad) {
+                    this.Ania.setVelocityX(160); //Se mueve a la derecha
+                } else {
+                    this.Ania.setVelocityX(250); //Se mueve a la derecha
+                }
+                this.Ania.anims.play('Anim_AniaWalk', true); //Reproducir animación de caminar
+                this.Ania.flipX = false; //No voltear sprite
 
-        //Salto de Ania
-        if (this.keys.SPACE.isDown && this.Ania.body.touching.down && !this.Ania.canDoubleJump && this.Ania.canMove) {
-            this.Ania.setVelocityY(-350);//Salto
-        } else if (this.keys.SPACE.isDown && this.Ania.body.touching.down && this.Ania.canDoubleJump && this.Ania.canMove) {
-            this.Ania.setVelocityY(-550);
-        }
+            } else if (this.keys.A.isDown && this.Ania.canMove) { //Si presiona A
+                if (!this.Ania.masVelocidad) {
+                    this.Ania.setVelocityX(-160);//se mueve a la izquierda  
+                } else {
+                    this.Ania.setVelocityX(-250); //Se mueve a la izquierda
+                }
+                this.Ania.anims.play('Anim_AniaWalk', true); //Reproducir animación de caminar
+                this.Ania.flipX = true;//Voltear sprite
+            } else if (!this.Ania.canMove) {
+                this.Ania.setVelocityX(0); //No se mueve
+                this.Ania.anims.play('Anim_AniaIdle', true);//Reproducir animación de idle
+            } else {
+                this.Ania.setVelocityX(0); //No se mueve
+                this.Ania.anims.play('Anim_AniaIdle', true);//Reproducir animación de idle
+            }
 
+            //Salto de Ania
+            if (this.keys.SPACE.isDown && this.Ania.body.touching.down && !this.Ania.canDoubleJump && this.Ania.canMove) {
+                this.Ania.setVelocityY(-350);//Salto
+            } else if (this.keys.SPACE.isDown && this.Ania.body.touching.down && this.Ania.canDoubleJump && this.Ania.canMove) {
+                this.Ania.setVelocityY(-550);
+            }
+        }
+        
         // Mover el gancho
         if (this.keys.Right.isDown && this.Gancho.x < this.Gancho.width / 2 + this.scale.width - 225) {
             this.Gancho.setVelocityX(160);
@@ -347,8 +352,6 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         } else {
             this.Gancho.setVelocityX(0);
         }
-
-
 
         //Solo detecta una pulsación
         if (Phaser.Input.Keyboard.JustDown(this.keys.ENTER) && this.Gancho.objeto != null && this.Gancho.Soltar == false) {
@@ -405,7 +408,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         console.log("Ania ha sido dañada");
     }
     DestroyPowrUp(powerUp, objeto) {
-        if(this.Gancho.Soltar==false) return; // Evitar daño si el gancho no ha soltado el objeto
+        if (this.Gancho.Soltar == false) return; // Evitar daño si el gancho no ha soltado el objeto
         powerUp.destroy();
     }
 
@@ -422,7 +425,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         }
         //Aparicion
         const margen = 30;
-        
+
         const x = Phaser.Math.Between(this.LeftWall.getBounds().right, this.RightWall.getBounds().left);
         const y = Phaser.Math.Between(this.TuboGancho.getBounds().bottom, this.floor.getBounds().top);
 
