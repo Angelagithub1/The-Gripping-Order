@@ -206,7 +206,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.Gancho.body.setAllowGravity(false); //Desactivar gravedad
         this.Gancho.anims.play('Anim_GanchoIdle', true);
         this.Gancho.objeto = null;
-        this.Gancho.Soltar = false;
+        //this.Gancho.Soltar = false;
 
         // Punto visual que sigue la parte visible del gancho
         this.ganchoPoint = this.add.circle(this.Gancho.x, this.Gancho.y + 50, 5/*, 0x00ff00*/).setDepth(50);
@@ -292,7 +292,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.physics.add.collider(this.Ania, this.platform6);
         this.physics.add.collider(this.Ania, this.platform7);
         this.physics.add.collider(this.Ania, this.platform8);
-
+/*
         //Colision objetos con plataformas
         this.physics.add.overlap(this.platform1, this.objects);
         this.physics.add.overlap(this.platform2, this.objects);
@@ -303,7 +303,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.physics.add.overlap(this.platform7, this.objects);
         this.physics.add.overlap(this.platform8, this.objects);
 
-
+*/
         //Gancho con limites de mundo
         this.physics.add.collider(this.Gancho, this.LeftWall);
         this.physics.add.collider(this.Gancho, this.RightWall);
@@ -368,7 +368,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         if (this.Gancho.objeto == null) {
             //Si no hay objeto lo crea
             this.CreateObject(this.ganchoPoint.x, this.ganchoPoint.y);
-        } else if (this.Gancho.Soltar == false) {
+        } else if (this.Gancho.objeto.Soltar == false) {
             // Si no ha soltado el objeto lo mantiene pegado al gancho
             this.Gancho.objeto.x = this.ganchoPoint.x;
             this.Gancho.objeto.y = this.ganchoPoint.y;
@@ -431,16 +431,18 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         }
 
         //Solo detecta una pulsación
-        if (Phaser.Input.Keyboard.JustDown(this.keys.ENTER) && this.Gancho.objeto != null && this.Gancho.Soltar == false) {
+        if (Phaser.Input.Keyboard.JustDown(this.keys.ENTER) && this.Gancho.objeto != null && this.Gancho.objeto.Soltar == false) {
             //Se avisa que se ha soltado el objeto y se activa la gravedad
-            this.Gancho.Soltar = true;
+            //this.Gancho.Soltar = true;
+            this.Gancho.objeto.Soltar = true;
             this.Gancho.objeto.body.setAllowGravity(true);
             this.time.delayedCall(800, () => {
                 //Se espera un tiempo para avisar que no hay objeto para que no 
                 //se cree uno nuevo inmediatamente
                 this.Gancho.objeto = null;
-                this.Gancho.Soltar = false;
+                //this.Gancho.Soltar = false;
             });
+  
         }
 
 
@@ -470,15 +472,22 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         objeto.body.setSize(objeto.width, objeto.height, true);
         objeto.body.setOffset(0, 0);
         objeto.name = tipoObjeto;
+        objeto.Soltar = false;
         this.Gancho.objeto = objeto;
     }
 
     DamageAnia(ania, objeto) {
-        if (this.Gancho.Soltar == false) return; // Evitar daño si el gancho no ha soltado el objeto
-        if (!objeto.canDamage || ania.invulnerable) return; // Evitar daño múltiple
-        //objeto.canDamage = false; // Marcar el objeto como ya usado para daño
+        if (objeto.Soltar == false) {
+            console.log("Gancho no ha soltado");
+            return; // Evitar daño si el gancho no ha soltado el objeto
+        }
+        if (!objeto.canDamage || ania.invulnerable) {
+            console.log("Ya daño a ania");
+            return; // Evitar daño múltiple
+        }
+        objeto.canDamage = false; // Marcar el objeto como ya usado para daño
         this.Ania.lives =this.Ania.lives- 1; // Restar una vida a Ania
-        
+        /*
         if (this.Ania.lives <= 0) {
             console.log("Ania muere");
             const heart = this.hearts.pop();
@@ -487,7 +496,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             heart.setTexture('HeartEmpty'); // Cambiar la textura a corazón vacío
             console.log("Ania ha sido dañada");
         }
-        /*
+        /**/
         if (this.hearts.length > 0) {
             const heart = this.hearts.pop();
             heart.setTexture('HeartEmpty'); // Cambiar la textura a corazón vacío
@@ -495,10 +504,10 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         } else {
             this.scene.start("PantallaFinal"); // Cambiar a la escena ResultScreen
         }
-        console.log("Ania ha sido dañada");*/
+        console.log("Ania ha sido dañada");/**/
     }
     DestroyPowrUp(powerUp, objeto) {
-        if (this.Gancho.Soltar == false) return; // Evitar daño si el gancho no ha soltado el objeto
+        if (objeto.Soltar== false) return; // Evitar daño si el gancho no ha soltado el objeto
         powerUp.destroy();
     }
 
