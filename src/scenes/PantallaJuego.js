@@ -31,6 +31,16 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.load.spritesheet('AniaWalk', 'Assets/Sprites/Ania/Ania-WALK.png', { frameWidth: 42, frameHeight: 25 });
         this.load.spritesheet('GanchoIdle', 'Assets/Sprites/gancho.png', { frameWidth: 108, frameHeight: 50 });
 
+        //Sprites Ania PowerUps
+        this.load.spritesheet('AniaIdleAmarillo', 'Assets/Sprites/Ania/Color/Amarillo-IDLE.png', { frameWidth: 42, frameHeight: 25 });
+        this.load.spritesheet('AniaWalkAmarillo', 'Assets/Sprites/Ania/Color/Amarillo-WALK.png', { frameWidth: 42, frameHeight: 25 });
+        this.load.spritesheet('AniaIdleAzul', 'Assets/Sprites/Ania/Color/Azul-IDLE.png', { frameWidth: 42, frameHeight: 25 });
+        this.load.spritesheet('AniaWalkAzul', 'Assets/Sprites/Ania/Color/Azul-WALK.png', { frameWidth: 42, frameHeight: 25 });
+        this.load.spritesheet('AniaIdleRojo', 'Assets/Sprites/Ania/Color/Rojo-IDLE.png', { frameWidth: 42, frameHeight: 25 });
+        this.load.spritesheet('AniaWalkRojo', 'Assets/Sprites/Ania/Color/Rojo-WALK.png', { frameWidth: 42, frameHeight: 25 });
+        this.load.spritesheet('AniaIdleVerde', 'Assets/Sprites/Ania/Color/Verde-IDLE.png', { frameWidth: 42, frameHeight: 25 });
+        this.load.spritesheet('AniaWalkVerde', 'Assets/Sprites/Ania/Color/Verde-WALK.png', { frameWidth: 42, frameHeight: 25 });
+
         //Vidas
         this.load.image('Heart', 'Assets/Interfaz/Otros/VidaEncendida.png')
         this.load.image('HeartEmpty', 'Assets/Interfaz/Otros/VidaApagada.png')
@@ -53,6 +63,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         const background = this.add.image(0, 0, 'BackgroundGraveyard').setOrigin(0); //Añadir imagen de fondo
         background.setScale(Math.max(this.scale.width / background.width, this.scale.height / background.height));
 
+        //Boton Pausa
         const botonPausa = this.add.image(850, 55, 'BotonPausaN').setScale(1.5).setInteractive().setScale(2);
         botonPausa.on('pointerover', () => { botonPausa.setTexture('BotonPausaE') });
         botonPausa.on('pointerout', () => { botonPausa.setTexture('BotonPausaN') });
@@ -82,6 +93,62 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.anims.create({
             key: 'Anim_AniaWalk',
             frames: this.anims.generateFrameNumbers('AniaWalk', { start: 0, end: 4 }),
+            frameRate: 5, //numero de frames
+            repeat: -1 //-1 para que se repita indefinidamente
+        });
+
+        //Ania-Amarillo
+        this.anims.create({
+            key: 'Anim_AniaIdleAmarillo',
+            frames: this.anims.generateFrameNumbers('AniaIdleAmarillo', { start: 0, end: 7 }),
+            frameRate: 8, //numero de frames
+            repeat: -1 //-1 para que se repita indefinidamente
+        });
+        this.anims.create({
+            key: 'Anim_AniaWalkAmarillo',
+            frames: this.anims.generateFrameNumbers('AniaWalkAmarillo', { start: 0, end: 4 }),
+            frameRate: 5, //numero de frames
+            repeat: -1 //-1 para que se repita indefinidamente
+        });
+
+        //Ania-Azul
+        this.anims.create({
+            key: 'Anim_AniaIdleAzul',
+            frames: this.anims.generateFrameNumbers('AniaIdleAzul', { start: 0, end: 7 }),
+            frameRate: 8, //numero de frames
+            repeat: -1 //-1 para que se repita indefinidamente
+        });
+        this.anims.create({
+            key: 'Anim_AniaWalkAzul',
+            frames: this.anims.generateFrameNumbers('AniaWalkAzul', { start: 0, end: 4 }),
+            frameRate: 5, //numero de frames
+            repeat: -1 //-1 para que se repita indefinidamente
+        });
+
+        //Ania-Rojo
+        this.anims.create({
+            key: 'Anim_AniaIdleRojo',
+            frames: this.anims.generateFrameNumbers('AniaIdleRojo', { start: 0, end: 7 }),
+            frameRate: 8, //numero de frames
+            repeat: -1 //-1 para que se repita indefinidamente
+        });
+        this.anims.create({
+            key: 'Anim_AniaWalkRojo',
+            frames: this.anims.generateFrameNumbers('AniaWalkRojo', { start: 0, end: 4 }),
+            frameRate: 5, //numero de frames
+            repeat: -1 //-1 para que se repita indefinidamente
+        });
+
+        //Ania-Verde
+        this.anims.create({
+            key: 'Anim_AniaIdleVerde',
+            frames: this.anims.generateFrameNumbers('AniaIdleVerde', { start: 0, end: 7 }),
+            frameRate: 8, //numero de frames
+            repeat: -1 //-1 para que se repita indefinidamente
+        });
+        this.anims.create({
+            key: 'Anim_AniaWalkVerde',
+            frames: this.anims.generateFrameNumbers('AniaWalkVerde', { start: 0, end: 4 }),
             frameRate: 5, //numero de frames
             repeat: -1 //-1 para que se repita indefinidamente
         });
@@ -280,11 +347,6 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
 
         this.powerUpsLista = ['PowerUpAmarillo', 'PowerUpAzul', 'PowerUpRojo', 'PowerUpVerde'];
 
-
-
-
-
-
     }
 
 
@@ -398,14 +460,24 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         if (this.Gancho.Soltar == false) return; // Evitar daño si el gancho no ha soltado el objeto
         if (!objeto.canDamage || ania.invulnerable) return; // Evitar daño múltiple
         objeto.canDamage = false; // Marcar el objeto como ya usado para daño
-        this.Ania.lives -= 1; // Restar una vida a Ania
+        this.Ania.lives =this.Ania.lives- 1; // Restar una vida a Ania
+        const heart = this.hearts.pop();
+        if (this.Ania.lives <= 0) {
+            console.log("Ania muere");
+            this.scene.start("PantallaFinal");
+        } else{
+            heart.setTexture('HeartEmpty'); // Cambiar la textura a corazón vacío
+            console.log("Ania ha sido dañada");
+        }
+        /*
         if (this.hearts.length > 0) {
             const heart = this.hearts.pop();
             heart.setTexture('HeartEmpty'); // Cambiar la textura a corazón vacío
+
         } else {
             this.scene.start("PantallaFinal"); // Cambiar a la escena ResultScreen
         }
-        console.log("Ania ha sido dañada");
+        console.log("Ania ha sido dañada");*/
     }
     DestroyPowrUp(powerUp, objeto) {
         if (this.Gancho.Soltar == false) return; // Evitar daño si el gancho no ha soltado el objeto
@@ -466,7 +538,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
     DobleSalto(jugador) {
         console.log("Efecto Doble Salto");
         jugador.canDoubleJump = true; // Permitir doble salto
-        this.time.delayedCall(5000, () => {
+        this.time.delayedCall(5000, () => { 
             jugador.canDoubleJump = false; // Desactivar doble salto después de 15 segundos
         });
     }

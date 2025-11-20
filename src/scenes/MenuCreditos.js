@@ -11,24 +11,46 @@ export class MenuCreditos extends Phaser.Scene {   //Crear clase que hereda de P
         //Nombre del juego
         this.load.image('NombreJuego', 'Assets/Interfaz/titulo.png'); 
 
-        //Boton Salir
-        this.load.image('BotonSalirN', 'Assets/Interfaz/Botones/salirNormal.png'); 
-        this.load.image('BotonSalirE', 'Assets/Interfaz/Botones/salirEncima.png'); 
-        this.load.image('BotonSalirP', 'Assets/Interfaz/Botones/salirPulsado.png');
+        //Creditos
+        this.load.image('Creditos', 'Assets/Interfaz/creditos.png');
+
+        //Boton Pausa
+        this.load.image('BotonPausaN', 'Assets/Interfaz/Botones/pausarNormal.png');
+        this.load.image('BotonPausaE', 'Assets/Interfaz/Botones/pausarEncima.png');
+        this.load.image('BotonPausaP', 'Assets/Interfaz/Botones/pausarPulsado.png');
+
+        //Boton Volver
+        this.load.image('MenuN', 'Assets/Interfaz/Botones/menuPNormal.png'); 
+        this.load.image('MenuE', 'Assets/Interfaz/Botones/menuPEncima.png'); 
+        this.load.image('MenuP', 'Assets/Interfaz/Botones/menuPPresionado.png');
         
     }
     create(){   //Se ejecuta al iniciar la escena
         //Fondo
         const background = this.add.image(0, 0, 'Menus').setOrigin(0); //Añadir imagen de fondo
         background.setScale(Math.max(this.scale.width / background.width, this.scale.height / background.height));
-        const nombreJuego = this.add.image(this.scale.width / 2, this.scale.height / 4, 'NombreJuego').setScale(1.5);  //Nombre del juego
+        const nombreJuego = this.add.image(this.scale.width / 2, this.scale.height / 4, 'NombreJuego').setScale(2);
+
+        //Creditos
+        const bloqueCreditos = this.add.image(this.scale.width / 2, this.scale.height / 2+90, 'Creditos').setScale(1.25); 
+
+        //Boton Pausa
+        const botonPausa = this.add.image(850, 55, 'BotonPausaN').setScale(1.5).setInteractive().setScale(2); 
+        botonPausa.on('pointerover', () => { botonPausa.setTexture('BotonPausaE')}); 
+        botonPausa.on('pointerout', () => { botonPausa.setTexture('BotonPausaN')});
+        botonPausa.on('pointerdown', () => { botonPausa.setTexture('BotonPausaP') }); 
+        botonPausa.on('pointerup', () => {
+            console.log("Pausa");
+            this.scene.pause();
+            this.scene.launch('MenuPausa', { escenaPrevia: this.scene.key });
+        });
         
-        //Boton Salir
-        const botonSalir = this.add.image(130, 55, 'BotonSalirN').setScale(1.5).setInteractive(); 
-        botonSalir.on('pointerover', () => { botonSalir.setTexture('BotonSalirE')}); 
-        botonSalir.on('pointerout', () => { botonSalir.setTexture('BotonSalirN')});
-        botonSalir.on('pointerdown', () => { botonSalir.setTexture('BotonSalirP') }); 
-        botonSalir.on('pointerup', () => { this.scene.start('MenuPrincipal'); });
+        //Boton Volver
+        const botonVolver = this.add.image(110, 55, 'MenuN').setScale(1.5).setInteractive(); 
+        botonVolver.on('pointerover', () => { botonVolver.setTexture('MenuE')}); 
+        botonVolver.on('pointerout', () => { botonVolver.setTexture('MenuN')});
+        botonVolver.on('pointerdown', () => { botonVolver.setTexture('MenuP') }); 
+        botonVolver.on('pointerup', () => { this.scene.start('MenuPrincipal'); });
 
 
     }

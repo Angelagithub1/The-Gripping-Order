@@ -46,7 +46,7 @@ export class MenuPrincipal extends Phaser.Scene {   //Crear clase que hereda de 
         botonJugar.on('pointerover', () => { botonJugar.setTexture('BotonJugarE')}); //Efecto hover
         botonJugar.on('pointerout', () => { botonJugar.setTexture('BotonJugarN')}); //Efecto salir
         botonJugar.on('pointerdown', () => { botonJugar.setTexture('BotonJugarP') }); //Efecto encima
-        botonJugar.on('pointerup', () => { this.scene.start('MenuEleccionJugador'); }); //Al hacer click, iniciar escena principal
+        botonJugar.on('pointerup', () => { this.scene.start('PantallaJuego'); }); //Al hacer click, iniciar escena principal
 
         //Boton Tutorial
         const botonTutorial = this.add.image(this.scale.width / 2, this.scale.height / 2 + 80, 'BotonTutorialN').setScale(2).setInteractive(); 
@@ -67,7 +67,11 @@ export class MenuPrincipal extends Phaser.Scene {   //Crear clase que hereda de 
         botonPausa.on('pointerover', () => { botonPausa.setTexture('BotonPausaE')}); 
         botonPausa.on('pointerout', () => { botonPausa.setTexture('BotonPausaN')});
         botonPausa.on('pointerdown', () => { botonPausa.setTexture('BotonPausaP') }); 
-        botonPausa.on('pointerup', () => { this.scene.start('MenuPausa'); });
+        botonPausa.on('pointerup', () => {
+            console.log("Pausa");
+            this.scene.pause();
+            this.scene.launch('MenuPausa', { escenaPrevia: this.scene.key });
+        });
         
         //Boton Salir
         const botonSalir = this.add.image(130, 55, 'BotonSalirN').setScale(1.5).setInteractive(); 

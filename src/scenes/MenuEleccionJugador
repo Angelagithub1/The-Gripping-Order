@@ -22,10 +22,10 @@ export class MenuEleccionJugador extends Phaser.Scene {   //Crear clase que here
         this.load.image('BotonPausaE', 'Assets/Interfaz/Botones/pausarEncima.png');
         this.load.image('BotonPausaP', 'Assets/Interfaz/Botones/pausarPulsado.png');
         
-        //Boton Salir
-        this.load.image('BotonSalirN', 'Assets/Interfaz/Botones/salirNormal.png'); 
-        this.load.image('BotonSalirE', 'Assets/Interfaz/Botones/salirEncima.png'); 
-        this.load.image('BotonSalirP', 'Assets/Interfaz/Botones/salirPulsado.png');
+        //Boton Volver
+        this.load.image('MenuN', 'Assets/Interfaz/Botones/menuPNormal.png'); 
+        this.load.image('MenuE', 'Assets/Interfaz/Botones/menuPEncima.png'); 
+        this.load.image('MenuP', 'Assets/Interfaz/Botones/menuPPresionado.png');
     }
     create(){   //Se ejecuta al iniciar la escena
         //Fondo
@@ -33,20 +33,13 @@ export class MenuEleccionJugador extends Phaser.Scene {   //Crear clase que here
         background.setScale(Math.max(this.scale.width / background.width, this.scale.height / background.height));
         const nombreJuego = this.add.image(this.scale.width / 2, this.scale.height / 4, 'NombreJuego').setScale(2);  //Nombre del juego
 
-        //const contenedorAnia = this.add.image(this.scale.width / 2 - 200, this.scale.height / 2 + 75, 'Contenedor');
-        //const contenedorGancho = this.add.image(this.scale.width / 2 + 200, this.scale.height / 2 + 75, 'Contenedor');
-
         const botonAnia = this.add.image(300, 350, 'ContenedorNormal').setScale(2).setInteractive(); 
-       // botonAnia.on('pointerover', () => { botonSalir.setTexture('BotonSalirE')}); 
-        //botonAnia.on('pointerout', () => { botonSalir.setTexture('BotonSalirN')});
         botonAnia.on('pointerdown', () => { botonAnia.setTexture('ContenedorPulsado') }); 
         botonAnia.on('pointerup', () => { this.scene.start('PantallaJuego'); });
 
         const Ania = this.add.image(300, 350, 'Ania').setScale(2);
         
         const botonGancho = this.add.image(650, 350, 'ContenedorNormal').setScale(2).setInteractive(); 
-        //botonGancho.on('pointerover', () => { botonSalir.setTexture('BotonSalirE')}); 
-        //botonGancho.on('pointerout', () => { botonSalir.setTexture('BotonSalirN')});
         botonGancho.on('pointerdown', () => { botonGancho.setTexture('ContenedorPulsado') }); 
         botonGancho.on('pointerup', () => { this.scene.start('PantallaJuego'); });
 
@@ -59,12 +52,12 @@ export class MenuEleccionJugador extends Phaser.Scene {   //Crear clase que here
         botonPausa.on('pointerdown', () => { botonPausa.setTexture('BotonPausaP') }); 
         botonPausa.on('pointerup', () => { this.scene.start('MenuPausa'); });
 
-        //Boton Salir
-        const botonSalir = this.add.image(130, 55, 'BotonSalirN').setScale(1.5).setInteractive(); 
-        botonSalir.on('pointerover', () => { botonSalir.setTexture('BotonSalirE')}); 
-        botonSalir.on('pointerout', () => { botonSalir.setTexture('BotonSalirN')});
-        botonSalir.on('pointerdown', () => { botonSalir.setTexture('BotonSalirP') }); 
-        botonSalir.on('pointerup', () => { this.scene.start('MenuPrincipal'); });
+        //Boton Volver
+        const botonVolver = this.add.image(110, 55, 'MenuN').setScale(1.5).setInteractive(); 
+        botonVolver.on('pointerover', () => { botonVolver.setTexture('MenuE')}); 
+        botonVolver.on('pointerout', () => { botonVolver.setTexture('MenuN')});
+        botonVolver.on('pointerdown', () => { botonVolver.setTexture('MenuP') }); 
+        botonVolver.on('pointerup', () => { this.scene.start('MenuPrincipal'); });
         
 
 
