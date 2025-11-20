@@ -185,6 +185,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.Ania.x = this.scale.width / 2; //Posición inicial X
         this.Ania.name = "Ania";
         this.Ania.lives = 3; //Vidas de Ania
+        this.Ania.currentSkin= 'Normal'; //Skin actual de Ania
         this.Ania.canDoubleJump = false; //Capacidad de doble salto
         this.Ania.canMove = true; //Capacidad de moverse
         this.Ania.invulnerable = false; //Estado de invulnerabilidad
@@ -378,7 +379,8 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
                 } else {
                     this.Ania.setVelocityX(250); //Se mueve a la derecha
                 }
-                this.Ania.anims.play('Anim_AniaWalk', true); //Reproducir animación de caminar
+                this.updateWalkAnimation(this.Ania);
+                //this.Ania.anims.play('Anim_AniaWalk', true); //Reproducir animación de caminar
                 this.Ania.flipX = false; //No voltear sprite
 
             } else if (this.keys.A.isDown && this.Ania.canMove) { //Si presiona A
@@ -387,14 +389,15 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
                 } else {
                     this.Ania.setVelocityX(-250); //Se mueve a la izquierda
                 }
-                this.Ania.anims.play('Anim_AniaWalk', true); //Reproducir animación de caminar
+                this.updateWalkAnimation(this.Ania);
+                //this.Ania.anims.play('Anim_AniaWalk', true); //Reproducir animación de caminar
                 this.Ania.flipX = true;//Voltear sprite
             } else if (!this.Ania.canMove) {
                 this.Ania.setVelocityX(0); //No se mueve
-                this.Ania.anims.play('Anim_AniaIdle', true);//Reproducir animación de idle
+                this.updateIdleAnimation(this.Ania);//Reproducir animación de idle
             } else {
                 this.Ania.setVelocityX(0); //No se mueve
-                this.Ania.anims.play('Anim_AniaIdle', true);//Reproducir animación de idle
+                this.updateIdleAnimation(this.Ania);//Reproducir animación de idle
             }
 
             //Salto de Ania
@@ -403,6 +406,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             } else if (this.keys.SPACE.isDown && this.Ania.body.touching.down && this.Ania.canDoubleJump && this.Ania.canMove) {
                 this.Ania.setVelocityY(-550);
             }
+            //this.updateIdleAnimation(this.Ania);
         }
         
         // Mover el gancho
@@ -499,7 +503,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         const margen = 30;
 
         const x = Phaser.Math.Between(this.LeftWall.getBounds().right, this.RightWall.getBounds().left);
-        const y = Phaser.Math.Between(this.TuboGancho.getBounds().bottom, this.floor.getBounds().top);
+        const y = Phaser.Math.Between(this.TuboGancho.getBounds().bottom, this.floor.getBounds().top-50);
 
         console.log("Power Up en: " + x + ", " + y);
         const tipoPowerUp = Phaser.Math.RND.pick(this.powerUpsLista);
@@ -565,6 +569,31 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.time.delayedCall(5000, () => {
             jugador.masVelocidad = false; // Desactivar doble salto después de 15 segundos
         });
+    }
+
+    updateWalkAnimation(jugador){
+        if(jugador.canDoubleJump){
+            jugador.anims.play('Anim_AniaWalkAzul', true);
+        } else if(jugador.masVelocidad){
+            jugador.anims.play('Anim_AniaWalkVerde', true);
+        } else if(jugador.invulnerable){
+            jugador.anims.play('Anim_AniaWalkRojo', true);
+        } else{
+            jugador.anims.play('Anim_AniaWalk', true);
+        }  
+    }
+    updateIdleAnimation(jugador){
+        if(jugador.canDoubleJump){
+            jugador.anims.play('Anim_AniaIdleAzul', true);
+        } else if(jugador.masVelocidad){
+            jugador.anims.play('Anim_AniaIdleVerde', true);
+        } else if(jugador.invulnerable){
+            jugador.anims.play('Anim_AniaIdleRojo', true);
+        } else if (!jugador.canMove){
+            jugador.anims.play('Anim_AniaIdleAmarillo', true);
+        } else{
+            jugador.anims.play('Anim_AniaIdle', true);
+        }
     }
 
 
