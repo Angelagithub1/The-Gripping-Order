@@ -293,6 +293,17 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.physics.add.collider(this.Ania, this.platform7);
         this.physics.add.collider(this.Ania, this.platform8);
 
+        //Colision objetos con plataformas
+        this.physics.add.overlap(this.platform1, this.objects);
+        this.physics.add.overlap(this.platform2, this.objects);
+        this.physics.add.overlap(this.platform3, this.objects);
+        this.physics.add.overlap(this.platform4, this.objects);
+        this.physics.add.overlap(this.platform5, this.objects);
+        this.physics.add.overlap(this.platform6, this.objects);
+        this.physics.add.overlap(this.platform7, this.objects);
+        this.physics.add.overlap(this.platform8, this.objects);
+
+
         //Gancho con limites de mundo
         this.physics.add.collider(this.Gancho, this.LeftWall);
         this.physics.add.collider(this.Gancho, this.RightWall);
@@ -454,8 +465,10 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         let tipoObjeto = Phaser.Math.RND.pick(['Ataud', 'guadana', 'hueso', 'libro'])
         let objeto = this.objects.create(x, y + 30, tipoObjeto).setDepth(0);
         objeto.canDamage = true;
-        objeto.setOrigin(0.5, 0.1);
+        objeto.setOrigin(0.5, 0.5);
         objeto.body.setAllowGravity(false);
+        objeto.body.setSize(objeto.width, objeto.height, true);
+        objeto.body.setOffset(0, 0);
         objeto.name = tipoObjeto;
         this.Gancho.objeto = objeto;
     }
@@ -463,11 +476,12 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
     DamageAnia(ania, objeto) {
         if (this.Gancho.Soltar == false) return; // Evitar daño si el gancho no ha soltado el objeto
         if (!objeto.canDamage || ania.invulnerable) return; // Evitar daño múltiple
-        objeto.canDamage = false; // Marcar el objeto como ya usado para daño
+        //objeto.canDamage = false; // Marcar el objeto como ya usado para daño
         this.Ania.lives =this.Ania.lives- 1; // Restar una vida a Ania
-        const heart = this.hearts.pop();
+        
         if (this.Ania.lives <= 0) {
             console.log("Ania muere");
+            const heart = this.hearts.pop();
             this.scene.start("PantallaFinal");
         } else{
             heart.setTexture('HeartEmpty'); // Cambiar la textura a corazón vacío
