@@ -56,6 +56,20 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.load.image('PowerUpAzul', 'Assets/PowerUps/azul.png');
         this.load.image('PowerUpRojo', 'Assets/PowerUps/rojo.png');
         this.load.image('PowerUpVerde', 'Assets/PowerUps/verde.png');
+
+        //Musica de fondo
+        this.load.audio('MusicaJuego', 'Assets/Sonidos/Juego.mp3');
+        this.load.audio('MusicaFondo', 'Assets/Sonidos/MenuPrincipal.mp3');
+
+        //Musica botones
+        this.load.audio('SonidoBotonE', 'Assets/Sonidos/BotonEncima.mp3');
+        this.load.audio('SonidoBotonP', 'Assets/Sonidos/BotonPulsado.mp3');
+
+        //Sonidos juego
+        this.load.audio('AniaDanada', 'Assets/Sonidos/AniaHurt.mp3');
+        this.load.audio('GanchoSuelta', 'Assets/Sonidos/GanchoDisparo.mp3');
+        this.load.audio('PowerUp', 'Assets/Sonidos/Powerup.mp3');
+        
     }
     create() {
 
@@ -63,23 +77,53 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         const background = this.add.image(0, 0, 'BackgroundGraveyard').setOrigin(0); //Añadir imagen de fondo
         background.setScale(Math.max(this.scale.width / background.width, this.scale.height / background.height));
 
+        //Musica
+        const volumen = this.registry.get('volumen') ?? 0.5;
+        let musica =this.sound.get('MusicaFondo');
+
+        if(musica && musica.isPlaying){    //Parar la musica si está sonando
+            musica.stop();
+            musica.destroy();
+        } 
+
+        const musicaJuego=this.sound.add('MusicaJuego',{
+            loop: true,
+            volume: volumen,
+        });
+        musicaJuego.play();
+
+        //Sonido botones
+        const volumenBotones = this.registry.get('volumen') ?? 0.5;
+        this.sonidoE = this.sound.add('SonidoBotonE',{  volume: volumenBotones });
+        this.sonidoP = this.sound.add('SonidoBotonP',{  volume: volumenBotones });
+
+        //Sonidos juego
+        this.sonidoAniaDanada = this.sound.add('AniaDanada',{  volume: volumenBotones });
+        this.sonidoGanchoSuelta = this.sound.add('GanchoSuelta',{  volume: volumenBotones });   
+        this.sonidoPowerUp = this.sound.add('PowerUp',{  volume: volumenBotones });
+        
+
         //Boton Pausa
-        const botonPausa = this.add.image(850, 55, 'BotonPausaN').setScale(1.5).setInteractive().setScale(2);
-        botonPausa.on('pointerover', () => { botonPausa.setTexture('BotonPausaE') });
-        botonPausa.on('pointerout', () => { botonPausa.setTexture('BotonPausaN') });
-        botonPausa.on('pointerdown', () => { botonPausa.setTexture('BotonPausaP') });
+        const botonPausa = this.add.image(850, 55, 'BotonPausaN').setScale(1.5).setInteractive().setScale(2); 
+        botonPausa.on('pointerover', () => { 
+            this.sonidoE.play();
+            botonPausa.setTexture('BotonPausaE')}); 
+        botonPausa.on('pointerout', () => { botonPausa.setTexture('BotonPausaN')});
+        botonPausa.on('pointerdown', () => { 
+            this.sonidoP.play();
+            botonPausa.setTexture('BotonPausaP') }); 
         botonPausa.on('pointerup', () => {
             console.log("Pausa");
             this.scene.pause();
             this.scene.launch('MenuPausa', { escenaPrevia: this.scene.key });
         });
-
+/*
         //Boton Salir
         const botonSalir = this.add.image(130, 55, 'BotonSalirN').setScale(1.5).setInteractive();
         botonSalir.on('pointerover', () => { botonSalir.setTexture('BotonSalirE') });
         botonSalir.on('pointerout', () => { botonSalir.setTexture('BotonSalirN') });
         botonSalir.on('pointerdown', () => { botonSalir.setTexture('BotonSalirP') });
-        botonSalir.on('pointerup', () => { this.scene.start('PantallaFinal'); });
+        botonSalir.on('pointerup', () => { this.scene.start('PantallaFinal'); });*/
 
 
         //Animaciones
@@ -292,18 +336,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.physics.add.collider(this.Ania, this.platform6);
         this.physics.add.collider(this.Ania, this.platform7);
         this.physics.add.collider(this.Ania, this.platform8);
-/*
-        //Colision objetos con plataformas
-        this.physics.add.overlap(this.platform1, this.objects);
-        this.physics.add.overlap(this.platform2, this.objects);
-        this.physics.add.overlap(this.platform3, this.objects);
-        this.physics.add.overlap(this.platform4, this.objects);
-        this.physics.add.overlap(this.platform5, this.objects);
-        this.physics.add.overlap(this.platform6, this.objects);
-        this.physics.add.overlap(this.platform7, this.objects);
-        this.physics.add.overlap(this.platform8, this.objects);
 
-*/
         //Gancho con limites de mundo
         this.physics.add.collider(this.Gancho, this.LeftWall);
         this.physics.add.collider(this.Gancho, this.RightWall);
@@ -435,6 +468,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             //Se avisa que se ha soltado el objeto y se activa la gravedad
             //this.Gancho.Soltar = true;
             this.Gancho.objeto.Soltar = true;
+            this.sonidoGanchoSuelta.play();
             this.Gancho.objeto.body.setAllowGravity(true);
             this.time.delayedCall(800, () => {
                 //Se espera un tiempo para avisar que no hay objeto para que no 
@@ -485,6 +519,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             console.log("Ya daño a ania");
             return; // Evitar daño múltiple
         }
+        this.sonidoAniaDanada.play();
         objeto.canDamage = false; // Marcar el objeto como ya usado para daño
         this.Ania.lives =this.Ania.lives- 1; // Restar una vida a Ania
         /*
@@ -497,7 +532,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             console.log("Ania ha sido dañada");
         }
         /**/
-        if (this.hearts.length > 0) {
+        if (this.hearts.length > 1) {
             const heart = this.hearts.pop();
             heart.setTexture('HeartEmpty'); // Cambiar la textura a corazón vacío
 
@@ -537,6 +572,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
     }
 
     RecogerPowerUp(jugador, powerUp) {
+        this.sonidoPowerUp.play();
         switch (powerUp.type) {
             case 'PowerUpAmarillo':
                 console.log("Efecto Power Up Amarillo");

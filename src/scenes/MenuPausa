@@ -19,11 +19,22 @@ export class MenuPausa extends Phaser.Scene {   //Crear clase que hereda de Phas
         this.load.image('Slider', 'Assets/Interfaz/Botones/volumenBarra.png'); 
         this.load.image('sliderMedio', 'Assets/Interfaz/Botones/volumenBoton.png'); 
 
-
         //Boton Salir
         this.load.image('VolverN', 'Assets/Interfaz/Botones/izquierdaNormal.png'); 
         this.load.image('VolverE', 'Assets/Interfaz/Botones/izquierdaEncima.png'); 
         this.load.image('VolverP', 'Assets/Interfaz/Botones/izquierdaPulsado.png');
+
+        //Boton Volver
+        this.load.image('MenuN', 'Assets/Interfaz/Botones/menuPNormal.png'); 
+        this.load.image('MenuE', 'Assets/Interfaz/Botones/menuPEncima.png'); 
+        this.load.image('MenuP', 'Assets/Interfaz/Botones/menuPPresionado.png');
+
+        //Musica de fondo
+        //this.load.audio('musicaFondoMenuPausa', 'Assets/Musica/musicaMenuPausa.mp3');
+
+        //Musica botones
+        this.load.audio('SonidoBotonE', 'Assets/Sonidos/BotonEncima.mp3');
+        this.load.audio('SonidoBotonP', 'Assets/Sonidos/BotonPulsado.mp3');
         
     }
     create(){   //Se ejecuta al iniciar la escena
@@ -33,17 +44,47 @@ export class MenuPausa extends Phaser.Scene {   //Crear clase que hereda de Phas
         const nombreJuego = this.add.image(this.scale.width / 2, this.scale.height / 4, 'NombreJuego').setScale(2);  //Nombre del juego
 
         //Slider de volumen
-        const volumen=this.registry.get('volumen')?? 0.7
+        const volumen=this.registry.get('volumen')?? 0.5;
         this.sound.volume = volumen;
-        const slider = this.add.image(this.scale.width / 2, this.scale.height / 2+50, 'Slider').setScale(2);
+        const sliderBarra = this.add.image(this.scale.width / 2, this.scale.height / 2+50, 'Slider').setScale(2);
         const sliderMedio = this.add.image(this.scale.width / 2, this.scale.height / 2+50, 'sliderMedio').setScale(2).setInteractive({ draggable: true });
-        //const
+        sliderMedio.on('drag', (pointer, dragX) => {
+            const minX = sliderBarra.x - sliderBarra.width + sliderMedio.width;
+            const maxX = sliderBarra.x + sliderBarra.width - sliderMedio.width;
+            if (dragX >= minX && dragX <= maxX) {
+                sliderMedio.x = dragX;
+                const porcentaje = (dragX - minX) / (maxX - minX);
+                this.sound.volume = porcentaje;
+                this.registry.set('volumen', porcentaje);
+            }
+        });
+        //Sonido botones
+        const volumenBotones = this.registry.get('volumen') ?? 0.5;
+        this.sonidoE = this.sound.add('SonidoBotonE',{  volume: volumenBotones });
+        this.sonidoP = this.sound.add('SonidoBotonP',{  volume: volumenBotones });
+/*
+        //Boton Volver
+        const botonVolver = this.add.image(this.scale.width / 2, this.scale.height / 2+150, 'MenuN').setScale(1.5).setInteractive().setScale(4); 
+        botonVolver.on('pointerover', () => { 
+            this.sonidoE.play();
+            botonVolver.setTexture('MenuE')}); 
+        botonVolver.on('pointerout', () => { botonVolver.setTexture('MenuN')});
+        botonVolver.on('pointerdown', () => { 
+            this.sonidoP.play();
+            botonVolver.setTexture('MenuP') }); 
+        botonVolver.on('pointerup', () => { 
+            this.scene.stop();
+            this.scene.resume('MenuPrincipal');});*/
 
         //Boton Salir
         const botonSalir = this.add.image(120, 60, 'VolverN').setInteractive(); 
-        botonSalir.on('pointerover', () => { botonSalir.setTexture('VolverE')}); 
+        botonSalir.on('pointerover', () => { 
+            this.sonidoE.play();
+            botonSalir.setTexture('VolverE')}); 
         botonSalir.on('pointerout', () => { botonSalir.setTexture('VolverN')});
-        botonSalir.on('pointerdown', () => { botonSalir.setTexture('VolverP') }); 
+        botonSalir.on('pointerdown', () => { 
+            this.sonidoP.play();
+            botonSalir.setTexture('VolverP') }); 
         botonSalir.on('pointerup', () => { 
             this.scene.stop();
             this.scene.resume(this.escenaPrevia); 

@@ -35,6 +35,10 @@ export class MenuTutorial extends Phaser.Scene {   //Crear clase que hereda de P
 
         //Contenedor
         this.load.image('Contenedor', 'Assets/Interfaz/interfaz_grande.png');
+
+        //Musica botones
+        this.load.audio('SonidoBotonE', 'Assets/Sonidos/BotonEncima.mp3');
+        this.load.audio('SonidoBotonP', 'Assets/Sonidos/BotonPulsado.mp3');
         
     }
     create(){   //Se ejecuta al iniciar la escena
@@ -57,23 +61,37 @@ export class MenuTutorial extends Phaser.Scene {   //Crear clase que hereda de P
         const flechaDer = this.add.image(760, 330, 'GanchoFlechaDer').setScale(2);
         const enter = this.add.image(677, 400, 'GanchoEnter').setScale(2);
 
+        //Sonido botones
+        const volumenBotones = this.registry.get('volumen') ?? 0.5;
+        this.sonidoE = this.sound.add('SonidoBotonE',{  volume: volumenBotones });
+        this.sonidoP = this.sound.add('SonidoBotonP',{  volume: volumenBotones });
+
         //Boton Pausa
-        const botonPausa = this.add.image(850, 55, 'BotonPausaN').setScale(1.5).setInteractive().setScale(2);
-        botonPausa.on('pointerover', () => { botonPausa.setTexture('BotonPausaE') });
-        botonPausa.on('pointerout', () => { botonPausa.setTexture('BotonPausaN') });
-        botonPausa.on('pointerdown', () => { botonPausa.setTexture('BotonPausaP') });
+        const botonPausa = this.add.image(850, 55, 'BotonPausaN').setScale(1.5).setInteractive().setScale(2); 
+        botonPausa.on('pointerover', () => { 
+            this.sonidoE.play();
+            botonPausa.setTexture('BotonPausaE')}); 
+        botonPausa.on('pointerout', () => { botonPausa.setTexture('BotonPausaN')});
+        botonPausa.on('pointerdown', () => { 
+            this.sonidoP.play();
+            botonPausa.setTexture('BotonPausaP') }); 
         botonPausa.on('pointerup', () => {
             console.log("Pausa");
             this.scene.pause();
             this.scene.launch('MenuPausa', { escenaPrevia: this.scene.key });
         });
-
+        
         //Boton Volver
         const botonVolver = this.add.image(110, 55, 'MenuN').setScale(1.5).setInteractive(); 
-        botonVolver.on('pointerover', () => { botonVolver.setTexture('MenuE')}); 
+        botonVolver.on('pointerover', () => { 
+            this.sonidoE.play();
+            botonVolver.setTexture('MenuE')}); 
         botonVolver.on('pointerout', () => { botonVolver.setTexture('MenuN')});
-        botonVolver.on('pointerdown', () => { botonVolver.setTexture('MenuP') }); 
+        botonVolver.on('pointerdown', () => { 
+            this.sonidoP.play();
+            botonVolver.setTexture('MenuP') }); 
         botonVolver.on('pointerup', () => { this.scene.start('MenuPrincipal'); });
+
         
     }
 }
