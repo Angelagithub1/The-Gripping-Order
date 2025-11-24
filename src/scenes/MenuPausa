@@ -10,7 +10,7 @@ export class MenuPausa extends Phaser.Scene {   //Crear clase que hereda de Phas
 
     preload(){  //Se ejecuta antes de que empiece la escena
         //Fondo
-        this.load.image('Menus', 'Assets/Backgrounds/Menus.jpeg'); //Cargar imagen de fondo
+        this.load.image('MenuPausa', 'Assets/Backgrounds/fondoTrans.png'); //Cargar imagen de fondo
 
         //Nombre del juego
         this.load.image('NombreJuego', 'Assets/Interfaz/titulo.png'); 
@@ -21,27 +21,29 @@ export class MenuPausa extends Phaser.Scene {   //Crear clase que hereda de Phas
 
 
         //Boton Salir
-        this.load.image('BotonSalirN', 'Assets/Interfaz/Botones/salirNormal.png'); 
-        this.load.image('BotonSalirE', 'Assets/Interfaz/Botones/salirEncima.png'); 
-        this.load.image('BotonSalirP', 'Assets/Interfaz/Botones/salirPulsado.png');
+        this.load.image('VolverN', 'Assets/Interfaz/Botones/izquierdaNormal.png'); 
+        this.load.image('VolverE', 'Assets/Interfaz/Botones/izquierdaEncima.png'); 
+        this.load.image('VolverP', 'Assets/Interfaz/Botones/izquierdaPulsado.png');
         
     }
     create(){   //Se ejecuta al iniciar la escena
         //Fondo
-        const background = this.add.image(0, 0, 'Menus').setOrigin(0); //Añadir imagen de fondo
+        const background = this.add.image(0, 0, 'MenuPausa').setOrigin(0); //Añadir imagen de fondo
         background.setScale(Math.max(this.scale.width / background.width, this.scale.height / background.height));
-        const nombreJuego = this.add.image(this.scale.width / 2, this.scale.height / 4, 'NombreJuego').setScale(5);  //Nombre del juego
+        const nombreJuego = this.add.image(this.scale.width / 2, this.scale.height / 4, 'NombreJuego').setScale(2);  //Nombre del juego
 
         //Slider de volumen
-        const slider = this.add.image(this.scale.width / 2, this.scale.height / 2, 'Slider').setScale(2);
-        const sliderMedio = this.add.image(this.scale.width / 2, this.scale.height / 2, 'sliderMedio').setScale(2).setInteractive({ draggable: true });
+        const volumen=this.registry.get('volumen')?? 0.7
+        this.sound.volume = volumen;
+        const slider = this.add.image(this.scale.width / 2, this.scale.height / 2+50, 'Slider').setScale(2);
+        const sliderMedio = this.add.image(this.scale.width / 2, this.scale.height / 2+50, 'sliderMedio').setScale(2).setInteractive({ draggable: true });
         //const
 
         //Boton Salir
-        const botonSalir = this.add.image(130, 55, 'BotonSalirN').setScale(1.5).setInteractive(); 
-        botonSalir.on('pointerover', () => { botonSalir.setTexture('BotonSalirE')}); 
-        botonSalir.on('pointerout', () => { botonSalir.setTexture('BotonSalirN')});
-        botonSalir.on('pointerdown', () => { botonSalir.setTexture('BotonSalirP') }); 
+        const botonSalir = this.add.image(120, 60, 'VolverN').setInteractive(); 
+        botonSalir.on('pointerover', () => { botonSalir.setTexture('VolverE')}); 
+        botonSalir.on('pointerout', () => { botonSalir.setTexture('VolverN')});
+        botonSalir.on('pointerdown', () => { botonSalir.setTexture('VolverP') }); 
         botonSalir.on('pointerup', () => { 
             this.scene.stop();
             this.scene.resume(this.escenaPrevia); 
