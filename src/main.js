@@ -16,7 +16,7 @@ const config = {
         default: 'arcade',  //Sin gravedad, HABRA QUE CAMBIARLO EN EL FUTURO
         arcade: {
             gravity: { y: 600 },
-            debug: true
+            debug: false
         }
     },
     scale: {

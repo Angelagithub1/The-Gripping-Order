@@ -4,6 +4,10 @@ export class PantallaFinal extends Phaser.Scene {   //Crear clase que hereda de 
         super('PantallaFinal'); //Asignación de un nombre interno
     }
 
+    init(data) {
+        this.ganador = data.ganador; // Guardar el nombre del jugador ganador
+    }
+
     preload(){  //Se ejecuta antes de que empiece la escena
         //Fondo
         this.load.image('Menus', 'Assets/Backgrounds/Menus.jpeg'); //Cargar imagen de fondo
@@ -30,11 +34,17 @@ export class PantallaFinal extends Phaser.Scene {   //Crear clase que hereda de 
         this.load.image('MenuE', 'Assets/Interfaz/Botones/menuPEncima.png'); 
         this.load.image('MenuP', 'Assets/Interfaz/Botones/menuPPresionado.png');
 
+        //Animaciones
+        this.load.spritesheet('AniaIdle', 'Assets/Sprites/Ania/Ania-IDLE.png', { frameWidth: 42, frameHeight: 25 });
+        this.load.spritesheet('GanchoIdle', 'Assets/Sprites/gancho.png', { frameWidth: 108, frameHeight: 50 });
+
+
         //Musica botones
         this.load.audio('SonidoBotonE', 'Assets/Sonidos/BotonEncima.mp3');
         this.load.audio('SonidoBotonP', 'Assets/Sonidos/BotonPulsado.mp3');
         
     }
+
     create(){   //Se ejecuta al iniciar la escena
         //Fondo
         const background = this.add.image(0, 0, 'Menus').setOrigin(0); //Añadir imagen de fondo
@@ -60,6 +70,32 @@ export class PantallaFinal extends Phaser.Scene {   //Crear clase que hereda de 
         const volumenBotones = this.registry.get('volumen') ?? 0.5;
         this.sonidoE = this.sound.add('SonidoBotonE',{  volume: volumenBotones });
         this.sonidoP = this.sound.add('SonidoBotonP',{  volume: volumenBotones });
+
+        //Animaciones
+        this.anims.create({
+            key: 'Anim_AniaIdle',
+            frames: this.anims.generateFrameNumbers('AniaIdle', { start: 0, end: 7 }),
+            frameRate: 8, //numero de frames
+            repeat: -1 //-1 para que se repita indefinidamente
+        });
+
+        this.anims.create({
+            key: 'Anim_GanchoIdle',
+            frames: this.anims.generateFrameNumbers('GanchoIdle', { start: 0, end: 9 }),
+            frameRate: 10, //numero de frames
+            repeat: -1 //-1 para que se repita indefinidamente
+        });
+        
+
+        if(this.ganador == 'Gancho') {
+            this.Gancho = this.physics.add.sprite(475, 300, 'GanchoIdle').setImmovable(true).setScale(3);
+            this.Gancho.body.setAllowGravity(false);
+            this.Gancho.anims.play('Anim_GanchoIdle', true);
+        } else{
+            this.Ania = this.physics.add.sprite(475, 300, 'AniaIdle').setImmovable(true).setScale(3);
+            this.Ania.body.setAllowGravity(false);
+            this.Ania.anims.play('Anim_AniaIdle', true);
+        }
 
         //Boton Pausa
         const botonPausa = this.add.image(850, 55, 'BotonPausaN').setScale(1.5).setInteractive().setScale(2); 

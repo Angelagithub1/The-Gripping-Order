@@ -134,6 +134,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             frameRate: 8, //numero de frames
             repeat: -1 //-1 para que se repita indefinidamente
         });
+
         this.anims.create({
             key: 'Anim_AniaWalk',
             frames: this.anims.generateFrameNumbers('AniaWalk', { start: 0, end: 4 }),
@@ -245,6 +246,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.Gancho = this.physics.add.sprite(108, 50, 'GanchoIdle').setImmovable(true).setDepth(1);
         this.Gancho.setScale(1.5).setFrame(1);
         this.Gancho.y = 80;
+        this.Gancho.name = "Gancho";
         this.Gancho.x = this.scale.width / 2;
         this.Gancho.setOrigin(0.5, 0.1); // 0.1 lo pone el pivote cerca de la parte superior
         this.Gancho.body.setAllowGravity(false); //Desactivar gravedad
@@ -494,9 +496,9 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
     }
 
     timeUp() {
-
-        this.scene.start("PantallaFinal"); // Cambiar a la escena ResultScreen
+        this.finalJuego(this.Ania);
     }
+
     CreateObject(x, y) {
         let tipoObjeto = Phaser.Math.RND.pick(['Ataud', 'guadana', 'hueso', 'libro'])
         let objeto = this.objects.create(x, y + 30, tipoObjeto).setDepth(0);
@@ -522,22 +524,13 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.sonidoAniaDanada.play();
         objeto.canDamage = false; // Marcar el objeto como ya usado para daño
         this.Ania.lives =this.Ania.lives- 1; // Restar una vida a Ania
-        /*
-        if (this.Ania.lives <= 0) {
-            console.log("Ania muere");
-            const heart = this.hearts.pop();
-            this.scene.start("PantallaFinal");
-        } else{
-            heart.setTexture('HeartEmpty'); // Cambiar la textura a corazón vacío
-            console.log("Ania ha sido dañada");
-        }
-        /**/
         if (this.hearts.length > 1) {
             const heart = this.hearts.pop();
             heart.setTexture('HeartEmpty'); // Cambiar la textura a corazón vacío
 
         } else {
-            this.scene.start("PantallaFinal"); // Cambiar a la escena ResultScreen
+            this.finalJuego(this.Gancho);
+             // Cambiar a la escena ResultScreen
         }
         console.log("Ania ha sido dañada");/**/
     }
@@ -653,6 +646,12 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         } else{
             jugador.anims.play('Anim_AniaIdle', true);
         }
+    }
+
+    finalJuego(jugador) {
+        this.scene.start("PantallaFinal",{
+            ganador: jugador.name,
+        }); // Cambiar a la escena ResultScreen
     }
 
 
