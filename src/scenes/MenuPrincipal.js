@@ -85,7 +85,7 @@ export class MenuPrincipal extends Phaser.Scene {   //Crear clase que hereda de 
         botonJugar.on('pointerdown', () => { 
             this.sonidoP.play();
             botonJugar.setTexture('BotonJugarP')}); //Efecto encima
-        botonJugar.on('pointerup', () => { this.scene.start('PantallaJuego'); }); //Al hacer click, iniciar escena principal
+        botonJugar.on('pointerup', () => { this.scene.start('MenuEleccionJugador'); }); //Al hacer click, iniciar escena principal
 
         //Boton Tutorial
         const botonTutorial = this.add.image(this.scale.width / 2, this.scale.height / 2 + 80, 'BotonTutorialN').setScale(2).setInteractive(); 
