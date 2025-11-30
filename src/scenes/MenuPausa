@@ -35,12 +35,17 @@ export class MenuPausa extends Phaser.Scene {   //Crear clase que hereda de Phas
         //Musica botones
         this.load.audio('SonidoBotonE', 'Assets/Sonidos/BotonEncima.mp3');
         this.load.audio('SonidoBotonP', 'Assets/Sonidos/BotonPulsado.mp3');
+
+        //Titulo
+        this.load.image('Sonido','Assets/Interfaz/sonidos.png')
         
     }
     create(){   //Se ejecuta al iniciar la escena
         //Fondo
         const background = this.add.image(0, 0, 'MenuPausa').setOrigin(0).setScale(2); //Añadir imagen de fondo
         const nombreJuego = this.add.image(this.scale.width / 2, this.scale.height / 4, 'NombreJuego').setScale(2);  //Nombre del juego
+
+        const tituloSonido = this.add.image(this.scale.width / 2, this.scale.height / 2 -5 , 'Sonido').setScale(2);
 
         //Slider de volumen
         const volumen=this.registry.get('volumen')?? 0.5;
