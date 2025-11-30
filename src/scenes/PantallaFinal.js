@@ -42,6 +42,9 @@ export class PantallaFinal extends Phaser.Scene {   //Crear clase que hereda de 
         //Musica botones
         this.load.audio('SonidoBotonE', 'Assets/Sonidos/BotonEncima.mp3');
         this.load.audio('SonidoBotonP', 'Assets/Sonidos/BotonPulsado.mp3');
+
+        //Titulo de pantalla
+        this.load.image('TituloVictoria', 'Assets/Interfaz/victoria.png');
         
     }
 
@@ -50,6 +53,7 @@ export class PantallaFinal extends Phaser.Scene {   //Crear clase que hereda de 
         const background = this.add.image(0, 0, 'Menus').setOrigin(0); //Añadir imagen de fondo
         background.setScale(Math.max(this.scale.width / background.width, this.scale.height / background.height));
         const nombreJuego = this.add.image(this.scale.width / 2, this.scale.height / 4, 'NombreJuego').setScale(2);  //Nombre del juego
+        const tituloVictoria = this.add.image(this.scale.width / 2, this.scale.height / 2 + 150, 'TituloVictoria').setScale(1.5);  //Titulo de victoria
 
         //Musica
         const volumen = this.registry.get('volumen') ?? 0.2;
