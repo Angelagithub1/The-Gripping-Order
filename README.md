@@ -222,7 +222,7 @@ Nivel 3: Fiesta fúnebre en el más allá
 ## **Gancho** 
 
 Es uno de los personajes que puede llevar un jugador. Consiste en una garra inspirada en los juegos de gancho de las salas de recreativos, que, al contrario que estos, dejará caer piezas en vez de cogerlas.
-![](./Assets/Sprites/Personajes/Gancho.png)
+![](./Assets/Sprites/gancho.gif)
 
 ## **Ania** 
 
@@ -248,6 +248,7 @@ Los Power Ups serán llamas de diferentes colores, y son exclusivos para el juga
 * Amarillo: es una trampa, hace que el jugador se quede congelado, haciendo así más fácil que el gancho le tire una pieza.  
 * Rojo: hace al jugador invulnerable, permitiendo una mayor tranquilidad durante ese tiempo.  
 * Verde: aumenta la velocidad del jugador, haciendo más difícil que el gancho le acierte con una pieza.
+
 ![](./Assets/ObjResolucion/VELA1.png)
 ![](./Assets/ObjResolucion/VELA2.png)
 ![](./Assets/ObjResolucion/VELA3.png)
