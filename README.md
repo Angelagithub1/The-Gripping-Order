@@ -222,12 +222,14 @@ Nivel 3: Fiesta fúnebre en el más allá
 ## **Gancho** 
 
 Es uno de los personajes que puede llevar un jugador. Consiste en una garra inspirada en los juegos de gancho de las salas de recreativos, que, al contrario que estos, dejará caer piezas en vez de cogerlas.
+
 ![](./Assets/Sprites/gancho.gif)
 
 ## **Ania** 
 
 Es el otro personaje que puede llevar un jugador. Consiste en una pequeña criatura de colores vivos parecida a un escarabajo. Esta compuesta por fragmentos de sprites corrompidos, dando así la apariencia de un glitch. Su supervivencia depende por completo de su capacidad para predecir los movimientos de su oponente.
-![](./Assets/Sprites/Personajes/Ania.png)
+
+![](./Assets/Sprites/Ania-IDLE.gif)
 
 # **Items** 
 
@@ -242,7 +244,7 @@ Siguiendo con la narrativa actual del juego, la cual tiene una temática oscura,
 
 ## **Power Ups** 
 
-Los Power Ups serán llamas de diferentes colores, y son exclusivos para el jugador que lleva a Ania. Sus efectos se acaban a los 5 segundos, sea cual sea el Power Up, y no se pueden tener dos efectos a la vez, solo se contará el primero que coja hasta que el tiempo de este haya acabado.
+Los Power Ups serán llamas de diferentes colores, y son exclusivos para el jugador que lleva a Ania. Sus efectos se acaban a los 5 segundos, tiempo en el que Ania se tiñe del color del Power Up, y no se pueden tener dos efectos a la vez, solo se contará el primero que coja hasta que el tiempo de este haya acabado.
 
 * Azul: permite que el jugador haga un doble salto al mantener pulsado el espacio.  
 * Amarillo: es una trampa, hace que el jugador se quede congelado, haciendo así más fácil que el gancho le tire una pieza.  
