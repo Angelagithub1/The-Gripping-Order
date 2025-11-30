@@ -222,10 +222,12 @@ Nivel 3: Fiesta fúnebre en el más allá
 ## **Gancho** 
 
 Es uno de los personajes que puede llevar un jugador. Consiste en una garra inspirada en los juegos de gancho de las salas de recreativos, que, al contrario que estos, dejará caer piezas en vez de cogerlas.
+![](./Assets/Sprites/Personajes/Gancho.png)
 
 ## **Ania** 
 
 Es el otro personaje que puede llevar un jugador. Consiste en una pequeña criatura de colores vivos parecida a un escarabajo. Esta compuesta por fragmentos de sprites corrompidos, dando así la apariencia de un glitch. Su supervivencia depende por completo de su capacidad para predecir los movimientos de su oponente.
+![](./Assets/Sprites/Personajes/Ania.png)
 
 # **Items** 
 
