@@ -5,7 +5,7 @@
 ## **The Gripping Order** 
 ![](./Assets/ResolutionLogo.png)
 
-**Grupo 3 Nombre de equipo:**
+**Grupo 3 The Gripping Order:**
 
 * **Ángela Fernández Hernández**  
   * [**a.fernandezh.2022@alumnos.urjc.es**](mailto:a.fernandezh.2022@alumnos.urjc.es)  
@@ -198,15 +198,12 @@ El escenario en Crush Factory está inspirado en la estética clásica de las m�
 En este fondo sobrio y plano, se destacan claramente los elementos clave del juego. Para añadir dinamismo visual y ayudar en la accesibilidad, los Power Ups y otros objetos interactivos cuentan con colores vivos y brillantes, que contrastan fuertemente con el fondo para facilitar su identificación rápida durante la partida.
 Esta combinación de un diseño simple pero efectivo, con referencias retro y un uso inteligente del color, contribuye a crear un escenario que es a la vez funcional y atractivo, invitando a los jugadores a sumergirse en partidas rápidas y emocionantes.
 
-
-## **Arte**
-![](./Assets/Fondo.JPG)
-
 ## **Niveles**
 Nivel 1: Cementerio abandonado
 * Ambiente: Niebla espesa, lápidas rotas, árboles secos y cuervos que observan desde las ramas.
 * Estética: Colores apagados y menos saturados para transmitir una atmósfera melancólica.
 * Jugabilidad: Ania puede interactuar con las lápidas, usándolas como plataformas para subir y saltar.
+![](./Assets/Capturas/Juego.png)
   
 Nivel 2: Morgue subterránea
 * Ambiente: Pasillos estrechos, luces parpadeantes, refrigeradores abiertos y sonidos metálicos constantes.
@@ -226,8 +223,6 @@ Nivel 3: Fiesta fúnebre en el más allá
 
 Es uno de los personajes que puede llevar un jugador. Consiste en una garra inspirada en los juegos de gancho de las salas de recreativos, que, al contrario que estos, dejará caer piezas en vez de cogerlas.
 
-![](./Assets/Gancho.png)
-
 ## **Ania** 
 
 Es el otro personaje que puede llevar un jugador. Consiste en una pequeña criatura de colores vivos parecida a un escarabajo. Esta compuesta por fragmentos de sprites corrompidos, dando así la apariencia de un glitch. Su supervivencia depende por completo de su capacidad para predecir los movimientos de su oponente.
@@ -237,6 +232,7 @@ Es el otro personaje que puede llevar un jugador. Consiste en una pequeña criat
 ## **Piezas** 
 
 Siguiendo con la narrativa actual del juego, la cual tiene una temática oscura, el gancho lanzará objetos típicos de funerales a Ania, como guadañas, ataúdes, jarrones de cenizas y huesos varios.
+
 ![](./Assets/ObjResolucion/ataud.png)
 ![](./Assets/ObjResolucion/guadaña.png)
 ![](./Assets/ObjResolucion/hueso.png)
@@ -250,10 +246,10 @@ Los Power Ups serán llamas de diferentes colores, y son exclusivos para el juga
 * Amarillo: es una trampa, hace que el jugador se quede congelado, haciendo así más fácil que el gancho le tire una pieza.  
 * Rojo: hace al jugador invulnerable, permitiendo una mayor tranquilidad durante ese tiempo.  
 * Verde: aumenta la velocidad del jugador, haciendo más difícil que el gancho le acierte con una pieza.
-* ![](./Assets/ObjResolucion/VELA1.png)
-* ![](./Assets/ObjResolucion/VELA2.png)
-* ![](./Assets/ObjResolucion/VELA3.png)
-* ![](./Assets/ObjResolucion/VELA4.png)
+![](./Assets/ObjResolucion/VELA1.png)
+![](./Assets/ObjResolucion/VELA2.png)
+![](./Assets/ObjResolucion/VELA3.png)
+![](./Assets/ObjResolucion/VELA4.png)
 
 # **Estados e interfaces** 
 
@@ -358,8 +354,6 @@ El videojuego **Crush Factory**, desarrollado por *The Gripping Order*, se distr
 # **Bibliografía** 
 
 [https://www.ordenacionjuego.es/operadores-juego/informacion-operadores/licencias-juego](https://www.ordenacionjuego.es/operadores-juego/informacion-operadores/licencias-juego)
-
-* Sonidos:
 
 [https://pixabay.com](https://pixabay.com)
 
