@@ -3,6 +3,7 @@
 # **Crush Factory**
 
 ## **The Gripping Order** 
+![](./Assets/ResolutionLogo.png)
 
 **Grupo 3 Nombre de equipo:**
 
@@ -57,7 +58,7 @@
 
 1. [Gancho](#gancho)
 
-2. [Bicho](#bicho)
+2. [Ania](#Ania)
 
 [**Items**](#items)
 
@@ -121,26 +122,30 @@ Este documento acerca del videojuego Crush Factory desarrollado para la asignatu
 
 ## **Concepto del juego** 
 
-Crush Factory es un videojuego competitivo para dos jugadores que combina estrategia, reflejo y astucia. Donde cada jugador asume el rol de gancho o de bicho. 
-El gancho es una máquina capaz de mover y soltar enormes piezas con un único objetivo, aplastar al bicho. Mientras que el bicho es una pequeña y ágil criatura que deberá esquivar estas piezas para mantenerse con vida hasta que se acabe el tiempo. 
-Gancho y bicho se enfrentarán en una peligrosa y dinámica fábrica donde las piezas caen. Con un cronómetro recordando el paso del tiempo que sirve como alivio para el bicho pero como una inminente amenaza para el gancho.
+Crush Factory es un videojuego competitivo para dos jugadores que combina estrategia, reflejo y astucia. Donde cada jugador asume el rol de gancho o de Ania. 
+El gancho es una máquina capaz de mover y soltar enormes piezas con un único objetivo, aplastar al Ania. Mientras que Ania es una pequeña y ágil criatura que deberá esquivar estas piezas para mantenerse con vida hasta que se acabe el tiempo. 
+Gancho y Ania se enfrentarán en una peligrosa y dinámica fábrica donde las piezas caen. Con un cronómetro recordando el paso del tiempo que sirve como alivio para Ania, pero como una inminente amenaza para el gancho.
 Crush Factory busca ofrecer partidas cortas y competitivas, donde la habilidad, la lectura del oponente y el buen timing son esenciales para conseguir la victoria. 
                                                                                                     
 
 ## **Características principales** 
 
-Dentro de Crush Factory, al gancho le irán apareciendo diferentes piezas para dejarlas caer sobre el bicho, mientras que este deberá esquivar y saltar estas piezas para sobrevivir hasta que finalice el tiempo. Además, el bicho tendrá a su disposición diversos Power Ups que le ayudarán a sobrevivir. Una vez iniciada la partida, el tiempo comenzará a correr de forma constante hasta que el bicho muera o este finalice. 
+Dentro de Crush Factory, al gancho le irán apareciendo diferentes piezas para dejarlas caer sobre Ania, mientras que esta deberá esquivar y saltar estas piezas para sobrevivir hasta que finalice el tiempo. Además, Ania tendrá a su disposición diversos Power Ups que le ayudarán a sobrevivir. Una vez iniciada la partida, el tiempo comenzará a correr de forma constante hasta que Ania muera o este finalice. 
 
-Por un lado, una vez que a la garra le aparezca la pieza, debe intentar soltarla sobre el bicho moviéndose de  izquierda a derecha y soltarla para intentar aplastarlo.
+Por un lado, una vez que al gancho le aparezca la pieza, debe intentar soltar la pieza en el momento justo para aplastar a Ania. Si esto ocurre tres veces, Ania se quedará sin vida
 
-Por otro lado, el bicho tendrá libertad de movimiento dentro de los límites de la pantalla, ya sea moviéndose de un lado a otro o saltando sobre las piezas que le lancen encima. Además, podrá obtener Power Ups pasando sobre estos cuando aparezcan en la pantalla. 
+Por otro lado, Ania tendrá libertad de movimiento dentro de los límites de la pantalla, ya sea moviéndose de un lado a otro o saltando sobre las piezas que le lancen encima. Además, podrá obtener Power Ups pasando sobre estos cuando aparezcan en la pantalla. 
+
+Es un juego en 2D con cámara fija lateral en una posición estática predeterminada (como cualquier Mario Bros clásico pero sin el desplazamiento).
+![](./Assets/Capturas/Juego.png)
+
 
 ## **Género** 
 
 El género del juego se clasifica como plataforma, survival y competitivo.
 
 * Plataformas: una de las partes fundamentales del juego de uno de los jugadores es el movimiento y los saltos, ya que debe esquivar las piezas que le caen mediante estas acciones.  
-* Supervivencia: el objetivo del jugador que lleva al bicho es sobrevivir el mayor tiempo posible, mientras que el objetivo del otro es impedirlo.  
+* Supervivencia: el objetivo del jugador que lleva a Ania es sobrevivir el mayor tiempo posible, mientras que el objetivo del otro es impedirlo.  
 * Competitivo: ambos jugadores tienen objetivos contrarios, no pueden ganar ambos, por lo que hay un constante ambiente de enfrentamiento entre ellos.
 
 ## **Propósito y Público objetivo** 
@@ -183,13 +188,13 @@ Análisis DAFO:
 Crush Factory es un juego en su totalidad original, desarrollado desde cero y sin estar basado en ninguna otra franquicia, marca o adaptación de otro tipo de producto multimedia preexistente. Su diseño, personajes, mecánicas y estética son fruto de una creación única y autónoma, lo que garantiza una identidad propia y distintiva en el mercado.
 Además se contemplan planes a futuro  para el lanzamiento de contenidos adicionales que expandan y enriquezcan esta entrega, manteniendo la originalidad y coherencia del universo creado. 
 Esta independencia creativa permite al proyecto tener libertad para evolucionar según las necesidades y el feedback de la comunidad, asegurando un desarrollo alineado con la visión original del juego y las expectativas de sus jugadores.
- 
+
 
 # **Escenario** 
 
 ## **Descripción** 
 
-El escenario en Crush Factory está inspirado en la estética clásica de las máquinas arcade de los años 80 y 90, evocando la nostalgia de esa época dorada de los videojuegos. El entorno presenta un fondo oscuro, diseñado para no distraer la atención y dando protagonismo al gancho y el bicho, pero al mismo tiempo creando una atmósfera intensa. 
+El escenario en Crush Factory está inspirado en la estética clásica de las máquinas arcade de los años 80 y 90, evocando la nostalgia de esa época dorada de los videojuegos. El entorno presenta un fondo oscuro, diseñado para no distraer la atención y dando protagonismo al gancho y a Ania, pero al mismo tiempo creando una atmósfera intensa. 
 En este fondo sobrio y plano, se destacan claramente los elementos clave del juego. Para añadir dinamismo visual y ayudar en la accesibilidad, los Power Ups y otros objetos interactivos cuentan con colores vivos y brillantes, que contrastan fuertemente con el fondo para facilitar su identificación rápida durante la partida.
 Esta combinación de un diseño simple pero efectivo, con referencias retro y un uso inteligente del color, contribuye a crear un escenario que es a la vez funcional y atractivo, invitando a los jugadores a sumergirse en partidas rápidas y emocionantes.
 
@@ -223,7 +228,7 @@ Es uno de los personajes que puede llevar un jugador. Consiste en una garra insp
 
 ![](./Assets/Gancho.png)
 
-## **Bicho** 
+## **Ania** 
 
 Es el otro personaje que puede llevar un jugador. Consiste en una pequeña criatura de colores vivos parecida a un escarabajo. Esta compuesta por fragmentos de sprites corrompidos, dando así la apariencia de un glitch. Su supervivencia depende por completo de su capacidad para predecir los movimientos de su oponente.
 
@@ -231,16 +236,24 @@ Es el otro personaje que puede llevar un jugador. Consiste en una pequeña criat
 
 ## **Piezas** 
 
-Siguiendo con la narrativa actual del juego, la cual tiene una temática oscura, el gancho lanzará objetos típicos de funerales al bicho, como guadañas, ataúdes, jarrones de cenizas y huesos varios.
+Siguiendo con la narrativa actual del juego, la cual tiene una temática oscura, el gancho lanzará objetos típicos de funerales a Ania, como guadañas, ataúdes, jarrones de cenizas y huesos varios.
+![](./Assets/ObjResolucion/ataud.png)
+![](./Assets/ObjResolucion/guadaña.png)
+![](./Assets/ObjResolucion/hueso.png)
+![](./Assets/ObjResolucion/libro.png)
 
 ## **Power Ups** 
 
-Los Power Ups serán llamas de diferentes colores, y son exclusivos para el jugador que lleva al bicho. Sus efectos se acaban a los 5 segundos, sea cual sea el Power Up, y no se pueden tener dos efectos a la vez, solo se contará el primero que coja hasta que el tiempo de este haya acabado.
+Los Power Ups serán llamas de diferentes colores, y son exclusivos para el jugador que lleva a Ania. Sus efectos se acaban a los 5 segundos, sea cual sea el Power Up, y no se pueden tener dos efectos a la vez, solo se contará el primero que coja hasta que el tiempo de este haya acabado.
 
 * Azul: permite que el jugador haga un doble salto al mantener pulsado el espacio.  
 * Amarillo: es una trampa, hace que el jugador se quede congelado, haciendo así más fácil que el gancho le tire una pieza.  
 * Rojo: hace al jugador invulnerable, permitiendo una mayor tranquilidad durante ese tiempo.  
 * Verde: aumenta la velocidad del jugador, haciendo más difícil que el gancho le acierte con una pieza.
+* ![](./Assets/ObjResolucion/VELA1.png)
+* ![](./Assets/ObjResolucion/VELA2.png)
+* ![](./Assets/ObjResolucion/VELA3.png)
+* ![](./Assets/ObjResolucion/VELA4.png)
 
 # **Estados e interfaces** 
 
@@ -256,39 +269,40 @@ Actualmente solo se tiene el diseño de cómo serán las interfaces, aunque su e
 
 ### Pantalla de inicio 
 
-![](./Assets/PantallaInicio.jpg)
+![](./Assets/Capturas/MenuInicio.png)
 
 ### Tutorial 
 
-![](./Assets/Tutorial.jpg)
+![](./Assets/Capturas/Tutorial.png)
 
 ### Créditos 
 
-![](./Assets/Creditos.jpg)
+![](./Assets/Capturas/Creditos.png)
 ### Elección de jugador 
 
-![](./Assets/EleccionDeJugador.jpg)
+Aunque esta pantalla no es accesible a nivel local, ya se ha diseñado e implementado de cara al modo online.
+![](./Assets/Capturas/EleccionJugador.png)
 
 ### Pantalla de juego 
 
-![](./Assets/PantallaDeJuego.jpg)
+![](./Assets/Capturas/JuegoAvanzado.png)
 
 ### Pantalla de victoria/derrota 
 
-![](./Assets/VictoriaDerrota.jpg)
+![](./Assets/Capturas/VictoriaGancho.png)
 
 ### Menú de pausa
 
-![](./Assets/MenuDePausa.jpg)
+![](./Assets/Capturas/Pausa.png)
 
 # **Mecánicas \- Diagrama de Flujo** 
 
 ## **Jugabilidad y controles** 
 
-Al inicio, los jugadores tendrán que elegir entre los dos personajes del juego, y cada uno poseerá diferentes mecánicas y objetivos:
+Al inicio de cada partida en Crush Factory, los jugadores tendrán que elegir entre los dos personajes disponibles del juego, cada uno con mecánicas y objetivos claramente diferenciados que definen su estilo de juego:
 
-* Bicho: se mueve con las teclas a (moverse a la izquierda), d (moverse a la derecha), y la barra espaciadora para el salto. Su objetivo es sobrevivir durante un tiempo limitado indicado por un cronómetro, mientras esquiva las diferentes piezas que le tira el jugador. Durante la partida, el jugador podrá coger diferentes Power Ups que le darán distintos poderes durante 10 segundos.  
-* Gancho: se mueve con la flecha ← (moverse a la izquierda), → (moverse a la derecha), y el enter para lanzarla. Su objetivo es aplastar al jugador antes de que se acabe el tiempo.
+* Ania: Este personaje se controla mediante las teclas A (moverse a la izquierda), D (moverse a la derecha), y la barra espaciadora para el salto. La misión de Ania es sobrevivir durante un tiempo limitado indicado por un cronómetro visible en pantalla, mientras esquiva las diferentes piezas que le tira el jugador del gancho. Para ayudar en su supervivencia durante la partida, el jugador podrá recoger diferentes Power Ups que le darán habilidades especiales o ventajas temporales durante 10 segundos, como mayor velocidad, saltos más altos o escudos protectores. Pero no todos son Power Ups, también aparecerán trampas que eviten que pueda seguir moviéndose.  
+* Gancho: Este personaje se mueve con las flechas ← (moverse a la izquierda), → (moverse a la derecha), y el enter para lanzar piezas sobre  Ania. El objetivo del gancho es aplastar al jugador de Ania antes de que se acabe el tiempo, utilizando estratégicamente la posición y el lanzamiento de las piezas para encerrar y eliminar a su oponente.
 
   ## **Flujo del Juego** 
 
@@ -298,7 +312,7 @@ Al inicio, los jugadores tendrán que elegir entre los dos personajes del juego,
 
 ### Mecánicas de movimiento 
 
-Tanto el bicho como el gancho se mueven exclusivamente de izquierda a derecha, con la excepción de que el bicho puede saltar también para llegar a distintas plataformas.
+Tanto Ania como el gancho se mueven exclusivamente de izquierda a derecha, con la excepción de que Ania puede saltar también para llegar a distintas plataformas.
 
 ### Mecánica de lanzamiento de piezas 
 
@@ -306,19 +320,20 @@ Es una mecánica exclusiva del gancho que consiste en lanzar las piezas presiona
 
 ### Mecánica de recolección de Power Ups 
 
-Es una mecánica exclusiva del bicho que consiste en colisionar con distintos Power Ups que aparecerán de manera aleatoria por la pantalla de juego para poder obtener poderes durante un limitado período de tiempo. 
+Es una mecánica exclusiva de Ania que consiste en colisionar con distintos Power Ups que aparecerán de manera aleatoria por la pantalla de juego para poder obtener poderes durante un limitado período de tiempo. 
+Sin embargo, el gancho lo que deberá hacer es lanzar una pieza sobre los Power Ups para hacerlos desaparecer y que Ania no pueda usarlos.
 
 ### Mecánica de Tiempo 
 
-Cada partida dura 1 minuto y 30 segundos, y es una de las claves de la supervivencia. Cuando finalice ese tiempo, se mostrará la partida de victoria para el bicho, dado que si antes el gancho consigue aplastar al bicho, el tiempo no llegará a terminar.
+Cada partida dura 1 minuto y 30 segundos, y es una de las claves de la supervivencia. Cuando finalice ese tiempo, se mostrará la partida de victoria para Ania, dado que si antes el gancho consigue aplastar a Ania, el tiempo no llegará a terminar.
 
 ### Mecánicas de supervivencia 
 
-Es una mecánica exclusiva del bicho consistente en sobrevivir el tiempo indicado esquivando las piezas que va tirando el gancho. Si no logra esquivarlas, perderá la partida.
+Es una mecánica exclusiva de Ania consistente en sobrevivir el tiempo indicado esquivando las piezas que va tirando el gancho. Si no logra esquivarlas y le golpea 3 veces perderá la partida.
 
 ### Gravedad 
 
-Tanto las piezas que tira el gancho como el bicho sufren de gravedad, por lo que caen hacia abajo cuando están en el aire, ya sea porque sean soltadas por el gancho o porque el jugador haya decidido saltar con el bicho.
+Tanto las piezas que tira el gancho como Ania sufren de gravedad, por lo que caen hacia abajo cuando están en el aire, ya sea porque sean soltadas por el gancho o porque el jugador haya decidido saltar con Ania. Sin embargo, mientras que Ania se queda en el suelo, las piezas lo atraviesan y salen fuera de la pantalla.
 
 # **Narrativa** 
 
@@ -337,4 +352,38 @@ La música de fondo mostrará una progresión que aumentará en intensidad a med
 Se buscará construir una base de jugadores comprometidos mediante el uso de redes sociales. Se crearán perfiles oficiales del juego en plataformas como Twitter e Instagram donde se irán publicando contenidos adicionales o arte oficial del juego. 
 
 Además de realizar encuestas o preguntas para que el público objetivo pueda interactuar con los desarrolladores y que estos puedan escuchar sus opiniones y feedback para mejorar el juego. Buscando hacer sentir que la opinión del jugador es importante para el equipo de desarrollo. 
+
+El videojuego **Crush Factory**, desarrollado por *The Gripping Order*, se distribuirá bajo una **licencia freeware**. Esto significa que el juego se ofrece de manera gratuita para su descarga y uso personal, sin coste alguno para el usuario.
+
+# **Bibliografía** 
+
+[https://www.ordenacionjuego.es/operadores-juego/informacion-operadores/licencias-juego](https://www.ordenacionjuego.es/operadores-juego/informacion-operadores/licencias-juego)
+
+* Sonidos:
+
+[https://pixabay.com](https://pixabay.com)
+
+[DJARTMUSIC](https://pixabay.com/es/users/djartmusic-46653586/)\- The World of 8 Bit Games
+
+[DJARTMUSIC](https://pixabay.com/es/users/djartmusic-46653586/)\- I Love my 8 Bit Game Console
+
+Victory2: [u\_ss015dykrt](https://pixabay.com/es/users/u_ss015dykrt-26759154/) \- Brass fanfare with timpani and winchimes
+
+Boton\_Seleccionado: [Emilianodleon](https://pixabay.com/es/users/emilianodleon-41744987/) \- Select Button UI
+
+Boton\_Presionado: [freesound\_community](https://pixabay.com/es/users/freesound_community-46691455/) \- button-pressed
+
+Gancho\_Disparo: [freesound\_community](https://pixabay.com/es/users/freesound_community-46691455/) \- 8 Bit Cannon Fire
+
+[freesound\_community](https://pixabay.com/es/users/freesound_community-46691455/) \- Colorful Potions
+
+Gancho\_Disparo2: [freesound\_community](https://pixabay.com/es/users/freesound_community-46691455/) \- OPL3ElecSnare1
+
+Victory: [freesound\_community](https://pixabay.com/es/users/freesound_community-46691455/) \- Success fanfare trumpets
+
+Ania\_Hurt: [freesound\_community](https://pixabay.com/es/users/freesound_community-46691455/) \- Player Hurt
+
+Ania\_Hit: [freesound\_community](https://pixabay.com/es/users/freesound_community-46691455/) \- playerhit
+
+Powerup: [freesound\_community](https://pixabay.com/es/users/freesound_community-46691455/) \- 8-Bit Powerup
 
