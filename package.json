@@ -4,10 +4,13 @@
   "description": "**Grupo 3 Nombre de equipo:**",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "build": "webpack --mode production",
+    "dev": "webpack serve --mode development --open",
+    "dev:server": "node src/server/index.js",
+    "start": "npm run build && node src/server/index.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
