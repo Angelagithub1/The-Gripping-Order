@@ -1,8 +1,8 @@
-import Phaser from 'phaser';
+//import Phaser from 'phaser';
 import { MenuPrincipal } from './scenes/MenuPrincipal.js';
 import { MenuCreditos } from './scenes/MenuCreditos.js';
-import { MenuEleccionJugador } from './scenes/MenuEleccionJugador';
-import { MenuPausa } from './scenes/MenuPausa';
+import { MenuEleccionJugador } from './scenes/MenuEleccionJugador.js';
+import { MenuPausa } from './scenes/MenuPausa.js';
 import { PantallaJuego } from './scenes/PantallaJuego.js';
 import { MenuTutorial } from './scenes/MenuTutorial.js';
 import { PantallaFinal} from './scenes/PantallaFinal.js';

@@ -1,4 +1,4 @@
-import Phaser from 'phaser';
+//import Phaser from 'phaser';
 export class MenuTutorial extends Phaser.Scene {   //Crear clase que hereda de Phaser
     constructor() {
         super('MenuTutorial'); //Asignación de un nombre interno

@@ -1,6 +1,7 @@
 {
   "name": "the-gripping-order",
   "version": "1.0.0",
+  "type": "module",
   "description": "**Grupo 3 Nombre de equipo:**",
   "main": "index.js",
   "scripts": {
@@ -13,6 +14,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "express": "^5.2.1",
     "phaser": "^3.90.0"
   },
   "devDependencies": {
