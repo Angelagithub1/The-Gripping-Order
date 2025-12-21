@@ -5,6 +5,9 @@ export class MenuEleccionJugador extends Phaser.Scene {   //Crear clase que here
     }
 
     preload(){  //Se ejecuta antes de que empiece la escena
+
+        this.scene.get('ConnectionMenu').escenaActual = this.scene.key;
+
         //Fondo
         this.load.image('Menus', 'Assets/Backgrounds/Menus.jpeg'); //Cargar imagen de fondo
 

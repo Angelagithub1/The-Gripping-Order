@@ -6,6 +6,8 @@ import { MenuPausa } from './scenes/MenuPausa.js';
 import { PantallaJuego } from './scenes/PantallaJuego.js';
 import { MenuTutorial } from './scenes/MenuTutorial.js';
 import { PantallaFinal} from './scenes/PantallaFinal.js';
+import { MenuReconexion } from './scenes/MenuReconexion.js';
+import { ConnectionMenu } from './scenes/ConnectionMenu.js';
 
 const config = {
     type: Phaser.AUTO,  //Phaser elige WebGL, no canvas siemopre que sea posible
@@ -23,7 +25,7 @@ const config = {
     mode: Phaser.Scale.FIT,          // ajusta al tamaño de la ventana
     autoCenter: Phaser.Scale.CENTER_BOTH // centra automáticamente
   },
-    scene: [MenuPrincipal, MenuCreditos, MenuTutorial, MenuEleccionJugador, MenuPausa, PantallaJuego, PantallaFinal],  //Lista de escenas del juego
+    scene: [ MenuPrincipal, MenuCreditos, MenuTutorial, MenuEleccionJugador, MenuPausa, PantallaJuego, PantallaFinal,ConnectionMenu, MenuReconexion,],  //Lista de escenas del juego
     backgroundColor: '#1a1a2e', //Color de fondo del juego
 }
 

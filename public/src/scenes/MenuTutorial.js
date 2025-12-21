@@ -42,6 +42,7 @@ export class MenuTutorial extends Phaser.Scene {   //Crear clase que hereda de P
         
     }
     create(){   //Se ejecuta al iniciar la escena
+        this.scene.get('ConnectionMenu').escenaActual = this.scene.key;
         //Fondo
         const background = this.add.image(0, 0, 'Menus').setOrigin(0); //Añadir imagen de fondo
         background.setScale(Math.max(this.scale.width / background.width, this.scale.height / background.height));

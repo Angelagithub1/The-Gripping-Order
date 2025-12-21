@@ -72,7 +72,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         
     }
     create() {
-
+        this.scene.get('ConnectionMenu').escenaActual = this.scene.key;
         //Fondo
         const background = this.add.image(0, 0, 'BackgroundGraveyard').setOrigin(0); //Añadir imagen de fondo
         background.setScale(Math.max(this.scale.width / background.width, this.scale.height / background.height));

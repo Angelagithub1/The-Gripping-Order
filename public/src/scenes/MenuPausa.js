@@ -41,6 +41,8 @@ export class MenuPausa extends Phaser.Scene {   //Crear clase que hereda de Phas
         
     }
     create(){   //Se ejecuta al iniciar la escena
+        this.scene.get('ConnectionMenu').escenaActual = this.scene.key;
+
         //Fondo
         const background = this.add.image(0, 0, 'MenuPausa').setOrigin(0).setScale(2); //Añadir imagen de fondo
         const nombreJuego = this.add.image(this.scale.width / 2, this.scale.height / 4, 'NombreJuego').setScale(2);  //Nombre del juego
@@ -94,8 +96,9 @@ export class MenuPausa extends Phaser.Scene {   //Crear clase que hereda de Phas
             this.scene.resume(this.escenaPrevia); 
         });
         
-        this.scene.bringToTop(); // Asegura que el menú de pausa esté en la parte superior
-
+        //this.scene.bringToTop(); // Asegura que el menú de pausa esté en la parte superior
+        this.scene.moveAbove(this.escenaPrevia);
+        this.scene.moveBelow("MenuReconexion");
 
     }
 }

@@ -5,6 +5,19 @@ export class MenuPrincipal extends Phaser.Scene {   //Crear clase que hereda de 
     }
 
     preload(){  //Se ejecuta antes de que empiece la escena
+
+        if(!this.scene.isActive('ConnectionMenu')){
+            //Si no esta activa la escena de conexion, crearla
+            this.scene.launch('ConnectionMenu', { escenaActual: this.scene.key });
+
+        }else{
+            //Si ya esta activa se le asigna la escena actual
+            this.scene.get('ConnectionMenu').escenaActual = this.scene.key;
+        }
+        
+        //Assets de pantalla de reconexion   - PONER EN LOGIN
+        this.load.image('FondoReconexion', 'Assets/Backgrounds/fondoTrans.png'); //Cargar imagen de fondo
+
         //Fondo
         this.load.image('Menus', 'Assets/Backgrounds/Menus.jpeg'); //Cargar imagen de fondo
 
@@ -45,6 +58,7 @@ export class MenuPrincipal extends Phaser.Scene {   //Crear clase que hereda de 
         this.load.audio('SonidoBotonP', 'Assets/Sonidos/BotonPulsado.mp3');
     }
     create(){   //Se ejecuta al iniciar la escena
+        console.log("Menu Principal");
         //Fondo
         const background = this.add.image(0, 0, 'Menus').setOrigin(0); //Añadir imagen de fondo
         background.setScale(Math.max(this.scale.width / background.width, this.scale.height / background.height));
@@ -123,21 +137,10 @@ export class MenuPrincipal extends Phaser.Scene {   //Crear clase que hereda de 
             this.scene.pause();
             this.scene.launch('MenuPausa', { escenaPrevia: this.scene.key });
         });
-        /*
-        //Boton Salir
-        const botonSalir = this.add.image(130, 55, 'BotonSalirN').setScale(1.5).setInteractive(); 
-        botonSalir.on('pointerover', () => { 
-            this.sonidoE.play();
-            botonSalir.setTexture('BotonSalirE')}); 
-        botonSalir.on('pointerout', () => { botonSalir.setTexture('BotonSalirN')});
-        botonSalir.on('pointerdown', () => { 
-            this.sonidoP.play();
-            botonSalir.setTexture('BotonSalirP') }); 
-*/
         
-
-
     }
 }
+
+
 
     

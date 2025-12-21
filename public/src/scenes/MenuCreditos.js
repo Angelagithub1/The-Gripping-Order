@@ -5,6 +5,9 @@ export class MenuCreditos extends Phaser.Scene {   //Crear clase que hereda de P
     }
 
     preload(){  //Se ejecuta antes de que empiece la escena
+
+        this.scene.get('ConnectionMenu').escenaActual = this.scene.key;
+
         //Fondo
         this.load.image('Menus', 'Assets/Backgrounds/Menus.jpeg'); //Cargar imagen de fondo
 
