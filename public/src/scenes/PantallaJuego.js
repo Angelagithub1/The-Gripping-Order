@@ -393,6 +393,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.physics.add.overlap(this.powerUps, this.objects, this.DestroyPowrUp, null, this);
 
         this.powerUpsLista = ['PowerUpAmarillo', 'PowerUpAzul', 'PowerUpRojo', 'PowerUpVerde'];
+        this.scene.moveBelow("ConnectionMenu");
 
     }
 

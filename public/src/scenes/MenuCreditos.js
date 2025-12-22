@@ -71,6 +71,7 @@ export class MenuCreditos extends Phaser.Scene {   //Crear clase que hereda de P
             this.sonidoP.play();
             botonVolver.setTexture('MenuP') }); 
         botonVolver.on('pointerup', () => { this.scene.start('MenuPrincipal'); });
+        this.scene.moveBelow("ConnectionMenu");
 
 
     }

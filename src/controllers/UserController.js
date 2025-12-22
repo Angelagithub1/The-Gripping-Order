@@ -63,11 +63,44 @@ const UserController = () => {
            // res.status(409).json({ message: "Usuario conectado, no se puede eliminar" });
         //}
     }
+
+    const changeSkinAnia = (req, res) => {
+        const { username, password, skin } = req.body;
+        const ruta = `./src/data/${username}.json`;
+        if (!fs.existsSync(ruta)) {
+            return res.status(404).json({ message: "Usuario no registrado" });
+        }
+        const usuario = JSON.parse(fs.readFileSync(ruta));
+        if (usuario.password === password) {
+            usuario.ania = skin;
+            fs.writeFileSync(ruta, JSON.stringify(usuario, null, 2));
+            res.json({ message: "Skin de Ania cambiada exitosamente" });
+        } else {
+            res.status(401).json({ message: "Contraseña incorrecta" });
+        }
+    }
+    const changeSkinGancho = (req, res) => {
+        const { username, password, skin } = req.body;
+        const ruta = `./src/data/${username}.json`;
+        if (!fs.existsSync(ruta)) {
+            return res.status(404).json({ message: "Usuario no registrado" });
+        }
+        const usuario = JSON.parse(fs.readFileSync(ruta));
+        if (usuario.password === password) {
+            usuario.gancho = skin;
+            fs.writeFileSync(ruta, JSON.stringify(usuario, null, 2));
+            res.json({ message: "Skin de Gancho cambiada exitosamente" });
+        } else {
+            res.status(401).json({ message: "Contraseña incorrecta" });
+        }
+    }
     return {
         loginUser,
         registerUser,
         deleteUser,
-        getUsserConnected
+        getUsserConnected,
+        changeSkinAnia,
+        changeSkinGancho
     };
 
 }

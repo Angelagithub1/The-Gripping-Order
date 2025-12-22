@@ -1,4 +1,3 @@
-
 export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de Phaser
     constructor() {
         super('ConnectionMenu'); //Asignación de un nombre interno
@@ -13,6 +12,7 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
         //Conexion
         this.statusText = this.add.text(16, this.scale.height - 32, '', { fontSize: '20px', fill: '#ffffff' });
         this.connectionInterval = setInterval(() => this.checkServerStatus(), 500);
+        this.PassSceneInterval = setInterval(() => this.CanPassNextScene(), 500);
         this.scene.bringToTop();
 
     }
@@ -25,9 +25,8 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
                     throw new Error('Error en la respuesta del servidor');
                 }
                 const data = await response.json();
-                if (this.escenaActual !== 'MenuLogin') {
-                    this.statusText.setText(`${data.username} - Usuarios: ${data.connected}`);
-                }
+                this.statusText.setText(`${data.username} - Usuarios: ${data.connected}`);
+                
                 if (this.scene.isPaused(this.escenaActual)) {
                     this.scene.resume(this.escenaActual);
                 }
@@ -49,14 +48,9 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
                     }
                 }
             } else {
-                this.statusText.setText(``);
+                this.statusText.setText(`Servidor: Conectado`);
             }
         } catch (error) {
-            this.handleConnectionUpdate(false);
-        }
-    }
-    handleConnectionUpdate(isConnected) {
-        if (!isConnected) {
             this.statusText.setText(`Servidor:Reconectando...`);
             if(this.escenaActual==='MenuLogin'){
                 return;
@@ -67,6 +61,46 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
             if (!this.scene.isActive('MenuReconexion')) {
                 this.scene.launch('MenuReconexion');
             }
+        }
+    }
+    async CanPassNextScene() {
+        if(this.escenaActual==='PantallaJuego'){
+            //Si no esta en la pantalla de juego porque no se puede cambiar de alli
+            return;
+        }
+        try{
+            //Se pregunta al servidor si se puede cambiar de escena
+            const response = await fetch('/configuration/canChangeScreen', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            });
+            const data = await response.json();
+
+            if (data.canChange !== '') {
+                if(this.escenaActual==data.canChange){
+                    //si es la misma no hacer nada
+                    return;
+                }
+                
+                this.scene.stop(this.escenaActual);
+                this.escenaActual= data.canChange;
+                if(this.scene.isActive('MenuPausa')){
+                    this.scene.get('MenuPausa').escenaPrevia=data.canChange
+                }
+                this.scene.launch(data.canChange);
+                const response = await fetch('/configuration/confirmChange',{
+                    method:'POST',
+                    headers:{
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({username:this.username, actScene:this.escenaActual})
+                })
+            }
+        }catch(error){
+            console.error('Error al verificar el cambio de escena:', error);
         }
     }
 }

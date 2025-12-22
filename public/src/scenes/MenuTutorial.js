@@ -93,6 +93,7 @@ export class MenuTutorial extends Phaser.Scene {   //Crear clase que hereda de P
             botonVolver.setTexture('MenuP') }); 
         botonVolver.on('pointerup', () => { this.scene.start('MenuPrincipal'); });
 
-        
+                this.scene.moveBelow("ConnectionMenu");
+
     }
 }

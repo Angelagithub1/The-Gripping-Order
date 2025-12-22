@@ -31,6 +31,7 @@ export class MenuEleccionJugador extends Phaser.Scene {   //Crear clase que here
         this.load.image('MenuP', 'Assets/Interfaz/Botones/menuPPresionado.png');
     }
     create(){   //Se ejecuta al iniciar la escena
+        console.log("Menu de eleccion")
         //Fondo
         const background = this.add.image(0, 0, 'Menus').setOrigin(0); //Añadir imagen de fondo
         background.setScale(Math.max(this.scale.width / background.width, this.scale.height / background.height));
@@ -53,16 +54,54 @@ export class MenuEleccionJugador extends Phaser.Scene {   //Crear clase que here
         botonPausa.on('pointerover', () => { botonPausa.setTexture('BotonPausaE')}); 
         botonPausa.on('pointerout', () => { botonPausa.setTexture('BotonPausaN')});
         botonPausa.on('pointerdown', () => { botonPausa.setTexture('BotonPausaP') }); 
-        botonPausa.on('pointerup', () => { this.scene.start('MenuPausa'); });
+        botonPausa.on('pointerup', () => { this.scene.start('MenuPausa', { escenaPrevia: this.scene.key }); });
 
         //Boton Volver
         const botonVolver = this.add.image(110, 55, 'MenuN').setScale(1.5).setInteractive(); 
         botonVolver.on('pointerover', () => { botonVolver.setTexture('MenuE')}); 
         botonVolver.on('pointerout', () => { botonVolver.setTexture('MenuN')});
         botonVolver.on('pointerdown', () => { botonVolver.setTexture('MenuP') }); 
-        botonVolver.on('pointerup', () => { this.scene.start('MenuPrincipal'); });
-        
+        botonVolver.on('pointerup', () => { this.back() });
+                this.scene.moveBelow("ConnectionMenu");
 
+        const botonJugar = this.add.image(this.scale.width / 2, 450, 'BotonJugarN').setScale(2).setInteractive();
+        botonJugar.on('pointerover', () => {
+            botonJugar.setTexture('BotonJugarE')
+        }); //Efecto hover
+        botonJugar.on('pointerout', () => { botonJugar.setTexture('BotonJugarN') }); //Efecto salir
+        botonJugar.on('pointerdown', () => {
+            botonJugar.setTexture('BotonJugarP')
+        }); //Efecto encima
+        botonJugar.on('pointerup', () => {
+            this.Ready();
+        }); //Al hacer click, iniciar escena principal
 
+    }
+    async back(){
+        try {
+            const response = await fetch('/configuration/requestChangeScreen', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username: this.scene.get('ConnectionMenu').username, actscene: this.scene.key, next:false })
+            });
+        } catch (error) {
+            console.error('Error al solicitar el cambio de escena:', error);
+        }
+    }
+
+    async Ready(){
+        try{
+            const response = await fetch('configuration/requestChangeScreen',{
+                method:'POST',
+                headers:{
+                    'Content-Type': 'application/json'
+                },
+                body:JSON.stringify({username:this.scene.get('ConnectionMenu').username, actscene:this.scene.key, next:true})
+            })
+        }catch(error){
+            console.error('Error al confirmar que el jugador esta listo:',error);
+        }
     }
 }

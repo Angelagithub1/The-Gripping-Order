@@ -153,6 +153,9 @@ export class MenuLogin extends Phaser.Scene {   //Crear clase que hereda de Phas
 
             });
         this.messageError = this.add.text(this.scale.width / 2, this.scale.height / 2 + 100, '', { color: 'red', fontFamily: 'Arial', fontSize: '20px ' }).setOrigin(0.5);
+
+                this.scene.moveBelow("ConnectionMenu");
+
     }
     async procesarEliminarUsuario(formulario) {
         let username = formulario.getChildByName('user').value;

@@ -129,7 +129,8 @@ export class PantallaFinal extends Phaser.Scene {   //Crear clase que hereda de 
         botonVolver.on('pointerup', () => { this.scene.start('MenuPrincipal'); });
 
 
-        
+                this.scene.moveBelow("ConnectionMenu");
+
 
 
     }
