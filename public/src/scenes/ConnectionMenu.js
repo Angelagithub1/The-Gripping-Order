@@ -12,12 +12,14 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
 
         //Conexion
         this.statusText = this.add.text(16, this.scale.height - 32, '', { fontSize: '20px', fill: '#ffffff' });
+        this.messageNotEnoughPlayers = this.add.text(this.scale.width / 2 - 250, this.scale.height - 65, '', { fontSize: '20px', fill: '#ff0000ff' });
+
         this.connectionInterval = setInterval(() => this.checkServerStatus(), 500);
         this.PassSceneInterval = setInterval(() => this.CanPassNextScene(), 500);
         this.scene.bringToTop();
 
     }
-    update(){
+    update() {
         //console.log("Connection Menu vivo")
     }
     async checkServerStatus() {
@@ -30,7 +32,29 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
                 }
                 const data = await response.json();
                 this.statusText.setText(`${data.username} - Usuarios: ${data.connected}`);
+                if (data.connected < 2) {
+                    //Si hay menos de dos jugadores
 
+                    if (this.escenaActual == 'MenuEleccionJugador') {
+                        this.scene.stop(this.escenaActual)
+                        this.escenaActual = 'MenuPrincipal'
+                        this.scene.launch('MenuPrincipal')
+                        this.messageNotEnoughPlayers.setText('Faltan jugadores, espere a que se conecte alguien')
+                        this.time.delayedCall(3000, () => {
+                            this.messageNotEnoughPlayers.setText('');
+                        }, [], this);
+                    }
+                    if (this.escenaActual == 'PantallaJuego') {
+                        this.scene.stop(this.escenaActual)
+                        this.escenaActual = 'PantallaFinal'
+                        this.scene.launch('PantallaFinal', {
+                            ganador: 'Ania', //Aqui hay que hacer una busqueda para saber que jugador gano
+                        });
+                        this.time.delayedCall(3000, () => {
+                            this.messageNotEnoughPlayers.setText('');
+                        }, [], this);
+                    }
+                }
                 if (this.scene.isPaused(this.escenaActual)) {
                     this.scene.resume(this.escenaActual);
                 }
@@ -101,28 +125,28 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
                 body: JSON.stringify({})
             });
             //if (response.ok) {
-                const data = await response.json();
+            const data = await response.json();
 
-                if (data.canChange !== '') {
-                    if (this.escenaActual == data.canChange) {
-                        //si es la misma no hacer nada
-                        return;
-                    }
-
-                    this.scene.stop(this.escenaActual);
-                    this.escenaActual = data.canChange;
-                    if (this.scene.isActive('MenuPausa')) {
-                        this.scene.get('MenuPausa').escenaPrevia = data.canChange
-                    }
-                    this.scene.launch(data.canChange);
-                    const response = await fetch('/configuration/confirmChange', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ username: this.username, actScene: this.escenaActual })
-                    })
+            if (data.canChange !== '') {
+                if (this.escenaActual == data.canChange) {
+                    //si es la misma no hacer nada
+                    return;
                 }
+
+                this.scene.stop(this.escenaActual);
+                this.escenaActual = data.canChange;
+                if (this.scene.isActive('MenuPausa')) {
+                    this.scene.get('MenuPausa').escenaPrevia = data.canChange
+                }
+                this.scene.launch(data.canChange);
+                const response = await fetch('/configuration/confirmChange', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username: this.username, actScene: this.escenaActual })
+                })
+            }
             /*} else if (response.status === 201) {
                 //El que manda 201 es cuando se aceptado la solicitud de confirmar cambio
                 this.ready = true;
