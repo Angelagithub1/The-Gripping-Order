@@ -1,11 +1,6 @@
 import fs from 'fs';
 //const usersConnected = new Set();
 const UserController = () => {
-    const getUsserConnected = () => {
-        res.json({
-            connected: usserConnected
-        })
-    };
     const loginUser = (req, res) => {
         const { username, password } = req.body;
         const ruta = `./src/data/${username}.json`;
@@ -98,7 +93,6 @@ const UserController = () => {
         loginUser,
         registerUser,
         deleteUser,
-        getUsserConnected,
         changeSkinAnia,
         changeSkinGancho
     };

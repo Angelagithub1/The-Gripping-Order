@@ -154,9 +154,10 @@ export class MenuLogin extends Phaser.Scene {   //Crear clase que hereda de Phas
             });
         this.messageError = this.add.text(this.scale.width / 2, this.scale.height / 2 + 100, '', { color: 'red', fontFamily: 'Arial', fontSize: '20px ' }).setOrigin(0.5);
 
-                this.scene.moveBelow("ConnectionMenu");
+        this.scene.moveBelow("ConnectionMenu");
 
     }
+
     async procesarEliminarUsuario(formulario) {
         let username = formulario.getChildByName('user').value;
         let password = formulario.getChildByName('pass').value;
@@ -177,6 +178,9 @@ export class MenuLogin extends Phaser.Scene {   //Crear clase que hereda de Phas
                         formulario.getChildByName('user').value = '';
                         formulario.getChildByName('pass').value = '';
                         this.messageError.setText(`${username} eliminado correctamente`);
+                        this.time.delayedCall(3000, () => {
+                            this.messageError.setText('');
+                        }, [], this);
                     } else {
                         if (response.status === 404) {
                             this.messageError.setText("Usuario no registrado");
@@ -221,30 +225,42 @@ export class MenuLogin extends Phaser.Scene {   //Crear clase que hereda de Phas
         }
     }
     async procesarRegistro(formulario) {
+
         let username = formulario.getChildByName('user').value;
         let password = formulario.getChildByName('pass').value;
 
         if (username !== '' && password !== '') {
+
             try {
-                const response = await fetch('/users/register', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ username, password })
-                })
-                if (response.ok) {
-                    const data = await response.json();
-                    this.messageError.setText('');
-                    this.scene.get('ConnectionMenu').username = username;
-                    this.scene.get('ConnectionMenu').password = password;
-                    this.scene.start('MenuPrincipal');
+                const usersconnected = await fetch(`/connected/users`);
+                const result = await usersconnected.json();
+                if (result.users === 2) {
+                    this.messageError.setText('Ya hay dos jugadores jugando, espere a que se libere un puesto');
+                    this.time.delayedCall(3000, () => {
+                        this.messageError.setText('');
+                    }, [], this);
                 } else {
-                    if (response.status === 409) {
-                        this.messageError.setText("Usuario ya existente");
-                        this.time.delayedCall(3000, () => {
-                            this.messageError.setText('');
-                        }, [], this);
+
+                    const response = await fetch('/users/register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ username, password })
+                    })
+                    if (response.ok) {
+                        const data = await response.json();
+                        this.messageError.setText('');
+                        this.scene.get('ConnectionMenu').username = username;
+                        this.scene.get('ConnectionMenu').password = password;
+                        this.scene.start('MenuPrincipal');
+                    } else {
+                        if (response.status === 409) {
+                            this.messageError.setText("Usuario ya existente");
+                            this.time.delayedCall(3000, () => {
+                                this.messageError.setText('');
+                            }, [], this);
+                        }
                     }
                 }
             } catch (error) {
@@ -263,55 +279,67 @@ export class MenuLogin extends Phaser.Scene {   //Crear clase que hereda de Phas
         }
     }
     async procesarLogin(formulario) {
+
         let username = formulario.getChildByName('user').value;
         let password = formulario.getChildByName('pass').value;
 
         if (username !== '' && password !== '') {
+
             try {
-                const connectionrevision = await fetch(`/connected/userconnected/${username}`);
-                const data = await connectionrevision.json();
-                if (!data.connected) {
-                    const response = await fetch('/users/login', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ username, password })
-                    })
-                    if (response.ok) {
-                        const data = await response.json();
-                        this.scene.get('ConnectionMenu').username = username;
-                        this.scene.get('ConnectionMenu').password = password;
-                        this.messageError.setText('');
-                        this.scene.start('MenuPrincipal');
-                    } else {
-                        if (response.status === 404) {
-                            this.messageError.setText("Usuario no registrado");
-                            this.time.delayedCall(3000, () => {
-                                this.messageError.setText('');
-                            }, [], this);
-                        } else if (response.status === 401) {
-                            this.messageError.setText('Contraseña incorrecta');
-                            this.time.delayedCall(3000, () => {
-                                this.messageError.setText('');
-                            }, [], this);
-                        } else if (response.status === 409) {
-                            this.messageError.setText('Usuario ya conectado');
-                            this.time.delayedCall(3000, () => {
-                                this.messageError.setText('');
-                            }, [], this);
-                        } else {
-                            this.messageError.setText('Error en el servidor');
-                            this.time.delayedCall(3000, () => {
-                                this.messageError.setText('');
-                            }, [], this);
-                        }
-                    }
-                }else{
-                    this.messageError.setText('Usuario ya conectado');
+                const response = await fetch(`/connected/users`);
+                const result = await response.json();
+                if (result.users === 2) {
+                    this.messageError.setText('Ya hay dos jugadores jugando, espere a que se libere un puesto');
                     this.time.delayedCall(3000, () => {
                         this.messageError.setText('');
                     }, [], this);
+
+                } else {
+                    const connectionrevision = await fetch(`/connected/userconnected/${username}`);
+                    const data = await connectionrevision.json();
+                    if (!data.connected) {
+                        const response = await fetch('/users/login', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ username, password })
+                        })
+                        if (response.ok) {
+                            const data = await response.json();
+                            this.scene.get('ConnectionMenu').username = username;
+                            this.scene.get('ConnectionMenu').password = password;
+                            this.messageError.setText('');
+                            this.scene.start('MenuPrincipal');
+                        } else {
+                            if (response.status === 404) {
+                                this.messageError.setText("Usuario no registrado");
+                                this.time.delayedCall(3000, () => {
+                                    this.messageError.setText('');
+                                }, [], this);
+                            } else if (response.status === 401) {
+                                this.messageError.setText('Contraseña incorrecta');
+                                this.time.delayedCall(3000, () => {
+                                    this.messageError.setText('');
+                                }, [], this);
+                            } else if (response.status === 409) {
+                                this.messageError.setText('Usuario ya conectado');
+                                this.time.delayedCall(3000, () => {
+                                    this.messageError.setText('');
+                                }, [], this);
+                            } else {
+                                this.messageError.setText('Error en el servidor');
+                                this.time.delayedCall(3000, () => {
+                                    this.messageError.setText('');
+                                }, [], this);
+                            }
+                        }
+                    } else {
+                        this.messageError.setText('Usuario ya conectado');
+                        this.time.delayedCall(3000, () => {
+                            this.messageError.setText('');
+                        }, [], this);
+                    }
                 }
             } catch (error) {
                 this.messageError.setText('Servidor no disponible');

@@ -6,6 +6,7 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
         this.escenaActual = data.escenaActual; // Guardar el nombre de la escena en pausa
         this.username = '';
         this.password = '';
+        this.ready = false;
     }
     create() {
 
@@ -15,6 +16,9 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
         this.PassSceneInterval = setInterval(() => this.CanPassNextScene(), 500);
         this.scene.bringToTop();
 
+    }
+    update(){
+        //console.log("Connection Menu vivo")
     }
     async checkServerStatus() {
         //console.log('Comprobando estado del servidor...');
@@ -26,7 +30,7 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
                 }
                 const data = await response.json();
                 this.statusText.setText(`${data.username} - Usuarios: ${data.connected}`);
-                
+
                 if (this.scene.isPaused(this.escenaActual)) {
                     this.scene.resume(this.escenaActual);
                 }
@@ -46,13 +50,32 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
                         this.scene.start('MenuLogin');
                         this.escenaActual = 'MenuLogin';
                     }
+                    if (this.escenaActual == 'MenuEleccionJugador' && this.scene.get(this.escenaActual).readyToPlay) {
+                        console.log('Mandando aviso que dio a aceptar')
+                        //Si esta en el menu de eleccion de jugador y estaba listo entonces se reenvia
+                        try {
+                            const reenvio = await fetch('configuration/requestChangeScreen', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ username: this.scene.get('ConnectionMenu').username, actscene: this.escenaActual, next: true })
+                            })
+                        } catch (error) {
+                            console.error('Error al confirmar que el jugador esta listo:', error);
+                        }
+                    }
+                }
+                if (this.escenaActual !== 'MenuEleccionJugador' && this.ready) {
+                    console.log('Reiniciando ready...')
+                    this.ready = false;
                 }
             } else {
                 this.statusText.setText(`Servidor: Conectado`);
             }
         } catch (error) {
             this.statusText.setText(`Servidor:Reconectando...`);
-            if(this.escenaActual==='MenuLogin'){
+            if (this.escenaActual === 'MenuLogin') {
                 return;
             }
             if (!this.scene.isPaused(this.escenaActual)) {
@@ -64,11 +87,11 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
         }
     }
     async CanPassNextScene() {
-        if(this.escenaActual==='PantallaJuego'){
+        if (this.escenaActual === 'PantallaJuego') {
             //Si no esta en la pantalla de juego porque no se puede cambiar de alli
             return;
         }
-        try{
+        try {
             //Se pregunta al servidor si se puede cambiar de escena
             const response = await fetch('/configuration/canChangeScreen', {
                 method: 'POST',
@@ -77,30 +100,37 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
                 },
                 body: JSON.stringify({})
             });
-            const data = await response.json();
+            //if (response.ok) {
+                const data = await response.json();
 
-            if (data.canChange !== '') {
-                if(this.escenaActual==data.canChange){
-                    //si es la misma no hacer nada
-                    return;
+                if (data.canChange !== '') {
+                    if (this.escenaActual == data.canChange) {
+                        //si es la misma no hacer nada
+                        return;
+                    }
+
+                    this.scene.stop(this.escenaActual);
+                    this.escenaActual = data.canChange;
+                    if (this.scene.isActive('MenuPausa')) {
+                        this.scene.get('MenuPausa').escenaPrevia = data.canChange
+                    }
+                    this.scene.launch(data.canChange);
+                    const response = await fetch('/configuration/confirmChange', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ username: this.username, actScene: this.escenaActual })
+                    })
                 }
-                
-                this.scene.stop(this.escenaActual);
-                this.escenaActual= data.canChange;
-                if(this.scene.isActive('MenuPausa')){
-                    this.scene.get('MenuPausa').escenaPrevia=data.canChange
-                }
-                this.scene.launch(data.canChange);
-                const response = await fetch('/configuration/confirmChange',{
-                    method:'POST',
-                    headers:{
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({username:this.username, actScene:this.escenaActual})
-                })
-            }
-        }catch(error){
-            console.error('Error al verificar el cambio de escena:', error);
+            /*} else if (response.status === 201) {
+                //El que manda 201 es cuando se aceptado la solicitud de confirmar cambio
+                this.ready = true;
+                console.log("Solicitud recibida", this.ready)
+
+            }*/
+        } catch (error) {
+            //console.log('Error al verificar el cambio de escena:', error);
         }
     }
 }

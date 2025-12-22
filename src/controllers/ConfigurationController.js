@@ -20,10 +20,12 @@ const ConfigurationController = () => {
             } else if (actscene === 'MenuEleccionJugador') {
                 // Si se esta en la seleccion de personaje y es la primera persona en darle a pasar a la escena de inicio
                 if (playersready.has(username)) {
+                    console.log("Solicitud ya recibida de antes")
                     res.status(409).json({ message: "Porfavor espere al otro jugador" });
                 } else {
+                    console.log("Solicitud ha llegado");
                     playersready.add(username);
-                    res.json({ message: "Solicitud recibida" });
+                    res.status(201).json({ message: "Confirmacion recibida" });
                 }
             }
         } else {

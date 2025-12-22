@@ -49,11 +49,11 @@ export class MenuPrincipal extends Phaser.Scene {   //Crear clase que hereda de 
         this.load.image('BotonSalirN', 'Assets/Interfaz/Botones/salirNormal.png');
         this.load.image('BotonSalirE', 'Assets/Interfaz/Botones/salirEncima.png');
         this.load.image('BotonSalirP', 'Assets/Interfaz/Botones/salirPulsado.png');
-        
 
-                //Musica botones
-                this.load.audio('SonidoBotonE', 'Assets/Sonidos/BotonEncima.mp3');
-                this.load.audio('SonidoBotonP', 'Assets/Sonidos/BotonPulsado.mp3');
+
+        //Musica botones
+        this.load.audio('SonidoBotonE', 'Assets/Sonidos/BotonEncima.mp3');
+        this.load.audio('SonidoBotonP', 'Assets/Sonidos/BotonPulsado.mp3');
     }
     create() {   //Se ejecuta al iniciar la escena
         console.log("Menu Principal");
@@ -82,11 +82,11 @@ export class MenuPrincipal extends Phaser.Scene {   //Crear clase que hereda de 
                     musica.setVolume(volumen);
                     musica.play();
                 }*/
-        
-                const volumenBotones = this.registry.get('volumen') ?? 0.5;
-        
-                this.sonidoE = this.sound.add('SonidoBotonE',{  volume: volumenBotones });
-                this.sonidoP = this.sound.add('SonidoBotonP',{  volume: volumenBotones });
+
+        const volumenBotones = this.registry.get('volumen') ?? 0.5;
+
+        this.sonidoE = this.sound.add('SonidoBotonE', { volume: volumenBotones });
+        this.sonidoP = this.sound.add('SonidoBotonP', { volume: volumenBotones });
 
         //Boton Jugar
         const botonJugar = this.add.image(this.scale.width / 2, this.scale.height / 2, 'BotonJugarN').setScale(2).setInteractive();
@@ -100,7 +100,7 @@ export class MenuPrincipal extends Phaser.Scene {   //Crear clase que hereda de 
             botonJugar.setTexture('BotonJugarP')
         }); //Efecto encima
         botonJugar.on('pointerup', () => {
-            this.passNextScene();
+            this.RequestButtonPlay();
             //this.scene.start('MenuEleccionJugador'); 
         }); //Al hacer click, iniciar escena principal
 
@@ -149,6 +149,19 @@ export class MenuPrincipal extends Phaser.Scene {   //Crear clase que hereda de 
         this.scene.moveBelow("ConnectionMenu");
     }
 
+    async RequestButtonPlay() {
+        const response = await fetch(`/connected/users`);
+        const result = await response.json();
+        if (result.users === 2) {
+            this.passNextScene();
+        } else {
+            this.statusText = this.add.text(this.scale.width / 2-250, this.scale.height -65, 'Porfavor espere a que se conecte otro jugador', { fontSize: '20px', fill: '#ff0000ff' });
+            this.time.delayedCall(3000, () => {
+                this.statusText.setText('');
+            }, [], this);
+        }
+    }
+
     async passNextScene() {
         try {
             const response = await fetch('/configuration/requestChangeScreen', {
@@ -156,7 +169,7 @@ export class MenuPrincipal extends Phaser.Scene {   //Crear clase que hereda de 
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ username: this.scene.get('ConnectionMenu').username, actscene: this.scene.key, next:true })
+                body: JSON.stringify({ username: this.scene.get('ConnectionMenu').username, actscene: this.scene.key, next: true })
             });
         } catch (error) {
             console.error('Error al solicitar el cambio de escena:', error);

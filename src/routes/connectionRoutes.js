@@ -6,4 +6,5 @@ const controllerConnection = createConnectionController();
 
 router.get('/keepalive/:username', controllerConnection.checkConnection);
 router.get('/userconnected/:username', controllerConnection.userConnected);
+router.get('/users',controllerConnection.usersConnected)
 export default router;

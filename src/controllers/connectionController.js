@@ -9,6 +9,7 @@ const connectionController =() => {
             console.log(`Nuevo cliente conectado:${username}`);
         }
         connectedUsers.set(username, Date.now());
+        console.log(username,"enviando mensaje")
 
         res.json({
             username: username,
@@ -21,20 +22,27 @@ const connectionController =() => {
             connected: connectedUsers.has(req.params.username)
         })
     }
+    const usersConnected = (req, res) =>{
+        res.json({
+            users: connectedUsers.size
+        })
+    }
     setInterval(() => {
         const now = Date.now();
         for(const[user,lastSeen] of connectedUsers.entries()){
             if(now -lastSeen>2000){
+                console.log(now -lastSeen)
                 connectedUsers.delete(user);
                 console.log(`Cliente desconectado:${user}`);
             }
         }
             
-    },500);
+    },1000);
 
     return {
         checkConnection,
-        userConnected
+        userConnected,
+        usersConnected
     };
 };
 
