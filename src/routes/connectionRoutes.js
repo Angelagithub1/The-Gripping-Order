@@ -2,8 +2,8 @@ import express from 'express';
 import createConnectionController from '../controllers/connectionController.js';
 
 const router = express.Router();
-const controller = createConnectionController();
+const controllerConnection = createConnectionController();
 
-router.get('/', controller.checkConnection);
-
+router.get('/keepalive/:username', controllerConnection.checkConnection);
+router.get('/userconnected/:username', controllerConnection.userConnected);
 export default router;

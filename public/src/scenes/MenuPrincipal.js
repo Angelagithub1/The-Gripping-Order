@@ -5,15 +5,16 @@ export class MenuPrincipal extends Phaser.Scene {   //Crear clase que hereda de 
     }
 
     preload(){  //Se ejecuta antes de que empiece la escena
-
-        if(!this.scene.isActive('ConnectionMenu')){
+        /*
+           if(!this.scene.isActive('ConnectionMenu')){
             //Si no esta activa la escena de conexion, crearla
             this.scene.launch('ConnectionMenu', { escenaActual: this.scene.key });
 
         }else{
             //Si ya esta activa se le asigna la escena actual
             this.scene.get('ConnectionMenu').escenaActual = this.scene.key;
-        }
+        }*/
+        this.scene.get('ConnectionMenu').escenaActual = this.scene.key;
         
         //Assets de pantalla de reconexion   - PONER EN LOGIN
         this.load.image('FondoReconexion', 'Assets/Backgrounds/fondoTrans.png'); //Cargar imagen de fondo
@@ -48,14 +49,14 @@ export class MenuPrincipal extends Phaser.Scene {   //Crear clase que hereda de 
         this.load.image('BotonSalirN', 'Assets/Interfaz/Botones/salirNormal.png'); 
         this.load.image('BotonSalirE', 'Assets/Interfaz/Botones/salirEncima.png'); 
         this.load.image('BotonSalirP', 'Assets/Interfaz/Botones/salirPulsado.png');
-
+/*
         //Musica de fondo
         this.load.audio('MusicaFondo', 'Assets/Sonidos/MenuPrincipal.mp3');
         this.load.audio('Victoria', 'Assets/Sonidos/Victoria.mp3');
 
         //Musica botones
         this.load.audio('SonidoBotonE', 'Assets/Sonidos/BotonEncima.mp3');
-        this.load.audio('SonidoBotonP', 'Assets/Sonidos/BotonPulsado.mp3');
+        this.load.audio('SonidoBotonP', 'Assets/Sonidos/BotonPulsado.mp3');*/
     }
     create(){   //Se ejecuta al iniciar la escena
         console.log("Menu Principal");
@@ -63,7 +64,7 @@ export class MenuPrincipal extends Phaser.Scene {   //Crear clase que hereda de 
         const background = this.add.image(0, 0, 'Menus').setOrigin(0); //Añadir imagen de fondo
         background.setScale(Math.max(this.scale.width / background.width, this.scale.height / background.height));
         const nombreJuego = this.add.image(this.scale.width / 2, this.scale.height / 4, 'NombreJuego').setScale(2);  //Nombre del juego
-
+/*
         //Sonido
         const volumen = this.registry.get('volumen') ?? 0.2;
         let musica =this.sound.get('MusicaFondo');
@@ -88,7 +89,7 @@ export class MenuPrincipal extends Phaser.Scene {   //Crear clase que hereda de 
         const volumenBotones = this.registry.get('volumen') ?? 0.5;
 
         this.sonidoE = this.sound.add('SonidoBotonE',{  volume: volumenBotones });
-        this.sonidoP = this.sound.add('SonidoBotonP',{  volume: volumenBotones });
+        this.sonidoP = this.sound.add('SonidoBotonP',{  volume: volumenBotones });*/
 
         //Boton Jugar
         const botonJugar = this.add.image(this.scale.width / 2, this.scale.height / 2, 'BotonJugarN').setScale(2).setInteractive(); 

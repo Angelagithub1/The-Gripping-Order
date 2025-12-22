@@ -1,0 +1,75 @@
+import fs from 'fs';
+//const usersConnected = new Set();
+const UserController = () => {
+    const getUsserConnected = () => {
+        res.json({
+            connected: usserConnected
+        })
+    };
+    const loginUser = (req, res) => {
+        const { username, password } = req.body;
+        const ruta = `./src/data/${username}.json`;
+        if (!fs.existsSync(ruta)) {
+            return res.status(404).json({ message: "Usuario no registrado" });
+        }
+        //if (!usersConnected.has(username)) {
+            const usuario = JSON.parse(fs.readFileSync(ruta));
+            if (usuario.password === password) {
+                res.json({ message: "Inicio de sesión exitoso" });
+                //usersConnected.add(username);
+                console.log(`Usuario conectado: ${username} - IP: ${req.ip || req.connection.remoteAddress}`);
+            } else {
+                res.status(401).json({ message: "Contraseña incorrecta" });
+            }
+        /*} else {
+            res.status(409).json({ message: "Usuario ya conectado" });
+        }*/
+    }
+    const registerUser = (req, res) => {
+        const { username, password } = req.body;
+        const ruta = `./src/data/${username}.json`;
+        if (fs.existsSync(ruta)) {
+            res.status(409).json({ message: "El usuario ya existe" });
+        } else {
+            const nuevousuario = {
+                username: username,
+                password: password,
+                ania: 0,
+                gancho: 0,
+            };
+            fs.writeFileSync(ruta, JSON.stringify(nuevousuario, null, 2));
+            //usersConnected.add(username);
+            res.status(201).json({ message: "Usuario registrado exitosamente" });
+            console.log(`Usuario conectado: ${username} - IP: ${req.ip || req.connection.remoteAddress}`);
+        }
+
+    }
+    const deleteUser = (req, res) => {
+        const { username, password } = req.body;
+
+        const ruta = `./src/data/${username}.json`;
+        if (!fs.existsSync(ruta)) {
+            return res.status(404).json({ message: "Usuario no registrado" });
+        }
+        //if (!usersConnected.has(username)) {
+            const usuario = JSON.parse(fs.readFileSync(ruta));
+            if (usuario.password === password) {
+                fs.unlinkSync(ruta);
+                res.json({ message: "Usuario eliminado exitosamente" });
+            } else {
+                res.status(401).json({ message: "Contraseña incorrecta" });
+            }
+        //}else{
+           // res.status(409).json({ message: "Usuario conectado, no se puede eliminar" });
+        //}
+    }
+    return {
+        loginUser,
+        registerUser,
+        deleteUser,
+        getUsserConnected
+    };
+
+}
+
+export default UserController;
