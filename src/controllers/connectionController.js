@@ -9,7 +9,7 @@ const connectionController =() => {
             console.log(`Nuevo cliente conectado:${username}`);
         }
         connectedUsers.set(username, Date.now());
-        console.log(username,"enviando mensaje")
+        //console.log(username,"enviando mensaje")
 
         res.json({
             username: username,

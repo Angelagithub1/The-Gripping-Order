@@ -7,6 +7,7 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
         this.username = '';
         this.password = '';
         this.ready = false;
+        this.intentos = 0;
     }
     create() {
 
@@ -34,26 +35,31 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
                 this.statusText.setText(`${data.username} - Usuarios: ${data.connected}`);
                 if (data.connected < 2) {
                     //Si hay menos de dos jugadores
-
-                    if (this.escenaActual == 'MenuEleccionJugador') {
-                        this.scene.stop(this.escenaActual)
-                        this.escenaActual = 'MenuPrincipal'
-                        this.scene.launch('MenuPrincipal')
-                        this.messageNotEnoughPlayers.setText('Faltan jugadores, espere a que se conecte alguien')
-                        this.time.delayedCall(3000, () => {
-                            this.messageNotEnoughPlayers.setText('');
-                        }, [], this);
+                    this.intentos++;
+                    if (this.intentos > 2) { //Si se ha intentado ya dos veces verificar a los dos jugadores
+                        this.intentos=0;
+                        if (this.escenaActual == 'MenuEleccionJugador') {
+                            this.scene.stop(this.escenaActual)
+                            this.escenaActual = 'MenuPrincipal'
+                            this.scene.launch('MenuPrincipal')
+                            this.messageNotEnoughPlayers.setText('Faltan jugadores, espere a que se conecte alguien')
+                            this.time.delayedCall(3000, () => {
+                                this.messageNotEnoughPlayers.setText('');
+                            }, [], this);
+                        }
+                        if (this.escenaActual == 'PantallaJuego') {
+                            this.scene.stop(this.escenaActual)
+                            this.escenaActual = 'PantallaFinal'
+                            this.scene.launch('PantallaFinal', {
+                                ganador: 'Ania', //Aqui hay que hacer una busqueda para saber que jugador gano
+                            });
+                            this.time.delayedCall(3000, () => {
+                                this.messageNotEnoughPlayers.setText('');
+                            }, [], this);
+                        }
                     }
-                    if (this.escenaActual == 'PantallaJuego') {
-                        this.scene.stop(this.escenaActual)
-                        this.escenaActual = 'PantallaFinal'
-                        this.scene.launch('PantallaFinal', {
-                            ganador: 'Ania', //Aqui hay que hacer una busqueda para saber que jugador gano
-                        });
-                        this.time.delayedCall(3000, () => {
-                            this.messageNotEnoughPlayers.setText('');
-                        }, [], this);
-                    }
+                }else{
+                    this.intentos=0;
                 }
                 if (this.scene.isPaused(this.escenaActual)) {
                     this.scene.resume(this.escenaActual);
@@ -89,6 +95,37 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
                             console.error('Error al confirmar que el jugador esta listo:', error);
                         }
                     }
+                    if (this.escenaActual == 'MenuEleccionJugador') {
+                        if (this.scene.get(this.escenaActual).isAniaC) {
+                            try {
+                                const response = await fetch('configuration/setChangesCharacters', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({ username: this.username, ania: true })
+                                })
+                            } catch (error) {
+                                console.log("No se pudo recuperar personaje elegido")
+                                this.scene.get(this.escenaActual).isAniaC = false;
+                            }
+                        }
+                        if (this.scene.get(this.escenaActual).isGanchoC) {
+                            try {
+                                const response = await fetch('configuration/setChangesCharacters', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({ username: this.username, ania: false })
+                                })
+                            } catch (error) {
+                                console.log("No se pudo recuperar personaje elegido")
+                                this.scene.get(this.escenaActual).isGanchoC = false;
+                            }
+                        }
+                    }
+
                 }
                 if (this.escenaActual !== 'MenuEleccionJugador' && this.ready) {
                     console.log('Reiniciando ready...')
@@ -151,7 +188,7 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
                 //El que manda 201 es cuando se aceptado la solicitud de confirmar cambio
                 this.ready = true;
                 console.log("Solicitud recibida", this.ready)
-
+ 
             }*/
         } catch (error) {
             //console.log('Error al verificar el cambio de escena:', error);

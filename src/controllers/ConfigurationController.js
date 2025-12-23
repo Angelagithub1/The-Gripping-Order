@@ -2,13 +2,13 @@
 // Si puede elegir un personaje o no
 
 const ConfigurationController = () => {
-    let aniachoosen = false;
-    let ganchochoosen = false;
     let selectscene = false;
     let back = false;
     const playersready = new Set();
-    const mapusers = new Map();
-
+    const mapusers = new Map([
+        ['ania', ''],
+        ['gancho', '']]
+    );
     const usersConfirmed = new Set();
     const requestChangeScreen = (req, res) => {
         const { username, actscene, next } = req.body; //next true es para siguiente y back para volver
@@ -52,20 +52,32 @@ const ConfigurationController = () => {
         const { username, ania } = req.body; //ania: true si eligió ania, false si eligió gancho
         if (ania) {
             //Se solicito escoger a ania
-            if (!aniachoosen) {
+            if (mapusers.get('ania') == '') {
                 //Si no se ha escogido antes a ania
-                aniachoosen = true;
-                mapusers.set(username, 'ania')
+                mapusers.set('ania', username)
+                if (mapusers.get('gancho') == username) {
+                    mapusers.set('gancho', '');
+                }
+                res.json({ message: "Eres ania" })
+                console.log("Solicitud llegada de una ania afirmativa")
+            } else if (mapusers.get('ania') == username) {
+                res.status(409).json({ message: "Ya eres Ania" })
             } else {
                 res.status(409).json({ message: "Ania ya ha sido elegida" })
             }
 
         } else {
             //Se solicito escoger al gancho
-            if (!ganchochoosen) {
+            if (mapusers.get('gancho') == '') {
                 //Si no se ha escogido antes a ania
-                ganchochoosen = true;
-                mapusers.set(username, 'gancho')
+                mapusers.set('gancho', username)
+                if (mapusers.get('ania') == username) {
+                    mapusers.set('ania', '');
+                }
+                res.json({ message: "Eres el gancho" })
+                console.log("Solicitud llegada de un gancho afirmativa")
+            } else if (mapusers.get('gancho') == username) {
+                res.status(409).json({ message: "Ya eres el gancho" })
             } else {
                 res.status(409).json({ message: "El gancho ya ha sido elegido" })
             }
@@ -79,18 +91,16 @@ const ConfigurationController = () => {
                 usersConfirmed.clear();
                 if (actScene == 'MenuPrincipal') { //Se reinician los datos de seleccion si es que volvio a menu principal
                     back = false;
-                    aniachoosen = false;
-                    ganchochoosen = false;
                     selectscene = false;
-                    playersready.clear();
-                    mapusers.clear();
                 } else if (actScene == 'MenuEleccionJugador') { //Se reinician los datos para cambiar a selectscene si esta ya
                     selectscene = false;
                     back = false;
-                } else if (actScene == 'PantallaJuego') { //Se reinician los datos
-                    aniachoosen = false;
-                    ganchochoosen = false;
-                    playersready.clear();
+                }
+                if (actScene != 'MenuEleccionJugador') {
+                    console.log("Limpieza")
+                    mapusers.set('gancho', '');
+                    mapusers.set('ania', '');
+                    playersready.clear()
                 }
             }
             res.json({ message: "Confirmacion recibida" })
@@ -98,9 +108,13 @@ const ConfigurationController = () => {
             res.json({ message: "Confirmación ya registrada" })
         }
     }
+    const choosen = (req, res) => {
+        res.json({
+            ania: mapusers.get('ania'),
+            gancho: mapusers.get('gancho')
+        })
+    }
     const resetParams = () => {
-        aniachoosen = false;
-        ganchochoosen = false;
         selectscene = false;
         playersready.clear();
         mapusers.clear();
@@ -110,7 +124,8 @@ const ConfigurationController = () => {
         requestChangeScreen,
         setChangesCharacters,
         resetParams,
-        confirmChange
+        confirmChange,
+        choosen
     };
 }
 export default ConfigurationController;
