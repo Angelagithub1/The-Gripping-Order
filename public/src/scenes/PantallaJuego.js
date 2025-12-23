@@ -31,33 +31,29 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.load.spritesheet('AniaWalk', 'Assets/Sprites/Ania/Ania-WALK.png', { frameWidth: 42, frameHeight: 25 });
 
         //Sprites Ania Lazo IDLE
-        this.load.spritesheet('AniaLazoIdle', 'Assets/Sprites/Ania/SKINS/RIBBON/AniaLazo-IDLE.png', { frameWidth: 42, frameHeight: 25 });
-        this.load.spritesheet('AniaLazoIdleAmarillo', 'Assets/Sprites/Ania/SKINS/RIBBON/Color/AmarilloLazo-IDLE.png', { frameWidth: 42, frameHeight: 25 });
-        this.load.spritesheet('AniaLazoIdleAzul', 'Assets/Sprites/Ania/SKINS/RIBBON/Color/AzulLazo-IDLE.png', { frameWidth: 42, frameHeight: 25 });
-        this.load.spritesheet('AniaLazoIdleRojo', 'Assets/Sprites/Ania/SKINS/RIBBON/Color/RojoLazo-IDLE.png', { frameWidth: 42, frameHeight: 25 });
-        this.load.spritesheet('AniaLazoIdleVerde', 'Assets/Sprites/Ania/SKINS/RIBBON/Color/VerdeLazo-IDLE.png', { frameWidth: 42, frameHeight: 25 });
-
+        this.load.spritesheet('AniaLazoIdle', 'Assets/Sprites/Ania/SKINS/RIBBON/AniaLazo-IDLE.png', { frameWidth: 42, frameHeight: 32 });
+        this.load.spritesheet('AniaLazoIdleAmarillo', 'Assets/Sprites/Ania/SKINS/RIBBON/Color/AmarilloLazo-IDLE.png', { frameWidth: 42, frameHeight: 32 });
+        this.load.spritesheet('AniaLazoIdleAzul', 'Assets/Sprites/Ania/SKINS/RIBBON/Color/AzulLazo-IDLE.png', { frameWidth: 42, frameHeight: 32 });
+        this.load.spritesheet('AniaLazoIdleRojo', 'Assets/Sprites/Ania/SKINS/RIBBON/Color/RojoLazo-IDLE.png', { frameWidth: 42, frameHeight: 32 });
+        this.load.spritesheet('AniaLazoIdleVerde', 'Assets/Sprites/Ania/SKINS/RIBBON/Color/VerdeLazo-IDLE.png', { frameWidth: 42, frameHeight: 32 });
         //Sprite Ania Lazo Walk
-        this.load.spritesheet('AniaLazoWalk', 'Assets/Sprites/Ania/SKINS/RIBBON/AniaRibbon-WALK.png', { frameWidth: 42, frameHeight: 25 });
-        this.load.spritesheet('AniaLazoWalkAmarillo', 'Assets/Sprites/Ania/SKINS/RIBBON/Color/AmarilloLazo-WALK.png', { frameWidth: 42, frameHeight: 25 });
-        this.load.spritesheet('AniaLazoWalkAzul', 'Assets/Sprites/Ania/SKINS/RIBBON/Color/AzulLazo-WALK.png', { frameWidth: 42, frameHeight: 25 });
-        this.load.spritesheet('AniaLazoWalkRojo', 'Assets/Sprites/Ania/SKINS/RIBBON/Color/RojoLazo-WALK.png', { frameWidth: 42, frameHeight: 25 });
-        this.load.spritesheet('AniaLazoWalkVerde', 'Assets/Sprites/Ania/SKINS/RIBBON/Color/VerdeLazo-WALK.png', { frameWidth: 42, frameHeight: 25 });
-
-
+        this.load.spritesheet('AniaLazoWalk', 'Assets/Sprites/Ania/SKINS/RIBBON/AniaRibbon-WALK.png', { frameWidth: 42, frameHeight: 32 });
+        this.load.spritesheet('AniaLazoWalkAmarillo', 'Assets/Sprites/Ania/SKINS/RIBBON/Color/AmarilloLazo-WALK.png', { frameWidth: 42, frameHeight: 32 });
+        this.load.spritesheet('AniaLazoWalkAzul', 'Assets/Sprites/Ania/SKINS/RIBBON/Color/AzulLazo-WALK.png', { frameWidth: 42, frameHeight: 32 });
+        this.load.spritesheet('AniaLazoWalkRojo', 'Assets/Sprites/Ania/SKINS/RIBBON/Color/RojoLazo-WALK.png', { frameWidth: 42, frameHeight: 32 });
+        this.load.spritesheet('AniaLazoWalkVerde', 'Assets/Sprites/Ania/SKINS/RIBBON/Color/VerdeLazo-WALK.png', { frameWidth: 42, frameHeight: 32 });
         //Sprites Ania sombrero IDLE
-        this.load.spritesheet('AniaSombreroIdle', 'Assets/Sprites/Ania/SKINS/HAT/AniaHat-IDLE.png', { frameWidth: 42, frameHeight: 25 });
-        this.load.spritesheet('AniaSombreroIdleAmarillo', 'Assets/Sprites/Ania/SKINS/HAT/Color/AmarilloHat-IDLE.png', { frameWidth: 42, frameHeight: 25 });
-        this.load.spritesheet('AniaSombreroIdleAzul', 'Assets/Sprites/Ania/SKINS/HAT/Color/AzulHat-IDLE.png', { frameWidth: 42, frameHeight: 25 });
-        this.load.spritesheet('AniaSombreroIdleRojo', 'Assets/Sprites/Ania/SKINS/HAT/Color/RojoHat-IDLE.png', { frameWidth: 42, frameHeight: 25 });
-        this.load.spritesheet('AniaSombreroIdleVerde', 'Assets/Sprites/Ania/SKINS/HAT/Color/VerdeHat-IDLE.png', { frameWidth: 42, frameHeight: 25 });
+        this.load.spritesheet('AniaSombreroIdle', 'Assets/Sprites/Ania/SKINS/HAT/AniaHat-IDLE.png', { frameWidth: 42, frameHeight: 32 });
+        this.load.spritesheet('AniaSombreroIdleAmarillo', 'Assets/Sprites/Ania/SKINS/HAT/Color/AmarilloHat-IDLE.png', { frameWidth: 42, frameHeight: 32 });
+        this.load.spritesheet('AniaSombreroIdleAzul', 'Assets/Sprites/Ania/SKINS/HAT/Color/AzulHat-IDLE.png', { frameWidth: 42, frameHeight: 32 });
+        this.load.spritesheet('AniaSombreroIdleRojo', 'Assets/Sprites/Ania/SKINS/HAT/Color/RojoHat-IDLE.png', { frameWidth: 42, frameHeight: 32 });
+        this.load.spritesheet('AniaSombreroIdleVerde', 'Assets/Sprites/Ania/SKINS/HAT/Color/VerdeHat-IDLE.png', { frameWidth: 42, frameHeight: 32 });
         //Sprite Ania sombrero Walk
-        this.load.spritesheet('AniaSombreroWalk', 'Assets/Sprites/Ania/SKINS/HAT/AniaHat-WALK.png', { frameWidth: 42, frameHeight: 25 });
-        this.load.spritesheet('AniaSombreroWalkAmarillo', 'Assets/Sprites/Ania/SKINS/HAT/Color/AmarilloHat-WALK.png', { frameWidth: 42, frameHeight: 25 });
-        this.load.spritesheet('AniaSombreroWalkAzul', 'Assets/Sprites/Ania/SKINS/HAT/Color/AzulHat-WALK.png', { frameWidth: 42, frameHeight: 25 });
-        this.load.spritesheet('AniaSombreroWalkRojo', 'Assets/Sprites/Ania/SKINS/HAT/Color/RojoHat-WALK.png', { frameWidth: 42, frameHeight: 25 });
-        this.load.spritesheet('AniaSombreroWalkVerde', 'Assets/Sprites/Ania/SKINS/HAT/Color/VerdeHat-WALK.png', { frameWidth: 42, frameHeight: 25 });
-
+        this.load.spritesheet('AniaSombreroWalk', 'Assets/Sprites/Ania/SKINS/HAT/AniaHat-WALK.png', { frameWidth: 42, frameHeight: 32 });
+        this.load.spritesheet('AniaSombreroWalkAmarillo', 'Assets/Sprites/Ania/SKINS/HAT/Color/AmarilloHat-WALK.png', { frameWidth: 42, frameHeight: 32 });
+        this.load.spritesheet('AniaSombreroWalkAzul', 'Assets/Sprites/Ania/SKINS/HAT/Color/AzulHat-WALK.png', { frameWidth: 42, frameHeight: 32 });
+        this.load.spritesheet('AniaSombreroWalkRojo', 'Assets/Sprites/Ania/SKINS/HAT/Color/RojoHat-WALK.png', { frameWidth: 42, frameHeight: 32 });
+        this.load.spritesheet('AniaSombreroWalkVerde', 'Assets/Sprites/Ania/SKINS/HAT/Color/VerdeHat-WALK.png', { frameWidth: 42, frameHeight: 32 });
         //Sprite Gancho
         this.load.spritesheet('GanchoIdle', 'Assets/Sprites/gancho.png', { frameWidth: 108, frameHeight: 50 });
 
@@ -410,7 +406,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.TuboGancho.setAlpha(0.5); //Hacer el tubo semi-transparente
 
         //Crear Ania
-        this.Ania = this.physics.add.sprite(42, 25, 'AniaIdle'); //Crear sprite de Ania
+        this.Ania = this.physics.add.sprite(42, 25, 'AniaLazoIdle'); //Crear sprite de Ania
         this.Ania.setScale(1.5).setFrame(1); //Escalar y poner frame inicial
         this.Ania.y = this.scale.height / 2; //Posición inicial Y
         this.Ania.x = this.scale.width / 2; //Posición inicial X
@@ -812,26 +808,26 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
 
     updateWalkAnimation(jugador){
         if(jugador.canDoubleJump){
-            jugador.anims.play('Anim_AniaWalkAzul', true);
+            jugador.anims.play('AAnim_AniaLazoWalkAzul', true);
         } else if(jugador.masVelocidad){
-            jugador.anims.play('Anim_AniaWalkVerde', true);
+            jugador.anims.play('Anim_AniaLazoWalkVerde', true);
         } else if(jugador.invulnerable){
-            jugador.anims.play('Anim_AniaWalkRojo', true);
+            jugador.anims.play('Anim_AniaLazoWalkRojo', true);
         } else{
-            jugador.anims.play('Anim_AniaWalk', true);
+            jugador.anims.play('Anim_AniaLazoWalk', true);
         }  
     }
     updateIdleAnimation(jugador){
         if(jugador.canDoubleJump){
-            jugador.anims.play('Anim_AniaIdleAzul', true);
+            jugador.anims.play('Anim_AniaLazoIdleAzul', true);
         } else if(jugador.masVelocidad){
-            jugador.anims.play('Anim_AniaIdleVerde', true);
+            jugador.anims.play('Anim_AniaLazoIdleVerde', true);
         } else if(jugador.invulnerable){
-            jugador.anims.play('Anim_AniaIdleRojo', true);
+            jugador.anims.play('Anim_AniaLazoIdleRojo', true);
         } else if (!jugador.canMove){
-            jugador.anims.play('Anim_AniaIdleAmarillo', true);
+            jugador.anims.play('Anim_AniaLazoIdleAmarillo', true);
         } else{
-            jugador.anims.play('Anim_AniaIdle', true);
+            jugador.anims.play('Anim_AniaLazoIdle', true);
         }
     }
 
