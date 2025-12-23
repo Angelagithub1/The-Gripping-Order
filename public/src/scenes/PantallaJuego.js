@@ -26,9 +26,39 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.load.image('PlataformasAltas', 'Assets/Backgrounds/plat2.png');
         this.load.image('PlataformasBajas', 'Assets/Backgrounds/plat1.png');
 
-        //Sprites Ania y Gancho
+        //Sprites Ania
         this.load.spritesheet('AniaIdle', 'Assets/Sprites/Ania/Ania-IDLE.png', { frameWidth: 42, frameHeight: 25 });
         this.load.spritesheet('AniaWalk', 'Assets/Sprites/Ania/Ania-WALK.png', { frameWidth: 42, frameHeight: 25 });
+
+        //Sprites Ania Lazo IDLE
+        this.load.spritesheet('AniaLazoIdle', 'Assets/Sprites/Ania/SKINS/RIBBON/AniaLazo-IDLE.png', { frameWidth: 42, frameHeight: 25 });
+        this.load.spritesheet('AniaLazoIdleAmarillo', 'Assets/Sprites/Ania/SKINS/RIBBON/Color/AmarilloLazo-IDLE.png', { frameWidth: 42, frameHeight: 25 });
+        this.load.spritesheet('AniaLazoIdleAzul', 'Assets/Sprites/Ania/SKINS/RIBBON/Color/AzulLazo-IDLE.png', { frameWidth: 42, frameHeight: 25 });
+        this.load.spritesheet('AniaLazoIdleRojo', 'Assets/Sprites/Ania/SKINS/RIBBON/Color/RojoLazo-IDLE.png', { frameWidth: 42, frameHeight: 25 });
+        this.load.spritesheet('AniaLazoIdleVerde', 'Assets/Sprites/Ania/SKINS/RIBBON/Color/VerdeLazo-IDLE.png', { frameWidth: 42, frameHeight: 25 });
+
+        //Sprite Ania Lazo Walk
+        this.load.spritesheet('AniaLazoWalk', 'Assets/Sprites/Ania/SKINS/RIBBON/AniaRibbon-WALK.png', { frameWidth: 42, frameHeight: 25 });
+        this.load.spritesheet('AniaLazoWalkAmarillo', 'Assets/Sprites/Ania/SKINS/RIBBON/Color/AmarilloLazo-WALK.png', { frameWidth: 42, frameHeight: 25 });
+        this.load.spritesheet('AniaLazoWalkAzul', 'Assets/Sprites/Ania/SKINS/RIBBON/Color/AzulLazo-WALK.png', { frameWidth: 42, frameHeight: 25 });
+        this.load.spritesheet('AniaLazoWalkRojo', 'Assets/Sprites/Ania/SKINS/RIBBON/Color/RojoLazo-WALK.png', { frameWidth: 42, frameHeight: 25 });
+        this.load.spritesheet('AniaLazoWalkVerde', 'Assets/Sprites/Ania/SKINS/RIBBON/Color/VerdeLazo-WALK.png', { frameWidth: 42, frameHeight: 25 });
+
+
+        //Sprites Ania sombrero IDLE
+        this.load.spritesheet('AniaSombreroIdle', 'Assets/Sprites/Ania/SKINS/HAT/AniaHat-IDLE.png', { frameWidth: 42, frameHeight: 25 });
+        this.load.spritesheet('AniaSombreroIdleAmarillo', 'Assets/Sprites/Ania/SKINS/HAT/Color/AmarilloHat-IDLE.png', { frameWidth: 42, frameHeight: 25 });
+        this.load.spritesheet('AniaSombreroIdleAzul', 'Assets/Sprites/Ania/SKINS/HAT/Color/AzulHat-IDLE.png', { frameWidth: 42, frameHeight: 25 });
+        this.load.spritesheet('AniaSombreroIdleRojo', 'Assets/Sprites/Ania/SKINS/HAT/Color/RojoHat-IDLE.png', { frameWidth: 42, frameHeight: 25 });
+        this.load.spritesheet('AniaSombreroIdleVerde', 'Assets/Sprites/Ania/SKINS/HAT/Color/VerdeHat-IDLE.png', { frameWidth: 42, frameHeight: 25 });
+        //Sprite Ania sombrero Walk
+        this.load.spritesheet('AniaSombreroWalk', 'Assets/Sprites/Ania/SKINS/HAT/AniaHat-WALK.png', { frameWidth: 42, frameHeight: 25 });
+        this.load.spritesheet('AniaSombreroWalkAmarillo', 'Assets/Sprites/Ania/SKINS/HAT/Color/AmarilloHat-WALK.png', { frameWidth: 42, frameHeight: 25 });
+        this.load.spritesheet('AniaSombreroWalkAzul', 'Assets/Sprites/Ania/SKINS/HAT/Color/AzulHat-WALK.png', { frameWidth: 42, frameHeight: 25 });
+        this.load.spritesheet('AniaSombreroWalkRojo', 'Assets/Sprites/Ania/SKINS/HAT/Color/RojoHat-WALK.png', { frameWidth: 42, frameHeight: 25 });
+        this.load.spritesheet('AniaSombreroWalkVerde', 'Assets/Sprites/Ania/SKINS/HAT/Color/VerdeHat-WALK.png', { frameWidth: 42, frameHeight: 25 });
+
+        //Sprite Gancho
         this.load.spritesheet('GanchoIdle', 'Assets/Sprites/gancho.png', { frameWidth: 108, frameHeight: 50 });
 
         //Sprites Ania PowerUps
@@ -127,7 +157,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
 
 
         //Animaciones
-        //Ania
+        //Ania Normal
         this.anims.create({
             key: 'Anim_AniaIdle',
             frames: this.anims.generateFrameNumbers('AniaIdle', { start: 0, end: 7 }),
@@ -197,6 +227,162 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             frameRate: 5, //numero de frames
             repeat: -1 //-1 para que se repita indefinidamente
         });
+
+
+
+
+
+
+
+        //Ania Lazo
+        this.anims.create({
+            key: 'Anim_AniaLazoIdle',
+            frames: this.anims.generateFrameNumbers('AniaLazoIdle', { start: 0, end: 7 }),
+            frameRate: 8, //numero de frames
+            repeat: -1 //-1 para que se repita indefinidamente
+        });
+
+        this.anims.create({
+            key: 'Anim_AniaLazoWalk',
+            frames: this.anims.generateFrameNumbers('AniaLazoWalk', { start: 0, end: 4 }),
+            frameRate: 5, //numero de frames
+            repeat: -1 //-1 para que se repita indefinidamente
+        });
+
+        //Ania-Amarillo
+        this.anims.create({
+            key: 'Anim_AniaLazoIdleAmarillo',
+            frames: this.anims.generateFrameNumbers('AniaLazoIdleAmarillo', { start: 0, end: 7 }),
+            frameRate: 8, //numero de frames
+            repeat: -1 //-1 para que se repita indefinidamente
+        });
+        this.anims.create({
+            key: 'Anim_AniaLazoWalkAmarillo',
+            frames: this.anims.generateFrameNumbers('AniaLazoWalkAmarillo', { start: 0, end: 4 }),
+            frameRate: 5, //numero de frames
+            repeat: -1 //-1 para que se repita indefinidamente
+        });
+
+        //Ania-Azul
+        this.anims.create({
+            key: 'Anim_AniaLazoIdleAzul',
+            frames: this.anims.generateFrameNumbers('AniaLazoIdleAzul', { start: 0, end: 7 }),
+            frameRate: 8, //numero de frames
+            repeat: -1 //-1 para que se repita indefinidamente
+        });
+        this.anims.create({
+            key: 'Anim_AniaLazoWalkAzul',
+            frames: this.anims.generateFrameNumbers('AniaLazoWalkAzul', { start: 0, end: 4 }),
+            frameRate: 5, //numero de frames
+            repeat: -1 //-1 para que se repita indefinidamente
+        });
+
+        //Ania-Rojo
+        this.anims.create({
+            key: 'Anim_AniaLazoIdleRojo',
+            frames: this.anims.generateFrameNumbers('AniaLazoIdleRojo', { start: 0, end: 7 }),
+            frameRate: 8, //numero de frames
+            repeat: -1 //-1 para que se repita indefinidamente
+        });
+        this.anims.create({
+            key: 'Anim_AniaLazoWalkRojo',
+            frames: this.anims.generateFrameNumbers('AniaLazoWalkRojo', { start: 0, end: 4 }),
+            frameRate: 5, //numero de frames
+            repeat: -1 //-1 para que se repita indefinidamente
+        });
+
+        //Ania-Verde
+        this.anims.create({
+            key: 'Anim_AniaLazoIdleVerde',
+            frames: this.anims.generateFrameNumbers('AniaLazoIdleVerde', { start: 0, end: 7 }),
+            frameRate: 8, //numero de frames
+            repeat: -1 //-1 para que se repita indefinidamente
+        });
+        this.anims.create({
+            key: 'Anim_AniaLazoWalkVerde',
+            frames: this.anims.generateFrameNumbers('AniaLazoWalkVerde', { start: 0, end: 4 }),
+            frameRate: 5, //numero de frames
+            repeat: -1 //-1 para que se repita indefinidamente
+        });
+
+
+
+
+
+
+        //Ania Lazo
+        this.anims.create({
+            key: 'Anim_AniaSombreroIdle',
+            frames: this.anims.generateFrameNumbers('AniaSombreroIdle', { start: 0, end: 7 }),
+            frameRate: 8, //numero de frames
+            repeat: -1 //-1 para que se repita indefinidamente
+        });
+
+        this.anims.create({
+            key: 'Anim_AniaSombreroWalk',
+            frames: this.anims.generateFrameNumbers('AniaSombreroWalk', { start: 0, end: 4 }),
+            frameRate: 5, //numero de frames
+            repeat: -1 //-1 para que se repita indefinidamente
+        });
+
+        //Ania-Amarillo
+        this.anims.create({
+            key: 'Anim_AniaSombreroIdleAmarillo',
+            frames: this.anims.generateFrameNumbers('AniaSombreroIdleAmarillo', { start: 0, end: 7 }),
+            frameRate: 8, //numero de frames
+            repeat: -1 //-1 para que se repita indefinidamente
+        });
+        this.anims.create({
+            key: 'Anim_AniaSombreroWalkAmarillo',
+            frames: this.anims.generateFrameNumbers('AniaSombreroWalkAmarillo', { start: 0, end: 4 }),
+            frameRate: 5, //numero de frames
+            repeat: -1 //-1 para que se repita indefinidamente
+        });
+
+        //Ania-Azul
+        this.anims.create({
+            key: 'Anim_AniaSombreroIdleAzul',
+            frames: this.anims.generateFrameNumbers('AniaSombreroIdleAzul', { start: 0, end: 7 }),
+            frameRate: 8, //numero de frames
+            repeat: -1 //-1 para que se repita indefinidamente
+        });
+        this.anims.create({
+            key: 'Anim_AniaSombreroWalkAzul',
+            frames: this.anims.generateFrameNumbers('AniaSombreroWalkAzul', { start: 0, end: 4 }),
+            frameRate: 5, //numero de frames
+            repeat: -1 //-1 para que se repita indefinidamente
+        });
+
+        //Ania-Rojo
+        this.anims.create({
+            key: 'Anim_AniaSombreroIdleRojo',
+            frames: this.anims.generateFrameNumbers('AniaSombreroIdleRojo', { start: 0, end: 7 }),
+            frameRate: 8, //numero de frames
+            repeat: -1 //-1 para que se repita indefinidamente
+        });
+        this.anims.create({
+            key: 'Anim_AniaSombreroWalkRojo',
+            frames: this.anims.generateFrameNumbers('AniaSombreroWalkRojo', { start: 0, end: 4 }),
+            frameRate: 5, //numero de frames
+            repeat: -1 //-1 para que se repita indefinidamente
+        });
+
+        //Ania-Verde
+        this.anims.create({
+            key: 'Anim_AniaSombreroIdleVerde',
+            frames: this.anims.generateFrameNumbers('AniaSombreroIdleVerde', { start: 0, end: 7 }),
+            frameRate: 8, //numero de frames
+            repeat: -1 //-1 para que se repita indefinidamente
+        });
+        this.anims.create({
+            key: 'Anim_AniaSombreroWalkVerde',
+            frames: this.anims.generateFrameNumbers('AniaSombreroWalkVerde', { start: 0, end: 4 }),
+            frameRate: 5, //numero de frames
+            repeat: -1 //-1 para que se repita indefinidamente
+        });
+
+
+
 
         //Gancho
         this.anims.create({

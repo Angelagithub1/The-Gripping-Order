@@ -20,7 +20,11 @@ export class MenuEleccionJugador extends Phaser.Scene {   //Crear clase que here
 
         //Personajes
         this.load.image('Ania', 'Assets/Sprites/Personajes/Ania.png');
+        this.load.image('AniaSombrero', 'Assets/Sprites/Personajes/AniaSombrero.png');
+        this.load.image('AniaLazo', 'Assets/Sprites/Personajes/AniaLazo.png');
         this.load.image('Gancho', 'Assets/Sprites/Personajes/Gancho.png');
+        //this.load.image('Gancho', 'Assets/Sprites/Personajes/Gancho.png');
+        //this.load.image('Gancho', 'Assets/Sprites/Personajes/Gancho.png');
         this.load.image('ContenedorNormal', 'Assets/Interfaz/interfazMedianoNormal.png');
         this.load.image('ContenedorPulsado', 'Assets/Interfaz/interfazMedianoPulsado.png');
 
@@ -38,32 +42,132 @@ export class MenuEleccionJugador extends Phaser.Scene {   //Crear clase que here
         this.load.image('BotonJugarN', 'Assets/Interfaz/Botones/jugarNormal.png');
         this.load.image('BotonJugarE', 'Assets/Interfaz/Botones/jugarEncima.png');
         this.load.image('BotonJugarP', 'Assets/Interfaz/Botones/jugarPulsado.png');
+
+        //Flecha Derecha
+        this.load.image('flechaDerN', 'Assets/Interfaz/Botones/derechaNormal.png');
+        this.load.image('flechaDerE', 'Assets/Interfaz/Botones/derechaEncima.png');
+        this.load.image('flechaDerP', 'Assets/Interfaz/Botones/derechaPulsado.png');
+
+        //Flecha Izquierda
+        this.load.image('flechaIzqN', 'Assets/Interfaz/Botones/izquierdaNormal.png');
+        this.load.image('flechaIzqE', 'Assets/Interfaz/Botones/izquierdaEncima.png');
+        this.load.image('flechaIzqP', 'Assets/Interfaz/Botones/izquierdaPulsado.png');
     }
     create() {   //Se ejecuta al iniciar la escena
         this.ready = false;
-        console.log("Menu de eleccion")
+        console.log("Menu de eleccion");
         //Fondo
         const background = this.add.image(0, 0, 'Menus').setOrigin(0); //Añadir imagen de fondo
         background.setScale(Math.max(this.scale.width / background.width, this.scale.height / background.height));
         const nombreJuego = this.add.image(this.scale.width / 2, this.scale.height / 4, 'NombreJuego').setScale(2);  //Nombre del juego
 
-        this.botonAnia = this.add.image(300, 350, 'ContenedorNormal').setScale(2).setInteractive();
+        this.botonAnia = this.add.image(300, 350, 'ContenedorNormal').setScale(1,2).setInteractive();
         this.botonAnia.on('pointerdown', () => { this.botonAnia.setTexture('ContenedorPulsado') });
         this.botonAnia.on('pointerup', () => {
             this.chooseCharacter(true);
         });
         this.botonAnia.on('pointerout', () => { this.botonAnia.setTexture('ContenedorNormal') })
 
-        const Ania = this.add.image(300, 350, 'Ania').setScale(2);
+        this.Ania = this.add.image(300, 350, 'Ania').setScale(2);
+        this.valorAnia = 0;
 
-        this.botonGancho = this.add.image(650, 350, 'ContenedorNormal').setScale(2).setInteractive();
+        this.botonGancho = this.add.image(650, 350, 'ContenedorNormal').setScale(1,2).setInteractive();
         this.botonGancho.on('pointerdown', () => { this.botonGancho.setTexture('ContenedorPulsado') });
         this.botonGancho.on('pointerup', () => {
             this.chooseCharacter(false);
         });
         this.botonGancho.on('pointerout', () => { this.botonGancho.setTexture('ContenedorNormal') })
 
-        const Gancho = this.add.image(650, 350, 'Gancho').setScale(2);
+        this.Gancho = this.add.image(650, 350, 'Gancho').setScale(2);
+        this.valorGancho = 0;
+
+        /*this.scene.start("PantallaFinal",{
+            ganador: jugador.name,
+        });*/
+
+        //Flecha derecha Ania
+        this.flechDerAnia = this.add.image(400, 350, 'flechaDerN').setScale(1).setInteractive();
+        this.flechDerAnia.on('pointerover', () => { this.flechDerAnia.setTexture('flechaDerE') });
+        this.flechDerAnia.on('pointerout', () => { this.flechDerAnia.setTexture('flechaDerN') });
+        this.flechDerAnia.on('pointerdown', () => { this.flechDerAnia.setTexture('flechaDerP') });
+        this.flechDerAnia.on('pointerup', () => { 
+            if(this.valorAnia==0){
+                this.Ania.setTexture('AniaSombrero');
+                this.valorAnia=1;
+                console.log("valor Ania :", this.valorAnia);
+            } else if(this.valorAnia==1){
+                this.Ania.setTexture('AniaLazo');
+                this.valorAnia=2;
+                console.log("valor Ania :", this.valorAnia);
+            } else if(this.valorAnia==2){
+                this.Ania.setTexture('Ania');
+                this.valorAnia=0;
+                console.log("valor Ania :", this.valorAnia);
+            }
+        });
+
+        //Flecha izquierda Ania
+        this.flechIzqAnia = this.add.image(200, 350, 'flechaIzqN').setScale(1).setInteractive();
+        this.flechIzqAnia.on('pointerover', () => { this.flechIzqAnia.setTexture('flechaIzqE') });
+        this.flechIzqAnia.on('pointerout', () => { this.flechIzqAnia.setTexture('flechaIzqN') });
+        this.flechIzqAnia.on('pointerdown', () => { this.flechIzqAnia.setTexture('flechaIzqP') });
+        this.flechIzqAnia.on('pointerup', () => { 
+            if(this.valorAnia==0){
+                this.Ania.setTexture('AniaLazo');
+                this.valorAnia=2;
+                console.log("valor Ania :", this.valorAnia);
+            } else if(this.valorAnia==1){
+                this.Ania.setTexture('Ania');
+                this.valorAnia=0;
+                console.log("valor Ania :", this.valorAnia);
+            } else if(this.valorAnia==2){
+                this.Ania.setTexture('AniaSombrero');
+                this.valorAnia=1;
+                console.log("valor Ania :", this.valorAnia);
+            }
+        });
+
+        //Flecha derecha Gancho
+        this.flechDerGancho = this.add.image(750, 350, 'flechaDerN').setScale(1).setInteractive();
+        this.flechDerGancho.on('pointerover', () => { this.flechDerGancho.setTexture('flechaDerE') });
+        this.flechDerGancho.on('pointerout', () => { this.flechDerGancho.setTexture('flechaDerN') });
+        this.flechDerGancho.on('pointerdown', () => { this.flechDerGancho.setTexture('flechaDerP') });
+        this.flechDerGancho.on('pointerup', () => { 
+            if(this.valorGancho==0){
+                this.Gancho.setTexture('GanchoSombrero');
+                this.valorGancho=1;
+                console.log("valor Gancho :", this.valorGancho);
+            } else if(this.valorGancho==1){
+                this.Gancho.setTexture('GanchoLazo');
+                this.valorGancho=2;
+                console.log("valor Gancho :", this.valorGancho);
+            } else if(this.valorGancho==2){
+                this.Gancho.setTexture('Gancho');
+                this.valorGancho=0;
+                console.log("valor Gancho :", this.valorGancho);
+            }
+        });
+
+        //Flecha izquierda Gancho
+        this.flechIzqGancho = this.add.image(550, 350, 'flechaIzqN').setScale(1).setInteractive();
+        this.flechIzqGancho.on('pointerover', () => { this.flechIzqGancho.setTexture('flechaIzqE') });
+        this.flechIzqGancho.on('pointerout', () => { this.flechIzqGancho.setTexture('flechaIzqN') });
+        this.flechIzqGancho.on('pointerdown', () => { this.flechIzqGancho.setTexture('flechaIzqP') });
+        this.flechIzqGancho.on('pointerup', () => { 
+            if(this.valorGancho==0){
+                this.Gancho.setTexture('GanchoLazo');
+                this.valorGancho=2;
+                console.log("valor Gancho :", this.valorGancho);
+            } else if(this.valorGancho==1){
+                this.Gancho.setTexture('Gancho');
+                this.valorGancho=0;
+                console.log("valor Gancho :", this.valorGancho);
+            } else if(this.valorGancho==2){
+                this.Gancho.setTexture('GanchoSombrero');
+                this.valorGancho=1;
+                console.log("valor Gancho :", this.valorGancho);
+            }
+        });
 
         //Boton Pausa
         const botonPausa = this.add.image(850, 55, 'BotonPausaN').setScale(1.5).setInteractive().setScale(2);
