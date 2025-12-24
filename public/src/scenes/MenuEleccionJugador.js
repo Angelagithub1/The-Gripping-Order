@@ -5,8 +5,13 @@ export class MenuEleccionJugador extends Phaser.Scene {   //Crear clase que here
     }
     init() {
         this.readyToPlay = false;
-        this.isAniaC =false;
-        this.isGanchoC=false;
+        this.isAniaC = false;
+        this.isGanchoC = false;
+
+        this.valorAnia = 0;
+        this.valorGancho = 0;
+
+
     }
     preload() {  //Se ejecuta antes de que empiece la escena
 
@@ -23,8 +28,8 @@ export class MenuEleccionJugador extends Phaser.Scene {   //Crear clase que here
         this.load.image('AniaSombrero', 'Assets/Sprites/Personajes/AniaSombrero.png');
         this.load.image('AniaLazo', 'Assets/Sprites/Personajes/AniaLazo.png');
         this.load.image('Gancho', 'Assets/Sprites/Personajes/Gancho.png');
-        //this.load.image('Gancho', 'Assets/Sprites/Personajes/Gancho.png');
-        //this.load.image('Gancho', 'Assets/Sprites/Personajes/Gancho.png');
+        this.load.image('GanchoSombrero', 'Assets/Sprites/Personajes/Gancho1.png');
+        this.load.image('GanchoLazo', 'Assets/Sprites/Personajes/Gancho2.png');
         this.load.image('ContenedorNormal', 'Assets/Interfaz/interfazMedianoNormal.png');
         this.load.image('ContenedorPulsado', 'Assets/Interfaz/interfazMedianoPulsado.png');
 
@@ -61,7 +66,7 @@ export class MenuEleccionJugador extends Phaser.Scene {   //Crear clase que here
         background.setScale(Math.max(this.scale.width / background.width, this.scale.height / background.height));
         const nombreJuego = this.add.image(this.scale.width / 2, this.scale.height / 4, 'NombreJuego').setScale(2);  //Nombre del juego
 
-        this.botonAnia = this.add.image(300, 350, 'ContenedorNormal').setScale(1,2).setInteractive();
+        this.botonAnia = this.add.image(300, 350, 'ContenedorNormal').setScale(1, 2).setInteractive();
         this.botonAnia.on('pointerdown', () => { this.botonAnia.setTexture('ContenedorPulsado') });
         this.botonAnia.on('pointerup', () => {
             this.chooseCharacter(true);
@@ -69,9 +74,8 @@ export class MenuEleccionJugador extends Phaser.Scene {   //Crear clase que here
         this.botonAnia.on('pointerout', () => { this.botonAnia.setTexture('ContenedorNormal') })
 
         this.Ania = this.add.image(300, 350, 'Ania').setScale(2);
-        this.valorAnia = 0;
 
-        this.botonGancho = this.add.image(650, 350, 'ContenedorNormal').setScale(1,2).setInteractive();
+        this.botonGancho = this.add.image(650, 350, 'ContenedorNormal').setScale(1, 2).setInteractive();
         this.botonGancho.on('pointerdown', () => { this.botonGancho.setTexture('ContenedorPulsado') });
         this.botonGancho.on('pointerup', () => {
             this.chooseCharacter(false);
@@ -79,7 +83,6 @@ export class MenuEleccionJugador extends Phaser.Scene {   //Crear clase que here
         this.botonGancho.on('pointerout', () => { this.botonGancho.setTexture('ContenedorNormal') })
 
         this.Gancho = this.add.image(650, 350, 'Gancho').setScale(2);
-        this.valorGancho = 0;
 
         /*this.scene.start("PantallaFinal",{
             ganador: jugador.name,
@@ -90,84 +93,56 @@ export class MenuEleccionJugador extends Phaser.Scene {   //Crear clase que here
         this.flechDerAnia.on('pointerover', () => { this.flechDerAnia.setTexture('flechaDerE') });
         this.flechDerAnia.on('pointerout', () => { this.flechDerAnia.setTexture('flechaDerN') });
         this.flechDerAnia.on('pointerdown', () => { this.flechDerAnia.setTexture('flechaDerP') });
-        this.flechDerAnia.on('pointerup', () => { 
-            if(this.valorAnia==0){
-                this.Ania.setTexture('AniaSombrero');
-                this.valorAnia=1;
-                console.log("valor Ania :", this.valorAnia);
-            } else if(this.valorAnia==1){
-                this.Ania.setTexture('AniaLazo');
-                this.valorAnia=2;
-                console.log("valor Ania :", this.valorAnia);
-            } else if(this.valorAnia==2){
-                this.Ania.setTexture('Ania');
-                this.valorAnia=0;
-                console.log("valor Ania :", this.valorAnia);
+        this.flechDerAnia.on('pointerup', () => {
+            let nuevo = this.valorAnia + 1
+            if (nuevo > 2) {
+                nuevo = 0
             }
+            this.setSkin(true, nuevo)
         });
+        this.flechDerAnia.setVisible(false);
 
         //Flecha izquierda Ania
         this.flechIzqAnia = this.add.image(200, 350, 'flechaIzqN').setScale(1).setInteractive();
         this.flechIzqAnia.on('pointerover', () => { this.flechIzqAnia.setTexture('flechaIzqE') });
         this.flechIzqAnia.on('pointerout', () => { this.flechIzqAnia.setTexture('flechaIzqN') });
         this.flechIzqAnia.on('pointerdown', () => { this.flechIzqAnia.setTexture('flechaIzqP') });
-        this.flechIzqAnia.on('pointerup', () => { 
-            if(this.valorAnia==0){
-                this.Ania.setTexture('AniaLazo');
-                this.valorAnia=2;
-                console.log("valor Ania :", this.valorAnia);
-            } else if(this.valorAnia==1){
-                this.Ania.setTexture('Ania');
-                this.valorAnia=0;
-                console.log("valor Ania :", this.valorAnia);
-            } else if(this.valorAnia==2){
-                this.Ania.setTexture('AniaSombrero');
-                this.valorAnia=1;
-                console.log("valor Ania :", this.valorAnia);
+        this.flechIzqAnia.on('pointerup', () => {
+            let nuevo = this.valorAnia - 1
+            if (nuevo < 0) {
+                nuevo = 2
             }
+            this.setSkin(true, nuevo)
         });
+        this.flechIzqAnia.setVisible(false);
 
         //Flecha derecha Gancho
         this.flechDerGancho = this.add.image(750, 350, 'flechaDerN').setScale(1).setInteractive();
         this.flechDerGancho.on('pointerover', () => { this.flechDerGancho.setTexture('flechaDerE') });
         this.flechDerGancho.on('pointerout', () => { this.flechDerGancho.setTexture('flechaDerN') });
         this.flechDerGancho.on('pointerdown', () => { this.flechDerGancho.setTexture('flechaDerP') });
-        this.flechDerGancho.on('pointerup', () => { 
-            if(this.valorGancho==0){
-                this.Gancho.setTexture('GanchoSombrero');
-                this.valorGancho=1;
-                console.log("valor Gancho :", this.valorGancho);
-            } else if(this.valorGancho==1){
-                this.Gancho.setTexture('GanchoLazo');
-                this.valorGancho=2;
-                console.log("valor Gancho :", this.valorGancho);
-            } else if(this.valorGancho==2){
-                this.Gancho.setTexture('Gancho');
-                this.valorGancho=0;
-                console.log("valor Gancho :", this.valorGancho);
+        this.flechDerGancho.on('pointerup', () => {
+            let nuevo = this.valorGancho + 1
+            if (nuevo > 2) {
+                nuevo = 0
             }
+            this.setSkin(false, nuevo)
         });
+        this.flechDerGancho.setVisible(false);
 
         //Flecha izquierda Gancho
         this.flechIzqGancho = this.add.image(550, 350, 'flechaIzqN').setScale(1).setInteractive();
         this.flechIzqGancho.on('pointerover', () => { this.flechIzqGancho.setTexture('flechaIzqE') });
         this.flechIzqGancho.on('pointerout', () => { this.flechIzqGancho.setTexture('flechaIzqN') });
         this.flechIzqGancho.on('pointerdown', () => { this.flechIzqGancho.setTexture('flechaIzqP') });
-        this.flechIzqGancho.on('pointerup', () => { 
-            if(this.valorGancho==0){
-                this.Gancho.setTexture('GanchoLazo');
-                this.valorGancho=2;
-                console.log("valor Gancho :", this.valorGancho);
-            } else if(this.valorGancho==1){
-                this.Gancho.setTexture('Gancho');
-                this.valorGancho=0;
-                console.log("valor Gancho :", this.valorGancho);
-            } else if(this.valorGancho==2){
-                this.Gancho.setTexture('GanchoSombrero');
-                this.valorGancho=1;
-                console.log("valor Gancho :", this.valorGancho);
+        this.flechIzqGancho.on('pointerup', () => {
+            let nuevo = this.valorGancho - 1
+            if (nuevo < 0) {
+                nuevo = 2
             }
+            this.setSkin(false, nuevo)
         });
+        this.flechIzqGancho.setVisible(false);
 
         //Boton Pausa
         const botonPausa = this.add.image(850, 55, 'BotonPausaN').setScale(1.5).setInteractive().setScale(2);
@@ -253,12 +228,17 @@ export class MenuEleccionJugador extends Phaser.Scene {   //Crear clase que here
 
             if (response.ok) {
                 console.log("Se puede")
-                if(isAnia){
-                    this.isAniaC=true;
-                    this.isGanchoC=false;
-                }else{
-                    this.isGanchoC=true;
-                    this.isAniaC=false;
+                const response = await fetch(`users/getSkins/${this.scene.get('ConnectionMenu').username}`)
+                const data = await response.json();
+                if (isAnia) {
+                    this.isAniaC = true;
+                    this.isGanchoC = false;
+                    this.setSkin(true, data.ania)
+
+                } else {
+                    this.isGanchoC = true;
+                    this.isAniaC = false;
+                    this.setSkin(false, data.gancho)
                 }
                 this.botonJugar.setInteractive();
             } else if (response.status == "409") {
@@ -272,6 +252,63 @@ export class MenuEleccionJugador extends Phaser.Scene {   //Crear clase que here
             console.error('Error al confirmar que el jugador esta listo:', error);
         }
     }
+    async setSkin(isAnia, skin) {
+
+        if (isAnia) {
+            if (!this.isAniaC) {
+                console.log("No puedes cambiar a ania");
+                return;
+            }
+            try {
+                console.log("Intentando cambiar a ania");
+                const response = await fetch(`users/changeSkinAnia/${this.scene.get('ConnectionMenu').username}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        skin: skin
+                    })
+                })
+                if (response.ok) {
+                    console.log("Ania:", skin)
+                    this.localSkinChange(true, skin)
+                } else {
+                    console.log("mensaje:", response)
+                }
+            } catch (error) {
+                console.log("No se que pasa");
+            }
+        } else {
+            if (!this.isGanchoC) {
+                console.log("No puedes cambiar al gancho");
+                return;
+            }
+            console.log("Intentando cambiar al gancho");
+
+            try {
+                const response = await fetch(`users/changeSkinGancho/${this.scene.get('ConnectionMenu').username}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        skin: skin
+                    })
+                })
+                if (response.ok) {
+                    console.log("Gancho:", skin)
+                    this.localSkinChange(false, skin)
+                } else {
+                    console.log("mensaje:", response)
+                }
+
+            } catch (error) {
+                console.log("No se que pasa");
+
+            }
+        }
+    }
 
     async ChoosedOne() {
         try {
@@ -279,35 +316,120 @@ export class MenuEleccionJugador extends Phaser.Scene {   //Crear clase que here
             const data = await response.json();
 
             if (data.ania == '') {
+                //Si no es escogido por nadie
                 this.botonAnia.setTexture('ContenedorNormal')
                 this.botonAnia.on('pointerout', () => { this.botonAnia.setTexture('ContenedorNormal') })
-            }else {
+                this.flechDerAnia.setVisible(false);
+                this.flechIzqAnia.setVisible(false);
+                console.log("Ania no escogida")
+                this.getPlayerSkin(true);//Si no se ha elegido por nadie se ponen las skins que el jugador tenia guardadas
+                this.botonAnia.setInteractive()
+
+            } else {
+                this.botonAnia.disableInteractive()
+
                 if (this.scene.get('ConnectionMenu').username != data.ania) {
                     //Si es escogido por el otro
                     this.botonAnia.setTexture('ContenedorPulsado')
                     this.botonAnia.on('pointerout', () => { this.botonAnia.setTexture('ContenedorPulsado') })
 
+                    this.flechDerAnia.setVisible(false);
+                    this.flechIzqAnia.setVisible(false);
+
+
+                    //Se busca la skin que le ha puesto el otro jugador
+                    const searchSkin = await fetch('users/AllPlayersSkins');
+                    const result = await searchSkin.json()
+
+                    this.localSkinChange(true, result.AniaSkin)
+
                 } else {
                     //Aqui poner los brillitos
+                    this.flechDerAnia.setVisible(true);
+                    this.flechIzqAnia.setVisible(true);
                 }
-            } 
+            }
 
             if (data.gancho == '') {
                 this.botonGancho.setTexture('ContenedorNormal')
-                this.botonGancho.on('pointerout', () => { this.botonAnia.setTexture('ContenedorNormal') })
+                this.botonGancho.on('pointerout', () => { this.botonGancho.setTexture('ContenedorNormal') })
+                this.flechDerGancho.setVisible(false);
+                this.flechIzqGancho.setVisible(false);
+                this.getPlayerSkin(false);//Si no se ha elegido por nadie se ponen las skins que el jugador tenia guardadas
+                this.botonGancho.setInteractive();
+                console.log("Gancho no escogido")
+
             } else {
+                this.botonGancho.disableInteractive();
                 if (this.scene.get('ConnectionMenu').username != data.gancho) {
                     //Si es escogido por el otro
                     this.botonGancho.setTexture('ContenedorPulsado')
-                    this.botonGancho.on('pointerout', () => { this.botonAnia.setTexture('ContenedorPulsado') })
+                    this.botonGancho.on('pointerout', () => { this.botonGancho.setTexture('ContenedorPulsado') })
+
+                    this.flechDerGancho.setVisible(false);
+                    this.flechIzqGancho.setVisible(false);
+
+                    //Se busca la skin que le ha puesto el otro jugador
+                    const searchSkin = await fetch('users/AllPlayersSkins');
+                    const result = await searchSkin.json()
+                    this.localSkinChange(false, result.GanchoSkin)
+
 
                 } else {
                     //Aqui poner los brillitos
+                    this.flechDerGancho.setVisible(true);
+                    this.flechIzqGancho.setVisible(true);
                 }
             }
 
         } catch (error) {
 
+        }
+    }
+
+    async getPlayerSkin(isAnia) {
+        try {
+            const response = await fetch(`users/getSkins/${this.scene.get('ConnectionMenu').username}`)
+            const data = await response.json();
+            if (response.ok) {
+                if (isAnia) {
+                    this.localSkinChange(true, data.ania)
+                } else {
+                    this.localSkinChange(false, data.gancho)
+                }
+
+            }
+        } catch (error) {
+
+        }
+    }
+    localSkinChange(isAnia, skin) {
+        if (isAnia) {
+            this.valorAnia = skin;
+            switch (skin) {
+                case 2:
+                    this.Ania.setTexture('AniaLazo');
+                    break;
+                case 1:
+                    this.Ania.setTexture('AniaSombrero')
+                    break;
+                case 0:
+                    this.Ania.setTexture('Ania')
+                    break;
+            }
+        } else {
+            this.valorGancho = skin;
+            switch (skin) {
+                case 2:
+                    this.Gancho.setTexture('GanchoLazo');
+                    break;
+                case 1:
+                    this.Gancho.setTexture('GanchoSombrero');
+                    break;
+                case 0:
+                    this.Gancho.setTexture('Gancho');
+                    break;
+            }
         }
     }
 }

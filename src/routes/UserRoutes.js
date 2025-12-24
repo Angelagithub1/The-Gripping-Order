@@ -7,6 +7,8 @@ const userController = UserController();
 router.post('/login', userController.loginUser);
 router.post('/register', userController.registerUser);
 router.delete('/delete', userController.deleteUser);
-router.post('/changeSkinAnia', userController.changeSkinAnia);
-router.post('/changeSkinGancho', userController.changeSkinGancho);
+router.put('/changeSkinAnia/:username', userController.changeSkinAnia);
+router.put('/changeSkinGancho/:username', userController.changeSkinGancho);
+router.get('/getSkins/:username',userController.getSkins)
+router.get('/AllPlayersSkins',userController.AllPlayersSkins)
 export default router;

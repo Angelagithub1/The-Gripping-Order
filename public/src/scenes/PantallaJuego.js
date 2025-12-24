@@ -4,6 +4,21 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         super('PantallaJuego'); //Asignación de un nombre interno
     }
 
+    init(data){
+        this.AniaSkin= data.AniaSkin;
+        /* 
+        2 -> AniaLazo
+        1 -> AniaSombrero
+        0 -> Ania
+        */
+        this.GanchoSkin = data.GanchoSkin;
+        /*
+        2 -> GanchoLazo
+        1 -> GanchoSombrero
+        0 -> Gancho
+        */
+    }
+
     preload() {  //Se ejecuta antes de que empiece la escena
         //Fondo
         this.load.image('Menus', 'Assets/Backgrounds/Menus.jpeg'); //Cargar imagen de fondo
@@ -98,6 +113,8 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         
     }
     create() {
+        //console.log("Ania:",this.AniaSkin, "gancho:",this.GanchoSkin);
+
         this.scene.get('ConnectionMenu').escenaActual = this.scene.key;
         //Fondo
         const background = this.add.image(0, 0, 'BackgroundGraveyard').setOrigin(0); //Añadir imagen de fondo

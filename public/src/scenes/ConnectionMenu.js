@@ -37,7 +37,7 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
                     //Si hay menos de dos jugadores
                     this.intentos++;
                     if (this.intentos > 2) { //Si se ha intentado ya dos veces verificar a los dos jugadores
-                        this.intentos=0;
+                        this.intentos = 0;
                         if (this.escenaActual == 'MenuEleccionJugador') {
                             this.scene.stop(this.escenaActual)
                             this.escenaActual = 'MenuPrincipal'
@@ -58,8 +58,8 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
                             }, [], this);
                         }
                     }
-                }else{
-                    this.intentos=0;
+                } else {
+                    this.intentos = 0;
                 }
                 if (this.scene.isPaused(this.escenaActual)) {
                     this.scene.resume(this.escenaActual);
@@ -175,7 +175,15 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
                 if (this.scene.isActive('MenuPausa')) {
                     this.scene.get('MenuPausa').escenaPrevia = data.canChange
                 }
-                this.scene.launch(data.canChange);
+                if (this.escenaActual == 'PantallaJuego') {
+                    const searchSkin = await fetch('users/AllPlayersSkins');
+                    const result = await searchSkin.json()
+                    //console.log("Solicitando cambio de escena con:",result.AniaSkin, result.GanchoSkin);
+                    this.scene.launch('PantallaJuego',{ AniaSkin: result.AniaSkin, GanchoSkin:result.GanchoSkin })
+
+                } else {
+                    this.scene.launch(data.canChange);
+                }
                 const response = await fetch('/configuration/confirmChange', {
                     method: 'POST',
                     headers: {

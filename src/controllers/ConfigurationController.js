@@ -9,6 +9,7 @@ const ConfigurationController = () => {
         ['ania', ''],
         ['gancho', '']]
     );
+
     const usersConfirmed = new Set();
     const requestChangeScreen = (req, res) => {
         const { username, actscene, next } = req.body; //next true es para siguiente y back para volver
@@ -59,7 +60,7 @@ const ConfigurationController = () => {
                     mapusers.set('gancho', '');
                 }
                 res.json({ message: "Eres ania" })
-                console.log("Solicitud llegada de una ania afirmativa")
+                //console.log("Solicitud llegada de una ania afirmativa")
             } else if (mapusers.get('ania') == username) {
                 res.status(409).json({ message: "Ya eres Ania" })
             } else {
@@ -75,7 +76,7 @@ const ConfigurationController = () => {
                     mapusers.set('ania', '');
                 }
                 res.json({ message: "Eres el gancho" })
-                console.log("Solicitud llegada de un gancho afirmativa")
+                //console.log("Solicitud llegada de un gancho afirmativa")
             } else if (mapusers.get('gancho') == username) {
                 res.status(409).json({ message: "Ya eres el gancho" })
             } else {
@@ -111,7 +112,7 @@ const ConfigurationController = () => {
     const choosen = (req, res) => {
         res.json({
             ania: mapusers.get('ania'),
-            gancho: mapusers.get('gancho')
+            gancho: mapusers.get('gancho'),
         })
     }
     const resetParams = () => {
