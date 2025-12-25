@@ -15,19 +15,26 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
         this.statusText = this.add.text(16, this.scale.height - 32, '', { fontSize: '20px', fill: '#ffffff' });
         this.messageNotEnoughPlayers = this.add.text(this.scale.width / 2 - 250, this.scale.height - 65, '', { fontSize: '20px', fill: '#ff0000ff' });
 
+        //Verificacion de conexion con el servidor
         this.connectionInterval = setInterval(() => this.checkServerStatus(), 500);
+
+        //Verificacion si hay que cambiar de pantalla
         this.PassSceneInterval = setInterval(() => this.CanPassNextScene(), 500);
+
         this.scene.bringToTop();
 
     }
-    update() {
-        //console.log("Connection Menu vivo")
-    }
     async checkServerStatus() {
-        //console.log('Comprobando estado del servidor...');
         try {
             if (this.username !== '') {
-                const response = await fetch(`/connected/keepalive/${this.username}`);
+                //Si ya se ha registrado o iniciado sesion
+                const response = await fetch(`/connected/keepalive`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username: this.username })
+                });
                 if (!response.ok) {
                     throw new Error('Error en la respuesta del servidor');
                 }
@@ -35,9 +42,13 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
                 this.statusText.setText(`${data.username} - Usuarios: ${data.connected}`);
                 if (data.connected < 2) {
                     //Si hay menos de dos jugadores
+
+                    //Los intentos es para dar tiempo a los clientes de reconectarse en caso de que se caiga el servidor
                     this.intentos++;
                     if (this.intentos > 2) { //Si se ha intentado ya dos veces verificar a los dos jugadores
                         this.intentos = 0;
+
+                        //Si esta en el menu de seleccion se vuelve al menu principal y se imprime un mensaje por pantalla
                         if (this.escenaActual == 'MenuEleccionJugador') {
                             this.scene.stop(this.escenaActual)
                             this.escenaActual = 'MenuPrincipal'
@@ -47,15 +58,26 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
                                 this.messageNotEnoughPlayers.setText('');
                             }, [], this);
                         }
+
+                        //Si esta en la pantalla de juego se da la victoria al jugador activo
                         if (this.escenaActual == 'PantallaJuego') {
                             this.scene.stop(this.escenaActual)
                             this.escenaActual = 'PantallaFinal'
+                            const getCharacter = await fetch(`/configuration/getCharacter/${this.username}`)
+                            const data = await getCharacter.json()
+                            console.log("Result:", data.character)
                             this.scene.launch('PantallaFinal', {
-                                ganador: 'Ania', //Aqui hay que hacer una busqueda para saber que jugador gano
+                                ganador: data.character,
                             });
-                            this.time.delayedCall(3000, () => {
-                                this.messageNotEnoughPlayers.setText('');
-                            }, [], this);
+
+                            const response = await fetch('/configuration/LimpiezaPorEliminacion', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ actScene: 'PantallaFinal' })
+                            })
+
                         }
                     }
                 } else {
@@ -148,19 +170,14 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
         }
     }
     async CanPassNextScene() {
-        if (this.escenaActual === 'PantallaJuego') {
+        if (this.escenaActual === 'PantallaJuego' || this.username=='') {
             //Si no esta en la pantalla de juego porque no se puede cambiar de alli
+            //O no ha iniciado sesion
             return;
         }
         try {
             //Se pregunta al servidor si se puede cambiar de escena
-            const response = await fetch('/configuration/canChangeScreen', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({})
-            });
+            const response = await fetch('/configuration/canChangeScreen');
             //if (response.ok) {
             const data = await response.json();
 
@@ -179,7 +196,7 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
                     const searchSkin = await fetch('users/AllPlayersSkins');
                     const result = await searchSkin.json()
                     //console.log("Solicitando cambio de escena con:",result.AniaSkin, result.GanchoSkin);
-                    this.scene.launch('PantallaJuego',{ AniaSkin: result.AniaSkin, GanchoSkin:result.GanchoSkin })
+                    this.scene.launch('PantallaJuego', { AniaSkin: result.AniaSkin, GanchoSkin: result.GanchoSkin })
 
                 } else {
                     this.scene.launch(data.canChange);

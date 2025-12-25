@@ -10,6 +10,7 @@ const ConfigurationController = () => {
         ['gancho', '']]
     );
 
+
     const usersConfirmed = new Set();
     const requestChangeScreen = (req, res) => {
         const { username, actscene, next } = req.body; //next true es para siguiente y back para volver
@@ -84,12 +85,53 @@ const ConfigurationController = () => {
             }
         }
     };
+    const LimpiezaPorEliminacion = (req, res) => {
+        const { actScene } = req.body
+        if(actScene == "MenuPrincipal" || actScene == "PantallaFinal") {
+            console.log("Limpieza")
+            back = false;
+            selectscene = false;
+            playersready.clear()
+            mapusers.set('gancho', '');
+            mapusers.set('ania', '');
+        }
+    }
     const confirmChange = (req, res) => {
         const { username, actScene } = req.body
         if (!usersConfirmed.has(username)) {
             usersConfirmed.add(username)
             if (usersConfirmed.size === 2) { //Si los dos usuarios han confirmado que cambiaron de escena
                 usersConfirmed.clear();
+                if (actScene == "MenuPrincipal" || actScene == "PantallaFinal") {
+                    console.log("Limpieza")
+                    back = false;
+                    selectscene = false;
+                    playersready.clear()
+                    mapusers.set('gancho', '');
+                    mapusers.set('ania', '');
+                }
+                /*
+                switch (actScene) {
+                    case "MenuEleccionJugador":
+                        back = false;
+                        selectscene = false;
+                        playersready.clear()
+                        mapusers.set('gancho', '');
+                        mapusers.set('ania', '');
+                        break;
+                    case "MenuPrincipal":
+                        back = false;
+                        selectscene = false;
+                        playersready.clear()
+                        mapusers.set('gancho', '');
+                        mapusers.set('ania', '');
+                        break;
+                    case "PantallaFinal":
+                        break;
+                    case "PantallaJuego":
+                        break;
+                }
+                /*
                 if (actScene == 'MenuPrincipal') { //Se reinician los datos de seleccion si es que volvio a menu principal
                     back = false;
                     selectscene = false;
@@ -98,11 +140,18 @@ const ConfigurationController = () => {
                     back = false;
                 }
                 if (actScene != 'MenuEleccionJugador') {
-                    console.log("Limpieza")
-                    mapusers.set('gancho', '');
-                    mapusers.set('ania', '');
                     playersready.clear()
                 }
+                if (actScene == 'PantallaFinal' || actScene == 'MenuPrincipal') {
+                    console.log("Limpieza")
+
+                    mapusers.set('gancho', '');
+                    mapusers.set('ania', '');
+                }else{
+                    console.log("Escena:",actScene)
+                }*/
+            } else if (usersConfirmed.size === 1) {
+                //Si es solo uno
             }
             res.json({ message: "Confirmacion recibida" })
         } else {
@@ -115,18 +164,25 @@ const ConfigurationController = () => {
             gancho: mapusers.get('gancho'),
         })
     }
-    const resetParams = () => {
-        selectscene = false;
-        playersready.clear();
-        mapusers.clear();
+    const getCharacter = (req, res) => {
+        const username = req.params.username
+        if (mapusers.get('ania') == username) {
+            res.json({ character: "ania" })
+        } else if (mapusers.get('gancho') == username) {
+            res.json({ character: "Gancho" })
+        } else {
+            console.log("No encontro al usuario")
+            res.status(404);
+        }
     }
     return {
         canChangeScreen,
         requestChangeScreen,
         setChangesCharacters,
-        resetParams,
+        getCharacter,
         confirmChange,
-        choosen
+        choosen,
+        LimpiezaPorEliminacion
     };
 }
 export default ConfigurationController;

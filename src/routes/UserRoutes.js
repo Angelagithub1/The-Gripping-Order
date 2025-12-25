@@ -4,7 +4,7 @@ import express from 'express';
 const router = express.Router();
 const userController = UserController();
 
-router.post('/login', userController.loginUser);
+router.get('/login/:username/:password', userController.loginUser);
 router.post('/register', userController.registerUser);
 router.delete('/delete', userController.deleteUser);
 router.put('/changeSkinAnia/:username', userController.changeSkinAnia);

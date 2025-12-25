@@ -298,13 +298,7 @@ export class MenuLogin extends Phaser.Scene {   //Crear clase que hereda de Phas
                     const connectionrevision = await fetch(`/connected/userconnected/${username}`);
                     const data = await connectionrevision.json();
                     if (!data.connected) {
-                        const response = await fetch('/users/login', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({ username, password })
-                        })
+                        const response = await fetch(`/users/login/${username}/${password}`)
                         if (response.ok) {
                             const data = await response.json();
                             this.scene.get('ConnectionMenu').username = username;

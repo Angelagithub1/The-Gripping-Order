@@ -3,7 +3,7 @@ const connectedUsers = new Map();
 const connectionController =() => {
     const checkConnection = (req, res) => {
 
-        const username = req.params.username;
+        const username = req.body.username;
 
         if(!connectedUsers.has(username)){
             console.log(`Nuevo cliente conectado:${username}`);

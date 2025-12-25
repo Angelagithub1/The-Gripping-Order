@@ -7,7 +7,7 @@ const UserController = () => {
     )
 
     const loginUser = (req, res) => {
-        const { username, password } = req.body;
+        const { username, password } = req.params;
         const ruta = `./src/data/${username}.json`;
         if (!fs.existsSync(ruta)) {
             return res.status(404).json({ message: "Usuario no registrado" });
@@ -74,7 +74,7 @@ const UserController = () => {
         const usuario = JSON.parse(fs.readFileSync(ruta));
         usuario.ania = skin;
         skins.set('ania', skin)
-        console.log("asignando skin a ania", skin, "nuevo valor:",skins.get('ania'))
+        console.log("asignando skin a ania", skin, "nuevo valor:", skins.get('ania'))
         fs.writeFileSync(ruta, JSON.stringify(usuario, null, 2));
         res.json({ message: "Skin de Ania cambiada exitosamente" });
 
@@ -89,7 +89,7 @@ const UserController = () => {
         const usuario = JSON.parse(fs.readFileSync(ruta));
         usuario.gancho = skin;
         skins.set('gancho', skin)
-        console.log("asignando skin al gancho", skin, "nuevo valor:",skins.get('gancho'))
+        console.log("asignando skin al gancho", skin, "nuevo valor:", skins.get('gancho'))
 
         fs.writeFileSync(ruta, JSON.stringify(usuario, null, 2));
         res.json({ message: "Skin de Gancho cambiada exitosamente" });
