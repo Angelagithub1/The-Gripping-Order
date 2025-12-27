@@ -67,12 +67,11 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.load.spritesheet('AniaSombreroIdleVerde', 'Assets/Sprites/Ania/SKINS/HAT/Color/VerdeHat-IDLE.png', { frameWidth: 42, frameHeight: 32 });
 
         //Sprite Ania sombrero Walk
-        this.load.spritesheet('AniaSombreroWalk', 'Assets/Sprites/Ania/SKINS/HAT/AniaHat-WALK.png', { frameWidth: 42, frameHeight: 32 });
-        this.load.spritesheet('AniaSombreroWalkAmarillo', 'Assets/Sprites/Ania/SKINS/HAT/Color/AmarilloHat-WALK.png', { frameWidth: 42, frameHeight: 32 });
-        this.load.spritesheet('AniaSombreroWalkAzul', 'Assets/Sprites/Ania/SKINS/HAT/Color/AzulHat-WALK.png', { frameWidth: 42, frameHeight: 32 });
-        this.load.spritesheet('AniaSombreroWalkRojo', 'Assets/Sprites/Ania/SKINS/HAT/Color/RojoHat-WALK.png', { frameWidth: 42, frameHeight: 32 });
-        this.load.spritesheet('AniaSombreroWalkVerde', 'Assets/Sprites/Ania/SKINS/HAT/Color/VerdeHat-WALK.png', { frameWidth: 42, frameHeight: 32 });
-
+        this.load.spritesheet('AniaSombreroWalk', 'Assets/Sprites/Ania/SKINS/HAT/AniaHat-WALK.png', { frameWidth: 42, frameHeight: 36 });
+        this.load.spritesheet('AniaSombreroWalkAmarillo', 'Assets/Sprites/Ania/SKINS/HAT/Color/AmarilloHat-WALK.png', { frameWidth: 42, frameHeight: 36 });
+        this.load.spritesheet('AniaSombreroWalkAzul', 'Assets/Sprites/Ania/SKINS/HAT/Color/AzulHat-WALK.png', { frameWidth: 42, frameHeight: 36 });
+        this.load.spritesheet('AniaSombreroWalkRojo', 'Assets/Sprites/Ania/SKINS/HAT/Color/RojoHat-WALK.png', { frameWidth: 42, frameHeight: 36 });
+        this.load.spritesheet('AniaSombreroWalkVerde', 'Assets/Sprites/Ania/SKINS/HAT/Color/VerdeHat-WALK.png', { frameWidth: 42, frameHeight: 36 });
         //Sprite Gancho
         this.load.spritesheet('GanchoIdle', 'Assets/Sprites/gancho.png', { frameWidth: 108, frameHeight: 50 });
 
@@ -798,7 +797,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
     updateWalkAnimation(jugador){
         if(this.AniaSkin==2){   //Ania con Lazo
             if(jugador.canDoubleJump){
-                jugador.anims.play('AAnim_AniaLazoWalkAzul', true);
+                jugador.anims.play('Anim_AniaLazoWalkAzul', true);
             } else if(jugador.masVelocidad){
                 jugador.anims.play('Anim_AniaLazoWalkVerde', true);
             } else if(jugador.invulnerable){
