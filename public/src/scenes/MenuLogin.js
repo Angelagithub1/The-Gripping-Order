@@ -37,125 +37,222 @@ export class MenuLogin extends Phaser.Scene {   //Crear clase que hereda de Phas
         this.load.audio('SonidoBotonE', 'Assets/Sonidos/BotonEncima.mp3');
         this.load.audio('SonidoBotonP', 'Assets/Sonidos/BotonPulsado.mp3');
 
-        //Formulario HTML
-        this.load.html('loginForm', 'Assets/loginform.html');
+        ///
+        //Botones de login y registro
+        this.load.image('BtnLoginN',  'Assets/Interfaz/Sesion_I_Normal.png');
+        this.load.image('BtnLoginE',  'Assets/Interfaz/Sesion_I_Encima.png');
+        this.load.image('BtnLoginP',  'Assets/Interfaz/Sesion_I_Presionado.png');
+        this.load.image('BtnRegisterN',  'Assets/Interfaz/Sesion_R_Normal.png');
+        this.load.image('BtnRegisterE',  'Assets/Interfaz/Sesion_R_Encima.png');
+        this.load.image('BtnRegisterP',  'Assets/Interfaz/Sesion_R_Presionado.png');
+
+        //Cambio entre login y registro
+        this.load.image('TxtToggleAInicioN',  'Assets/Interfaz/Sesion_I_CambioNormal.png');
+        this.load.image('TxtToggleAInicioE',  'Assets/Interfaz/Sesion_I_CambioEncima.png');
+       
+        this.load.image('TxtToggleARegistroN',  'Assets/Interfaz/Sesion_R_CambioNormal.png');
+        this.load.image('TxtToggleARegistroE',  'Assets/Interfaz/Sesion_R_CambioEncima.png');
+
+        //Eliminar sesion
+        this.load.image('TxtDeleteN',  'Assets/Interfaz/Sesion_EliminarNormal.png');
+        this.load.image('TxtDeleteE',  'Assets/Interfaz/Sesion_EliminarEncima.png');
+
+        //Títulos
+        this.load.image('TituloLogin',  'Assets/Interfaz/Sesion_I_Titulo.png');
+        this.load.image('TituloRegister',  'Assets/Interfaz/Sesion_R_Titulo.png');
+
+        //Constraseña y usuario
+        this.load.image('TxtUsuario',  'Assets/Interfaz/Sesion_Usuario.png');
+        this.load.image('TxtContrasena',  'Assets/Interfaz/Sesion_Contrasena.png');
+
+        //Assets de pantalla de reconexion, esa escena no puede cargar sus propios assets
+        this.load.image('SinConexion', 'Assets/Interfaz/Sesion_ConexionPerdida.png');
+        
     }
-    create() {   //Se ejecuta al iniciar la escena
 
-        console.log("Menu Principal");
-        //Fondo
-        const background = this.add.image(0, 0, 'Menus').setOrigin(0); //Añadir imagen de fondo
-        background.setScale(Math.max(this.scale.width / background.width, this.scale.height / background.height));
-        //const nombreJuego = this.add.image(this.scale.width / 2, this.scale.height / 4, 'NombreJuego').setScale(2);  //Nombre del juego
+    create() {
+      // ========= Fondo, audio y pausa (igual que ya tenías) =========
+      const bg = this.add.image(0, 0, 'Menus').setOrigin(0);
+      bg.setScale(Math.max(this.scale.width / bg.width, this.scale.height / bg.height));
 
-        //Sonido
-        const volumen = this.registry.get('volumen') ?? 0.2;
-        let musica = this.sound.get('MusicaFondo');
-        let musicaVictoria = this.sound.get('Victoria');
+      const volMus = this.registry.get('volumen') ?? 0.2;
+      let musica = this.sound.get('MusicaFondo');
+      const musicaVictoria = this.sound.get('Victoria');
+      if (musicaVictoria && musicaVictoria.isPlaying) { musicaVictoria.stop(); musicaVictoria.destroy(); }
+      if (!musica) { musica = this.sound.add('MusicaFondo', { loop: true, volume: volMus }); musica.play(); }
+      else if (!musica.isPlaying) { musica.setVolume(volMus); musica.play(); }
 
-        if (musicaVictoria && musicaVictoria.isPlaying) {    //Parar la musica si está sonando
-            musicaVictoria.stop();
-            musicaVictoria.destroy();
-        }
+      const volBtns = this.registry.get('volumen') ?? 0.5;
+      this.sonidoE = this.sound.add('SonidoBotonE', { volume: volBtns });
+      this.sonidoP = this.sound.add('SonidoBotonP', { volume: volBtns });
 
-        if (!musica) {    //Si no existe la musica todavia
-            musica = this.sound.add('MusicaFondo', {
-                loop: true,
-                volume: volumen,
-            });
-            musica.play();
-        } else if (!musica.isPlaying) { //Si existe pero no se esta reproduciendo
-            musica.setVolume(volumen);
-            musica.play();
-        }
+      const btnPause = this.add.image(850, 55, 'BotonPausaN').setScale(2).setInteractive();
+      btnPause.on('pointerover', () => { this.sonidoE.play(); btnPause.setTexture('BotonPausaE'); });
+      btnPause.on('pointerout',  () => { btnPause.setTexture('BotonPausaN'); });
+      btnPause.on('pointerdown', () => { this.sonidoP.play(); btnPause.setTexture('BotonPausaP'); });
+      btnPause.on('pointerup',   () => { this.scene.pause(); this.scene.launch('MenuPausa', { escenaPrevia: this.scene.key }); });
 
-        const volumenBotones = this.registry.get('volumen') ?? 0.5;
+      // ========= Layout base =========
+      const cx = this.scale.width / 2;
+      const cy = this.scale.height / 2;
+      const formCx = cx-80; // Ajuste fino para centrar el formulario DOM
 
-        this.sonidoE = this.sound.add('SonidoBotonE', { volume: volumenBotones });
-        this.sonidoP = this.sound.add('SonidoBotonP', { volume: volumenBotones });
+      // Ajustes rápidos (toca estos valores para afinar todo)
+      const UI = {
+        titleScale: 2.0,        // Título grande
+        titleY: cy - 180,       // Título más arriba  ← ajusta aquí
+        labelScale: 2.0,        // Tamaño “USUARIO / CONTRASEÑA”
+        labelAboveOffset: 20,   // Distancia de la etiqueta al borde superior del input
+        inputWidth: 300,        // Ancho del input DOM  ← ajusta aquí
+        inputHeight: 40,        // Alto del input DOM   ← ajusta aquí
+        inputsGap: 100,          // Separación vertical entre los dos inputs
+        inputsTopY: cy - 80,    // Y del input de “usuario”  ← ajusta aquí
+        buttonScale: 1.35,      // Tamaño del botón principal
+        toggleScale: 2.0,       // Tamaño del texto “Cambiar para …”
+        deleteScale: 2.0,       // Tamaño del texto “Eliminar cuenta”
+        afterInputsToButton: 60 // Espacio entre el segundo input y el botón
+      };
 
+      // ========= Estado inicial =========
+      this.isLogin = true;
 
-        //Boton Pausa
-        const botonPausa = this.add.image(850, 55, 'BotonPausaN').setScale(1.5).setInteractive().setScale(2);
-        botonPausa.on('pointerover', () => {
-            this.sonidoE.play();
-            botonPausa.setTexture('BotonPausaE')
+      // ========= Título (imagen) =========
+      // En modo login: 'TituloLogin' / en registro: 'TituloRegister'
+      this.titleImg = this.add.image(cx, UI.titleY, 'TituloLogin')
+        .setOrigin(0.5)
+        .setScale(UI.titleScale);
+
+      // ========= Inputs DOM (recuadro normal, sin imágenes) =========
+      // Creamos un contenedor del tamaño del canvas para posicionar por left/top
+      const formulario = this.add.dom(0, 0).createFromHTML(`
+        <div id="login-form" style="position:absolute; left:0; top:0; width:100%; height:100%;"></div>
+      `);
+
+      const makeDomInput = (name) => {
+        const input = document.createElement('input');
+        input.type = (name === 'pass') ? 'password' : 'text';
+        input.name = name;
+        input.placeholder = ''; // no placeholder; usamos etiquetas gráficas
+        Object.assign(input.style, {
+          position: 'absolute',
+          width: UI.inputWidth + 'px',
+          height: UI.inputHeight + 'px',
+          background: '#f3d05a',    // recuadro amarillo suave
+          border: '2px solid #8a4a12',
+          borderRadius: '6px',
+          outline: 'none',
+          color: '#3b1b00',
+          fontFamily: 'Arial, sans-serif',
+          fontSize: '18px',
+          fontWeight: 'bold',
+          letterSpacing: '0.5px',
+          textAlign: 'left',
+          padding: '6px 0px',
+          boxShadow: '0 2px 0 #3b1b00',
         });
-        botonPausa.on('pointerout', () => { botonPausa.setTexture('BotonPausaN') });
-        botonPausa.on('pointerdown', () => {
-            this.sonidoP.play();
-            botonPausa.setTexture('BotonPausaP')
+        input.tabIndex = 0;
+        return input; 
+      };
+
+      const root = formulario.node.querySelector('#login-form');
+      const inputUser = makeDomInput('user');
+      const inputPass = makeDomInput('pass');
+      root.appendChild(inputUser);
+      root.appendChild(inputPass);
+
+      // Posicionar inputs centrados (usando cx/cy)
+      const placeDomCentered = (domEl, x, y) => {
+        domEl.style.left = (x - UI.inputWidth / 2) + 'px';
+        domEl.style.top  = (y - UI.inputHeight / 2) + 'px';
+      };
+
+      const userY = UI.inputsTopY;
+      const passY = userY + UI.inputsGap;
+      placeDomCentered(inputUser, cx, userY);
+      placeDomCentered(inputPass, cx, passY);
+
+      // ========= Etiquetas “USUARIO / CONTRASEÑA” (imágenes), centradas encima =========
+      const placeLabelAbove = (key, centerX, inputTopY) => {
+        return this.add.image(centerX, inputTopY - UI.labelAboveOffset, key)
+          .setOrigin(0.5)
+          .setScale(UI.labelScale);
+      };
+      this.lblUser = placeLabelAbove('TxtUsuario', cx, userY - (UI.inputHeight / 2));
+      this.lblPass = placeLabelAbove('TxtContrasena', cx, passY - (UI.inputHeight / 2));
+
+      // ========= Botón principal (Login/Registro con tres estados) =========
+      const mainY = passY + (UI.inputHeight / 2) + UI.afterInputsToButton;
+      this.btnMain = this.add.image(cx, mainY, 'BtnLoginN')
+        .setScale(UI.buttonScale)
+        .setInteractive();
+
+      const setMainTextures = (isLogin) => {
+        const base = isLogin ? 'BtnLogin' : 'BtnRegister';
+        this.btnMain.setTexture(`${base}N`);
+        
+        this.btnMain.removeAllListeners();
+        this.btnMain
+          .on('pointerover', () => { this.sonidoE.play(); this.btnMain.setTexture(`${base}E`); })
+          .on('pointerout',  () => { this.btnMain.setTexture(`${base}N`); })
+          .on('pointerdown', () => { this.sonidoP.play(); this.btnMain.setTexture(`${base}P`); })
+          .on('pointerup',   () => {
+            if (this.isLogin) this.procesarLogin({ getChildByName: (n) => (n === 'user' ? inputUser : inputPass) });
+            else              this.procesarRegistro({ getChildByName: (n) => (n === 'user' ? inputUser : inputPass) });
+            this.btnMain.setTexture(`${base}N`);
+          });
+      };
+      setMainTextures(true);
+
+      // ========= Toggle (Cambiar para registrar / Cambiar para iniciar sesión) =========
+      this.toggleImg = this.add.image(cx, mainY + 60, 'TxtToggleARegistroN') // modo login -> “ARegistro”
+        .setOrigin(0.5)
+        .setScale(UI.toggleScale)
+        .setInteractive();
+
+      const setToggleTextures = (isLogin) => {
+        // isLogin === true  -> “Cambiar para registrar” (ARegistro)
+        // isLogin === false -> “Cambiar para iniciar sesión” (AInicio)
+        const base = isLogin ? 'TxtToggleARegistro' : 'TxtToggleAInicio';
+        this.toggleImg.setTexture(`${base}N`);
+        this.toggleImg.removeAllListeners();
+        this.toggleImg
+          .on('pointerover', () => { this.sonidoE.play(); this.toggleImg.setTexture(`${base}E`); })
+          .on('pointerout',  () => { this.toggleImg.setTexture(`${base}N`); })
+          .on('pointerdown', () => { this.sonidoP.play(); })
+          .on('pointerup',   () => {
+            this.isLogin = !this.isLogin;
+            // Título y botón principal
+            this.titleImg.setTexture(this.isLogin ? 'TituloLogin' : 'TituloRegister');
+            setMainTextures(this.isLogin);
+            // El propio toggle cambia de texto
+            setToggleTextures(this.isLogin);
+          });
+      };
+      setToggleTextures(true);
+
+      // ========= Eliminar cuenta (texto con hover) =========
+      const deleteY = mainY + 115; // súbelo o bájalo si lo ves demasiado abajo
+      const deleteImg = this.add.image(cx, deleteY, 'TxtDeleteN')
+        .setOrigin(0.5)
+        .setScale(UI.deleteScale)
+        .setInteractive();
+
+      deleteImg
+        .on('pointerover', () => { this.sonidoE.play(); deleteImg.setTexture('TxtDeleteE'); })
+        .on('pointerout',  () => { deleteImg.setTexture('TxtDeleteN'); })
+        .on('pointerdown', () => { this.sonidoP.play(); })
+        .on('pointerup',   () => {
+          // Pasamos los mismos inputs al handler
+          this.procesarEliminarUsuario({ getChildByName: (n) => (n === 'user' ? inputUser : inputPass) });
         });
-        botonPausa.on('pointerup', () => {
-            console.log("Pausa");
-            this.scene.pause();
-            this.scene.launch('MenuPausa', { escenaPrevia: this.scene.key });
-        });
 
-        const title = this.add.text(this.scale.width / 2 - 45, this.scale.height / 2 - 200, 'Inicio de sesion', { color: 'white', fontFamily: 'Arial', fontSize: '20px ' });
-        this.isLogin = true;
+      // ========= Mensajes dinámicos (pueden quedarse como texto) =========
+      this.messageError = this.add.text(cx, cy - 145, '', {
+        color: 'red', fontFamily: 'Arial', fontSize: '20px'
+      }).setOrigin(0.5);
 
-
-
-        // Botón para alternar al modo de eliminación
-        this.deleteModeButton = this.add.text(this.scale.width / 2, this.scale.height / 2 + 200, 'Eliminar Usuario', { fontSize: '30px Arial Black', color: '#ff0' })
-
-            .setOrigin(0.5)
-            .setInteractive()
-            .on('pointerover', () => this.deleteModeButton.setColor('#888')) // Oscurece el texto
-            .on('pointerout', () => this.deleteModeButton.setColor('#ff0'))  // Vuelve al color original
-            .on('pointerdown', () => this.procesarEliminarUsuario(formulario));
-
-        // Crear formulario HTML
-
-        let formulario = this.add.dom(400, 250).createFromHTML(`
-        <input type="text" name="user" placeholder="Usuario" style="width: 200px; height: 30px;">
-        <br>
-        <input type="password" name="pass" placeholder="Contraseña" style="width: 200px; height: 30px; margin-top: 10px;">
-        `);
-
-        let btnLogin = this.add.text(400, 300, 'Iniciar Sesion', { backgroundColor: '#afac14c8', padding: 10 })
-            .setInteractive()
-            .on('pointerover', () => {
-                btnLogin.setStyle({ backgroundColor: '#afac1468' });
-            })
-            .on('pointerout', () => {
-                btnLogin.setStyle({ backgroundColor: '#afac14c8' });
-            })
-            .on('pointerup', () => {
-                if (this.isLogin) {
-                    this.procesarLogin(formulario)
-                } else {
-                    this.procesarRegistro(formulario)
-                }
-                btnLogin.setStyle({ backgroundColor: '#ffffff' });
-            });
-
-        this.toggleButton = this.add.text(this.scale.width / 2, this.scale.height / 2 + 150, 'Cambiar para registrar', { fontSize: '30px Arial Black', color: '#ff0' })
-            .setOrigin(0.5)
-            .setInteractive()
-            .on('pointerover', () => this.toggleButton.setColor('#888')) // Oscurece el texto
-            .on('pointerout', () => this.toggleButton.setColor('#ff0'))  // Vuelve al color original
-            .on('pointerdown', () => {
-                //this.toggleForm();
-                if (!this.isLogin) {
-                    this.isLogin = true;
-                    this.toggleButton.setText('Cambiar para registrar');
-                    title.setText('Inicio de sesión');
-                    btnLogin.setText('Iniciar Sesion');
-                } else {
-                    this.isLogin = false;
-                    this.toggleButton.setText('Cambiar para iniciar sesión');
-                    title.setText('Registro de usuario');
-                    btnLogin.setText('Registrarse');
-                }
-                this.toggleButton.setColor('#fff'); // Aclara el texto al hacer clic
-
-            });
-        this.messageError = this.add.text(this.scale.width / 2, this.scale.height / 2 + 100, '', { color: 'red', fontFamily: 'Arial', fontSize: '20px ' }).setOrigin(0.5);
-
-        this.scene.moveBelow("ConnectionMenu");
-
+      // Orden con ConnectionMenu
+      this.scene.moveBelow('ConnectionMenu');
     }
 
     async procesarEliminarUsuario(formulario) {
