@@ -324,7 +324,9 @@ export class MenuLogin extends Phaser.Scene {   //Crear clase que hereda de Phas
     async procesarRegistro(formulario) {
 
         let username = formulario.getChildByName('user').value;
+        username=username.toLowerCase();
         let password = formulario.getChildByName('pass').value;
+        password=password.toLowerCase();
 
         if (username !== '' && password !== '') {
 
@@ -378,7 +380,9 @@ export class MenuLogin extends Phaser.Scene {   //Crear clase que hereda de Phas
     async procesarLogin(formulario) {
 
         let username = formulario.getChildByName('user').value;
+        username=username.toLowerCase();
         let password = formulario.getChildByName('pass').value;
+        password=password.toLowerCase();
 
         if (username !== '' && password !== '') {
 

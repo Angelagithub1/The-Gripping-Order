@@ -404,7 +404,14 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.TuboGancho.setAlpha(0.5); //Hacer el tubo semi-transparente
 
         //Crear Ania
-        this.Ania = this.physics.add.sprite(42, 25, 'AniaLazoIdle'); //Crear sprite de Ania
+        if (this.AniaSkin==2) {
+            this.Ania = this.physics.add.sprite(42, 32, 'AniaLazoIdle'); //Crear sprite de Ania Lazo
+        } else if (this.AniaSkin==1){
+            this.Ania = this.physics.add.sprite(42, 32, 'AniaSombreroIdle'); //Crear sprite de Ania Sombrero
+        } else {    
+        this.Ania = this.physics.add.sprite(42, 25, 'Ania'); //Crear sprite de Ania
+        }
+        
         this.Ania.setScale(1.5).setFrame(1); //Escalar y poner frame inicial
         this.Ania.y = this.scale.height / 2; //Posición inicial Y
         this.Ania.x = this.scale.width / 2; //Posición inicial X
