@@ -233,7 +233,7 @@ Es uno de los personajes que puede llevar un jugador. Consiste en una garra insp
 Se cuenta con 3 skins diferentes entre las que puede elegir el jugador, cada una con las variaciones de color correspondientes según el power up que se recoja:
 
 * Normal
-![](The-Gripping-Order/Assets/Sprites/gancho.gif)  
+![](The-Gripping-Order/public/Assets/Sprites/Personajes/Gif/BIGAnia-IDLE.gif)  
 * Naranja
 * ![](The-Gripping-Order/Assets/Sprites/gancho.gif)  
 * Rosa
