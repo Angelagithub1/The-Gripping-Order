@@ -14,6 +14,7 @@ const config = {
     type: Phaser.AUTO,  //Phaser elige WebGL, no canvas siemopre que sea posible
     width: 960, //Tamaño del juego ESENCIAL QUE SEA ESTA MEDIDA PORQUE QUEDA PROPORCIONADO
     height: 540,
+    pixelArt: true, //Para evitar que las imagenes se vean borrosas    
     parent: 'game-container',   //Div donde se renderiza el juego
     physics: {
         default: 'arcade',  //Sin gravedad, HABRA QUE CAMBIARLO EN EL FUTURO
