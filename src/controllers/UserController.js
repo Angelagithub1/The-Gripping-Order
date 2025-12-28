@@ -6,26 +6,21 @@ const UserController = () => {
         ['gancho', 0]]
     )
 
-    const loginUser = (req, res) => {
+    const loginUser = (req, res) => { //Iniciar sesión de un usuario
         const { username, password } = req.params;
         const ruta = `./src/data/${username}.json`;
         if (!fs.existsSync(ruta)) {
             return res.status(404).json({ message: "Usuario no registrado" });
         }
-        //if (!usersConnected.has(username)) {
         const usuario = JSON.parse(fs.readFileSync(ruta));
         if (usuario.password === password) {
             res.json({ message: "Inicio de sesión exitoso" });
-            //usersConnected.add(username);
             console.log(`Usuario conectado: ${username} - IP: ${req.ip || req.connection.remoteAddress}`);
         } else {
             res.status(401).json({ message: "Contraseña incorrecta" });
         }
-        /*} else {
-            res.status(409).json({ message: "Usuario ya conectado" });
-        }*/
     }
-    const registerUser = (req, res) => {
+    const registerUser = (req, res) => { //Registrar un nuevo usuario
         const { username, password } = req.body;
         const ruta = `./src/data/${username}.json`;
         if (fs.existsSync(ruta)) {
@@ -38,20 +33,18 @@ const UserController = () => {
                 gancho: 0,
             };
             fs.writeFileSync(ruta, JSON.stringify(nuevousuario, null, 2));
-            //usersConnected.add(username);
             res.status(201).json({ message: "Usuario registrado exitosamente" });
             console.log(`Usuario conectado: ${username} - IP: ${req.ip || req.connection.remoteAddress}`);
         }
 
     }
-    const deleteUser = (req, res) => {
+    const deleteUser = (req, res) => { //Eliminar un usuario
         const { username, password } = req.body;
 
         const ruta = `./src/data/${username}.json`;
         if (!fs.existsSync(ruta)) {
             return res.status(404).json({ message: "Usuario no registrado" });
         }
-        //if (!usersConnected.has(username)) {
         const usuario = JSON.parse(fs.readFileSync(ruta));
         if (usuario.password === password) {
             fs.unlinkSync(ruta);
@@ -59,12 +52,9 @@ const UserController = () => {
         } else {
             res.status(401).json({ message: "Contraseña incorrecta" });
         }
-        //}else{
-        // res.status(409).json({ message: "Usuario conectado, no se puede eliminar" });
-        //}
     }
 
-    const changeSkinAnia = (req, res) => {
+    const changeSkinAnia = (req, res) => { //Cambiar skin de Ania
         const username = req.params.username;
         const skin = req.body.skin;
         const ruta = `./src/data/${username}.json`;
@@ -79,7 +69,7 @@ const UserController = () => {
         res.json({ message: "Skin de Ania cambiada exitosamente" });
 
     }
-    const changeSkinGancho = (req, res) => {
+    const changeSkinGancho = (req, res) => { //Cambiar skin de Gancho
         const username = req.params.username;
         const skin = req.body.skin;
         const ruta = `./src/data/${username}.json`;
@@ -95,7 +85,7 @@ const UserController = () => {
         res.json({ message: "Skin de Gancho cambiada exitosamente" });
 
     }
-    const getSkins = (req, res) => {
+    const getSkins = (req, res) => { //Obtener skins de un usuario
         const username = req.params.username
         const ruta = `./src/data/${username}.json`;
         if (!fs.existsSync(ruta)) {
@@ -110,7 +100,7 @@ const UserController = () => {
             gancho: usuario.gancho
         })
     }
-    const AllPlayersSkins = (req, res) => {
+    const AllPlayersSkins = (req, res) => { //Obtener skins actuales de todos los jugadores
         res.json({
             AniaSkin: skins.get('ania'),
             GanchoSkin: skins.get('gancho')

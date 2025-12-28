@@ -130,8 +130,5 @@ export class PantallaFinal extends Phaser.Scene {   //Crear clase que hereda de 
 
 
                 this.scene.moveBelow("ConnectionMenu");
-
-
-
     }
 }

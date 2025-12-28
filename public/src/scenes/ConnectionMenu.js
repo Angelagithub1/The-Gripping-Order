@@ -24,7 +24,7 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
         this.scene.bringToTop();
 
     }
-    async checkServerStatus() {
+    async checkServerStatus() { //Verificar estado del servidor
         try {
             if (this.username !== '') {
                 //Si ya se ha registrado o iniciado sesion
@@ -132,7 +132,7 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
                                 this.scene.get(this.escenaActual).isAniaC = false;
                             }
                         }
-                        if (this.scene.get(this.escenaActual).isGanchoC) {
+                        if (this.scene.get(this.escenaActual).isGanchoC) { //Si habia elegido gancho
                             try {
                                 const response = await fetch('configuration/setChangesCharacters', {
                                     method: 'POST',
@@ -178,7 +178,6 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
         try {
             //Se pregunta al servidor si se puede cambiar de escena
             const response = await fetch('/configuration/canChangeScreen');
-            //if (response.ok) {
             const data = await response.json();
 
             if (data.canChange !== '') {
@@ -195,7 +194,6 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
                 if (this.escenaActual == 'PantallaJuego') {
                     const searchSkin = await fetch('users/AllPlayersSkins');
                     const result = await searchSkin.json()
-                    //console.log("Solicitando cambio de escena con:",result.AniaSkin, result.GanchoSkin);
                     this.scene.launch('PantallaJuego', { AniaSkin: result.AniaSkin, GanchoSkin: result.GanchoSkin })
 
                 } else {
@@ -209,14 +207,7 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
                     body: JSON.stringify({ username: this.username, actScene: this.escenaActual })
                 })
             }
-            /*} else if (response.status === 201) {
-                //El que manda 201 es cuando se aceptado la solicitud de confirmar cambio
-                this.ready = true;
-                console.log("Solicitud recibida", this.ready)
- 
-            }*/
         } catch (error) {
-            //console.log('Error al verificar el cambio de escena:', error);
         }
     }
 }

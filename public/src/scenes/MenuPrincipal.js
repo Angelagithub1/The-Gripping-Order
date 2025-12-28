@@ -5,18 +5,10 @@ export class MenuPrincipal extends Phaser.Scene {   //Crear clase que hereda de 
     }
 
     preload() {  //Se ejecuta antes de que empiece la escena
-        /*
-           if(!this.scene.isActive('ConnectionMenu')){
-            //Si no esta activa la escena de conexion, crearla
-            this.scene.launch('ConnectionMenu', { escenaActual: this.scene.key });
-
-        }else{
-            //Si ya esta activa se le asigna la escena actual
-            this.scene.get('ConnectionMenu').escenaActual = this.scene.key;
-        }*/
+        
         this.scene.get('ConnectionMenu').escenaActual = this.scene.key;
 
-        //Assets de pantalla de reconexion   - PONER EN LOGIN
+        //Assets de pantalla de reconexion  
         this.load.image('FondoReconexion', 'Assets/Backgrounds/fondoTrans.png'); //Cargar imagen de fondo
 
         //Fondo
@@ -61,30 +53,9 @@ export class MenuPrincipal extends Phaser.Scene {   //Crear clase que hereda de 
         const background = this.add.image(0, 0, 'Menus').setOrigin(0); //Añadir imagen de fondo
         background.setScale(Math.max(this.scale.width / background.width, this.scale.height / background.height));
         const nombreJuego = this.add.image(this.scale.width / 2, this.scale.height / 4, 'NombreJuego').setScale(2);  //Nombre del juego
-        /*
-                //Sonido
-                const volumen = this.registry.get('volumen') ?? 0.2;
-                let musica =this.sound.get('MusicaFondo');
-                let musicaVictoria =this.sound.get('Victoria');
-        
-                if(musicaVictoria && musicaVictoria.isPlaying){    //Parar la musica si está sonando
-                    musicaVictoria.stop();
-                    musicaVictoria.destroy();
-                } 
-        
-                if(!musica){    //Si no existe la musica todavia
-                    musica=this.sound.add('MusicaFondo',{
-                        loop: true,
-                        volume: volumen,
-                    });
-                    musica.play();
-                } else if (!musica.isPlaying){ //Si existe pero no se esta reproduciendo
-                    musica.setVolume(volumen);
-                    musica.play();
-                }*/
 
+        //Sonido botones
         const volumenBotones = this.registry.get('volumen') ?? 0.5;
-
         this.sonidoE = this.sound.add('SonidoBotonE', { volume: volumenBotones });
         this.sonidoP = this.sound.add('SonidoBotonP', { volume: volumenBotones });
 
@@ -101,7 +72,7 @@ export class MenuPrincipal extends Phaser.Scene {   //Crear clase que hereda de 
         }); //Efecto encima
         botonJugar.on('pointerup', () => {
             this.RequestButtonPlay();
-            //this.scene.start('MenuEleccionJugador'); 
+        
         }); //Al hacer click, iniciar escena principal
 
         //Boton Tutorial
@@ -149,7 +120,7 @@ export class MenuPrincipal extends Phaser.Scene {   //Crear clase que hereda de 
         this.scene.moveBelow("ConnectionMenu");
     }
 
-    async RequestButtonPlay() {
+    async RequestButtonPlay() { //Solicitar al servidor iniciar partida
         const response = await fetch(`/connected/users`);
         const result = await response.json();
         if (result.users === 2) {
@@ -162,7 +133,7 @@ export class MenuPrincipal extends Phaser.Scene {   //Crear clase que hereda de 
         }
     }
 
-    async passNextScene() {
+    async passNextScene() { //Notificar al servidor que se quiere cambiar de escena
         try {
             const response = await fetch('/configuration/requestChangeScreen', {
                 method: 'POST',

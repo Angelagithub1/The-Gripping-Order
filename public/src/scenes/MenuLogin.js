@@ -14,7 +14,7 @@ export class MenuLogin extends Phaser.Scene {   //Crear clase que hereda de Phas
             this.scene.get('ConnectionMenu').escenaActual = this.scene.key;
         }
 
-        //Assets de pantalla de reconexion   - PONER EN LOGIN
+        //Assets de pantalla de reconexion 
         this.load.image('FondoReconexion', 'Assets/Backgrounds/fondoTrans.png'); //Cargar imagen de fondo
 
         //Fondo
@@ -28,7 +28,6 @@ export class MenuLogin extends Phaser.Scene {   //Crear clase que hereda de Phas
         this.load.image('BotonPausaE', 'Assets/Interfaz/Botones/pausarEncima.png');
         this.load.image('BotonPausaP', 'Assets/Interfaz/Botones/pausarPulsado.png');
 
-
         //Musica de fondo
         this.load.audio('MusicaFondo', 'Assets/Sonidos/MenuPrincipal.mp3');
         this.load.audio('Victoria', 'Assets/Sonidos/Victoria.mp3');
@@ -37,7 +36,6 @@ export class MenuLogin extends Phaser.Scene {   //Crear clase que hereda de Phas
         this.load.audio('SonidoBotonE', 'Assets/Sonidos/BotonEncima.mp3');
         this.load.audio('SonidoBotonP', 'Assets/Sonidos/BotonPulsado.mp3');
 
-        ///
         //Botones de login y registro
         this.load.image('BtnLoginN',  'Assets/Interfaz/Sesion_I_Normal.png');
         this.load.image('BtnLoginE',  'Assets/Interfaz/Sesion_I_Encima.png');
@@ -71,7 +69,7 @@ export class MenuLogin extends Phaser.Scene {   //Crear clase que hereda de Phas
     }
 
     create() {
-      // ========= Fondo, audio y pausa (igual que ya tenías) =========
+      // Fondo, audio y pausa
       const bg = this.add.image(0, 0, 'Menus').setOrigin(0);
       bg.setScale(Math.max(this.scale.width / bg.width, this.scale.height / bg.height));
 
@@ -92,38 +90,38 @@ export class MenuLogin extends Phaser.Scene {   //Crear clase que hereda de Phas
       btnPause.on('pointerdown', () => { this.sonidoP.play(); btnPause.setTexture('BotonPausaP'); });
       btnPause.on('pointerup',   () => { this.scene.pause(); this.scene.launch('MenuPausa', { escenaPrevia: this.scene.key }); });
 
-      // ========= Layout base =========
+      //Layout base 
       const cx = this.scale.width / 2;
       const cy = this.scale.height / 2;
-      const formCx = cx-80; // Ajuste fino para centrar el formulario DOM
+      const formCx = cx-80; // Ajuste para centrar el formulario DOM
 
-      // Ajustes rápidos (toca estos valores para afinar todo)
+      // Ajustes rápidos
       const UI = {
-        titleScale: 2.0,        // Título grande
-        titleY: cy - 180,       // Título más arriba  ← ajusta aquí
+        titleScale: 2.0,        // Título
+        titleY: cy - 180,       // Título 
         labelScale: 2.0,        // Tamaño “USUARIO / CONTRASEÑA”
         labelAboveOffset: 20,   // Distancia de la etiqueta al borde superior del input
-        inputWidth: 300,        // Ancho del input DOM  ← ajusta aquí
-        inputHeight: 40,        // Alto del input DOM   ← ajusta aquí
+        inputWidth: 300,        // Ancho del input DOM 
+        inputHeight: 40,        // Alto del input DOM 
         inputsGap: 100,          // Separación vertical entre los dos inputs
-        inputsTopY: cy - 80,    // Y del input de “usuario”  ← ajusta aquí
+        inputsTopY: cy - 80,    // Y del input de “usuario” 
         buttonScale: 1.35,      // Tamaño del botón principal
-        toggleScale: 2.0,       // Tamaño del texto “Cambiar para …”
-        deleteScale: 2.0,       // Tamaño del texto “Eliminar cuenta”
+        toggleScale: 2.0,       // Tamaño del texto 
+        deleteScale: 2.0,       // Tamaño del texto 
         afterInputsToButton: 60 // Espacio entre el segundo input y el botón
       };
 
-      // ========= Estado inicial =========
+      // Estado inicial 
       this.isLogin = true;
 
-      // ========= Título (imagen) =========
+      //Título
       // En modo login: 'TituloLogin' / en registro: 'TituloRegister'
       this.titleImg = this.add.image(cx, UI.titleY, 'TituloLogin')
         .setOrigin(0.5)
         .setScale(UI.titleScale);
 
-      // ========= Inputs DOM (recuadro normal, sin imágenes) =========
-      // Creamos un contenedor del tamaño del canvas para posicionar por left/top
+      // Inputs DOM 
+      // Contenedor del tamaño del canvas para posicionar por left/top
       const formulario = this.add.dom(0, 0).createFromHTML(`
         <div id="login-form" style="position:absolute; left:0; top:0; width:100%; height:100%;"></div>
       `);
@@ -132,12 +130,12 @@ export class MenuLogin extends Phaser.Scene {   //Crear clase que hereda de Phas
         const input = document.createElement('input');
         input.type = (name === 'pass') ? 'password' : 'text';
         input.name = name;
-        input.placeholder = ''; // no placeholder; usamos etiquetas gráficas
+        input.placeholder = ''; // no placeholder
         Object.assign(input.style, {
           position: 'absolute',
           width: UI.inputWidth + 'px',
           height: UI.inputHeight + 'px',
-          background: '#f3d05a',    // recuadro amarillo suave
+          background: '#f3d05a',    // recuadro amarillo 
           border: '2px solid #8a4a12',
           borderRadius: '6px',
           outline: 'none',
@@ -160,7 +158,7 @@ export class MenuLogin extends Phaser.Scene {   //Crear clase que hereda de Phas
       root.appendChild(inputUser);
       root.appendChild(inputPass);
 
-      // Posicionar inputs centrados (usando cx/cy)
+      // Posicionar inputs 
       const placeDomCentered = (domEl, x, y) => {
         domEl.style.left = (x - UI.inputWidth / 2) + 'px';
         domEl.style.top  = (y - UI.inputHeight / 2) + 'px';
@@ -171,7 +169,7 @@ export class MenuLogin extends Phaser.Scene {   //Crear clase que hereda de Phas
       placeDomCentered(inputUser, cx, userY);
       placeDomCentered(inputPass, cx, passY);
 
-      // ========= Etiquetas “USUARIO / CONTRASEÑA” (imágenes), centradas encima =========
+      //Etiquetas “USUARIO / CONTRASEÑA”
       const placeLabelAbove = (key, centerX, inputTopY) => {
         return this.add.image(centerX, inputTopY - UI.labelAboveOffset, key)
           .setOrigin(0.5)
@@ -180,7 +178,7 @@ export class MenuLogin extends Phaser.Scene {   //Crear clase que hereda de Phas
       this.lblUser = placeLabelAbove('TxtUsuario', cx, userY - (UI.inputHeight / 2));
       this.lblPass = placeLabelAbove('TxtContrasena', cx, passY - (UI.inputHeight / 2));
 
-      // ========= Botón principal (Login/Registro con tres estados) =========
+      // Botón principal (Login/Registro con tres estados)
       const mainY = passY + (UI.inputHeight / 2) + UI.afterInputsToButton;
       this.btnMain = this.add.image(cx, mainY, 'BtnLoginN')
         .setScale(UI.buttonScale)
@@ -203,15 +201,13 @@ export class MenuLogin extends Phaser.Scene {   //Crear clase que hereda de Phas
       };
       setMainTextures(true);
 
-      // ========= Toggle (Cambiar para registrar / Cambiar para iniciar sesión) =========
-      this.toggleImg = this.add.image(cx, mainY + 60, 'TxtToggleARegistroN') // modo login -> “ARegistro”
+      // Cambiar para registrar / Cambiar para iniciar sesión
+      this.toggleImg = this.add.image(cx, mainY + 60, 'TxtToggleARegistroN') // modo login 
         .setOrigin(0.5)
         .setScale(UI.toggleScale)
         .setInteractive();
 
       const setToggleTextures = (isLogin) => {
-        // isLogin === true  -> “Cambiar para registrar” (ARegistro)
-        // isLogin === false -> “Cambiar para iniciar sesión” (AInicio)
         const base = isLogin ? 'TxtToggleARegistro' : 'TxtToggleAInicio';
         this.toggleImg.setTexture(`${base}N`);
         this.toggleImg.removeAllListeners();
@@ -224,14 +220,14 @@ export class MenuLogin extends Phaser.Scene {   //Crear clase que hereda de Phas
             // Título y botón principal
             this.titleImg.setTexture(this.isLogin ? 'TituloLogin' : 'TituloRegister');
             setMainTextures(this.isLogin);
-            // El propio toggle cambia de texto
+            // El toggle cambia de texto
             setToggleTextures(this.isLogin);
           });
       };
       setToggleTextures(true);
 
-      // ========= Eliminar cuenta (texto con hover) =========
-      const deleteY = mainY + 115; // súbelo o bájalo si lo ves demasiado abajo
+      // Eliminar cuenta 
+      const deleteY = mainY + 115; 
       const deleteImg = this.add.image(cx, deleteY, 'TxtDeleteN')
         .setOrigin(0.5)
         .setScale(UI.deleteScale)
@@ -242,11 +238,11 @@ export class MenuLogin extends Phaser.Scene {   //Crear clase que hereda de Phas
         .on('pointerout',  () => { deleteImg.setTexture('TxtDeleteN'); })
         .on('pointerdown', () => { this.sonidoP.play(); })
         .on('pointerup',   () => {
-          // Pasamos los mismos inputs al handler
+          // mismos inputs al handler
           this.procesarEliminarUsuario({ getChildByName: (n) => (n === 'user' ? inputUser : inputPass) });
         });
 
-      // ========= Mensajes dinámicos (pueden quedarse como texto) =========
+      // Mensajes dinámicos 
       this.messageError = this.add.text(cx, cy - 145, '', {
         color: 'red', fontFamily: 'Arial', fontSize: '20px'
       }).setOrigin(0.5);
@@ -255,7 +251,7 @@ export class MenuLogin extends Phaser.Scene {   //Crear clase que hereda de Phas
       this.scene.moveBelow('ConnectionMenu');
     }
 
-    async procesarEliminarUsuario(formulario) {
+    async procesarEliminarUsuario(formulario) { // Eliminar usuario
         let username = formulario.getChildByName('user').value;
         let password = formulario.getChildByName('pass').value;
         if (username !== '' && password !== '') {
@@ -312,7 +308,6 @@ export class MenuLogin extends Phaser.Scene {   //Crear clase que hereda de Phas
                 this.time.delayedCall(3000, () => {
                     this.messageError.setText('');
                 }, [], this);
-
             }
         } else {
             this.messageError.setText('Rellena todos los campos');
@@ -321,7 +316,7 @@ export class MenuLogin extends Phaser.Scene {   //Crear clase que hereda de Phas
             }, [], this);
         }
     }
-    async procesarRegistro(formulario) {
+    async procesarRegistro(formulario) { //Registrar usuario
 
         let username = formulario.getChildByName('user').value;
         username=username.toLowerCase();
@@ -377,7 +372,7 @@ export class MenuLogin extends Phaser.Scene {   //Crear clase que hereda de Phas
             }, [], this);
         }
     }
-    async procesarLogin(formulario) {
+    async procesarLogin(formulario) { //Iniciar sesion
 
         let username = formulario.getChildByName('user').value;
         username=username.toLowerCase();

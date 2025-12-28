@@ -1,9 +1,9 @@
-const User = (req,res)=>{
+const User = (req,res)=>{ //Obtener datos de un usuario
     const {user}=req.params;
     const datos = req.body;
     const ruta = `./src/data/${user}.json`;
 
-    if(!fs.existsSync(ruta)){
+    if(!fs.existsSync(ruta)){ 
         return res.status(404).json({error:"Usuario no encontrado"});
     }
 

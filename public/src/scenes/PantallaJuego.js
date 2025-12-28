@@ -1,7 +1,7 @@
 //import Phaser from 'phaser';
 export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de Phaser
     constructor() {
-        super('PantallaJuego'); //Asignación de un nombre interno
+        super('PantallaJuego');                     //Asignación de un nombre interno
     }
 
     init(data){
@@ -172,14 +172,14 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             key: 'Anim_AniaIdle',
             frames: this.anims.generateFrameNumbers('AniaIdle', { start: 0, end: 7 }),
             frameRate: 8, //numero de frames
-            repeat: -1 //-1 para que se repita indefinidamente
+            repeat: -1    //-1 para que se repita indefinidamente
         });
 
         this.anims.create({
             key: 'Anim_AniaWalk',
             frames: this.anims.generateFrameNumbers('AniaWalk', { start: 0, end: 4 }),
             frameRate: 5, //numero de frames
-            repeat: -1 //-1 para que se repita indefinidamente
+            repeat: -1    //-1 para que se repita indefinidamente
         });
 
         //Ania-Amarillo
@@ -187,13 +187,13 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             key: 'Anim_AniaIdleAmarillo',
             frames: this.anims.generateFrameNumbers('AniaIdleAmarillo', { start: 0, end: 7 }),
             frameRate: 8, //numero de frames
-            repeat: -1 //-1 para que se repita indefinidamente
+            repeat: -1    //-1 para que se repita indefinidamente
         });
         this.anims.create({
             key: 'Anim_AniaWalkAmarillo',
             frames: this.anims.generateFrameNumbers('AniaWalkAmarillo', { start: 0, end: 4 }),
             frameRate: 5, //numero de frames
-            repeat: -1 //-1 para que se repita indefinidamente
+            repeat: -1    //-1 para que se repita indefinidamente
         });
 
         //Ania-Azul
@@ -201,13 +201,13 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             key: 'Anim_AniaIdleAzul',
             frames: this.anims.generateFrameNumbers('AniaIdleAzul', { start: 0, end: 7 }),
             frameRate: 8, //numero de frames
-            repeat: -1 //-1 para que se repita indefinidamente
+            repeat: -1    //-1 para que se repita indefinidamente
         });
         this.anims.create({
             key: 'Anim_AniaWalkAzul',
             frames: this.anims.generateFrameNumbers('AniaWalkAzul', { start: 0, end: 4 }),
             frameRate: 5, //numero de frames
-            repeat: -1 //-1 para que se repita indefinidamente
+            repeat: -1    //-1 para que se repita indefinidamente
         });
 
         //Ania-Rojo
@@ -215,13 +215,13 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             key: 'Anim_AniaIdleRojo',
             frames: this.anims.generateFrameNumbers('AniaIdleRojo', { start: 0, end: 7 }),
             frameRate: 8, //numero de frames
-            repeat: -1 //-1 para que se repita indefinidamente
+            repeat: -1    //-1 para que se repita indefinidamente
         });
         this.anims.create({
             key: 'Anim_AniaWalkRojo',
             frames: this.anims.generateFrameNumbers('AniaWalkRojo', { start: 0, end: 4 }),
             frameRate: 5, //numero de frames
-            repeat: -1 //-1 para que se repita indefinidamente
+            repeat: -1    //-1 para que se repita indefinidamente
         });
 
         //Ania-Verde
@@ -229,13 +229,13 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             key: 'Anim_AniaIdleVerde',
             frames: this.anims.generateFrameNumbers('AniaIdleVerde', { start: 0, end: 7 }),
             frameRate: 8, //numero de frames
-            repeat: -1 //-1 para que se repita indefinidamente
+            repeat: -1    //-1 para que se repita indefinidamente
         });
         this.anims.create({
             key: 'Anim_AniaWalkVerde',
             frames: this.anims.generateFrameNumbers('AniaWalkVerde', { start: 0, end: 4 }),
             frameRate: 5, //numero de frames
-            repeat: -1 //-1 para que se repita indefinidamente
+            repeat: -1    //-1 para que se repita indefinidamente
         });
 
         //Ania Lazo
@@ -243,14 +243,14 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             key: 'Anim_AniaLazoIdle',
             frames: this.anims.generateFrameNumbers('AniaLazoIdle', { start: 0, end: 7 }),
             frameRate: 8, //numero de frames
-            repeat: -1 //-1 para que se repita indefinidamente
+            repeat: -1    //-1 para que se repita indefinidamente
         });
 
         this.anims.create({
             key: 'Anim_AniaLazoWalk',
             frames: this.anims.generateFrameNumbers('AniaLazoWalk', { start: 0, end: 4 }),
             frameRate: 5, //numero de frames
-            repeat: -1 //-1 para que se repita indefinidamente
+            repeat: -1    //-1 para que se repita indefinidamente
         });
 
         //Ania-Amarillo
@@ -258,13 +258,13 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             key: 'Anim_AniaLazoIdleAmarillo',
             frames: this.anims.generateFrameNumbers('AniaLazoIdleAmarillo', { start: 0, end: 7 }),
             frameRate: 8, //numero de frames
-            repeat: -1 //-1 para que se repita indefinidamente
+            repeat: -1    //-1 para que se repita indefinidamente
         });
         this.anims.create({
             key: 'Anim_AniaLazoWalkAmarillo',
             frames: this.anims.generateFrameNumbers('AniaLazoWalkAmarillo', { start: 0, end: 4 }),
             frameRate: 5, //numero de frames
-            repeat: -1 //-1 para que se repita indefinidamente
+            repeat: -1    //-1 para que se repita indefinidamente
         });
 
         //Ania-Azul
@@ -272,13 +272,13 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             key: 'Anim_AniaLazoIdleAzul',
             frames: this.anims.generateFrameNumbers('AniaLazoIdleAzul', { start: 0, end: 7 }),
             frameRate: 8, //numero de frames
-            repeat: -1 //-1 para que se repita indefinidamente
+            repeat: -1    //-1 para que se repita indefinidamente
         });
         this.anims.create({
             key: 'Anim_AniaLazoWalkAzul',
             frames: this.anims.generateFrameNumbers('AniaLazoWalkAzul', { start: 0, end: 4 }),
             frameRate: 5, //numero de frames
-            repeat: -1 //-1 para que se repita indefinidamente
+            repeat: -1    //-1 para que se repita indefinidamente
         });
 
         //Ania-Rojo
@@ -286,13 +286,13 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             key: 'Anim_AniaLazoIdleRojo',
             frames: this.anims.generateFrameNumbers('AniaLazoIdleRojo', { start: 0, end: 7 }),
             frameRate: 8, //numero de frames
-            repeat: -1 //-1 para que se repita indefinidamente
+            repeat: -1    //-1 para que se repita indefinidamente
         });
         this.anims.create({
             key: 'Anim_AniaLazoWalkRojo',
             frames: this.anims.generateFrameNumbers('AniaLazoWalkRojo', { start: 0, end: 4 }),
             frameRate: 5, //numero de frames
-            repeat: -1 //-1 para que se repita indefinidamente
+            repeat: -1    //-1 para que se repita indefinidamente
         });
 
         //Ania-Verde
@@ -300,13 +300,13 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             key: 'Anim_AniaLazoIdleVerde',
             frames: this.anims.generateFrameNumbers('AniaLazoIdleVerde', { start: 0, end: 7 }),
             frameRate: 8, //numero de frames
-            repeat: -1 //-1 para que se repita indefinidamente
+            repeat: -1    //-1 para que se repita indefinidamente
         });
         this.anims.create({
             key: 'Anim_AniaLazoWalkVerde',
             frames: this.anims.generateFrameNumbers('AniaLazoWalkVerde', { start: 0, end: 4 }),
             frameRate: 5, //numero de frames
-            repeat: -1 //-1 para que se repita indefinidamente
+            repeat: -1    //-1 para que se repita indefinidamente
         });
 
         //Ania Lazo
@@ -314,14 +314,14 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             key: 'Anim_AniaSombreroIdle',
             frames: this.anims.generateFrameNumbers('AniaSombreroIdle', { start: 0, end: 7 }),
             frameRate: 8, //numero de frames
-            repeat: -1 //-1 para que se repita indefinidamente
+            repeat: -1    //-1 para que se repita indefinidamente
         });
 
         this.anims.create({
             key: 'Anim_AniaSombreroWalk',
             frames: this.anims.generateFrameNumbers('AniaSombreroWalk', { start: 0, end: 4 }),
             frameRate: 5, //numero de frames
-            repeat: -1 //-1 para que se repita indefinidamente
+            repeat: -1    //-1 para que se repita indefinidamente
         });
 
         //Ania-Amarillo
@@ -329,13 +329,13 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             key: 'Anim_AniaSombreroIdleAmarillo',
             frames: this.anims.generateFrameNumbers('AniaSombreroIdleAmarillo', { start: 0, end: 7 }),
             frameRate: 8, //numero de frames
-            repeat: -1 //-1 para que se repita indefinidamente
+            repeat: -1    //-1 para que se repita indefinidamente
         });
         this.anims.create({
             key: 'Anim_AniaSombreroWalkAmarillo',
             frames: this.anims.generateFrameNumbers('AniaSombreroWalkAmarillo', { start: 0, end: 4 }),
             frameRate: 5, //numero de frames
-            repeat: -1 //-1 para que se repita indefinidamente
+            repeat: -1    //-1 para que se repita indefinidamente
         });
 
         //Ania-Azul
@@ -343,13 +343,13 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             key: 'Anim_AniaSombreroIdleAzul',
             frames: this.anims.generateFrameNumbers('AniaSombreroIdleAzul', { start: 0, end: 7 }),
             frameRate: 8, //numero de frames
-            repeat: -1 //-1 para que se repita indefinidamente
+            repeat: -1    //-1 para que se repita indefinidamente
         });
         this.anims.create({
             key: 'Anim_AniaSombreroWalkAzul',
             frames: this.anims.generateFrameNumbers('AniaSombreroWalkAzul', { start: 0, end: 4 }),
             frameRate: 5, //numero de frames
-            repeat: -1 //-1 para que se repita indefinidamente
+            repeat: -1    //-1 para que se repita indefinidamente
         });
 
         //Ania-Rojo
@@ -357,13 +357,13 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             key: 'Anim_AniaSombreroIdleRojo',
             frames: this.anims.generateFrameNumbers('AniaSombreroIdleRojo', { start: 0, end: 7 }),
             frameRate: 8, //numero de frames
-            repeat: -1 //-1 para que se repita indefinidamente
+            repeat: -1    //-1 para que se repita indefinidamente
         });
         this.anims.create({
             key: 'Anim_AniaSombreroWalkRojo',
             frames: this.anims.generateFrameNumbers('AniaSombreroWalkRojo', { start: 0, end: 4 }),
             frameRate: 5, //numero de frames
-            repeat: -1 //-1 para que se repita indefinidamente
+            repeat: -1    //-1 para que se repita indefinidamente
         });
 
         //Ania-Verde
@@ -371,13 +371,13 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             key: 'Anim_AniaSombreroIdleVerde',
             frames: this.anims.generateFrameNumbers('AniaSombreroIdleVerde', { start: 0, end: 7 }),
             frameRate: 8, //numero de frames
-            repeat: -1 //-1 para que se repita indefinidamente
+            repeat: -1    //-1 para que se repita indefinidamente
         });
         this.anims.create({
             key: 'Anim_AniaSombreroWalkVerde',
             frames: this.anims.generateFrameNumbers('AniaSombreroWalkVerde', { start: 0, end: 4 }),
             frameRate: 5, //numero de frames
-            repeat: -1 //-1 para que se repita indefinidamente
+            repeat: -1    //-1 para que se repita indefinidamente
         });
 
         //Gancho
@@ -385,7 +385,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             key: 'Anim_GanchoIdle',
             frames: this.anims.generateFrameNumbers('GanchoIdle', { start: 0, end: 9 }),
             frameRate: 10, //numero de frames
-            repeat: -1 //-1 para que se repita indefinidamente
+            repeat: -1    //-1 para que se repita indefinidamente
         });
 
         //Gancho Naranja
@@ -393,7 +393,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             key: 'Anim_GanchoIdleNaranja',
             frames: this.anims.generateFrameNumbers('GanchoIdleNaranja', { start: 0, end: 9 }),
             frameRate: 10, //numero de frames
-            repeat: -1 //-1 para que se repita indefinidamente
+            repeat: -1    //-1 para que se repita indefinidamente
         });
 
         //Gancho Rosado
@@ -401,7 +401,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             key: 'Anim_GanchoIdleRosa',
             frames: this.anims.generateFrameNumbers('GanchoIdleRosa', { start: 0, end: 9 }),
             frameRate: 10, //numero de frames
-            repeat: -1 //-1 para que se repita indefinidamente
+            repeat: -1    //-1 para que se repita indefinidamente
         });
 
         //Regiones
@@ -419,7 +419,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         //Tubo del gancho
         this.TuboGancho = this.add.rectangle(this.scale.width / 2, 74, this.scale.width - 180, 10/*, 0x00ff00*/);
         this.physics.add.existing(this.TuboGancho, true);
-        this.TuboGancho.setAlpha(0.5); //Hacer el tubo semi-transparente
+        this.TuboGancho.setAlpha(0.5); //Hace el tubo semi-transparente
 
         //Crear Ania
         if (this.AniaSkin==2) {
@@ -432,14 +432,14 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         
         this.Ania.setScale(1.5).setFrame(1); //Escalar y poner frame inicial
         this.Ania.y = this.scale.height / 2; //Posición inicial Y
-        this.Ania.x = this.scale.width / 2; //Posición inicial X
+        this.Ania.x = this.scale.width / 2;  //Posición inicial X
         this.Ania.name = "Ania";
-        this.Ania.lives = 3; //Vidas de Ania
-        this.Ania.currentSkin= 'Normal'; //Skin actual de Ania
-        this.Ania.canDoubleJump = false; //Capacidad de doble salto
-        this.Ania.canMove = true; //Capacidad de moverse
-        this.Ania.invulnerable = false; //Estado de invulnerabilidad
-        this.Ania.masVelocidad = false; //Estado de aumento de velocidad
+        this.Ania.lives = 3;                 //Vidas de Ania
+        this.Ania.currentSkin= 'Normal';     //Skin actual de Ania
+        this.Ania.canDoubleJump = false;     //Capacidad de doble salto
+        this.Ania.canMove = true;            //Capacidad de moverse
+        this.Ania.invulnerable = false;      //Estado de invulnerabilidad
+        this.Ania.masVelocidad = false;      //Estado de aumento de velocidad
 
         //Vidas de ania
         this.hearts = [
@@ -466,7 +466,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.Gancho.y = 80;
         this.Gancho.name = "Gancho";
         this.Gancho.x = this.scale.width / 2;
-        this.Gancho.setOrigin(0.5, 0.1); // 0.1 lo pone el pivote cerca de la parte superior
+        this.Gancho.setOrigin(0.5, 0.1);         // 0.1 lo pone el pivote cerca de la parte superior
         this.Gancho.body.setAllowGravity(false); //Desactivar gravedad
         this.Gancho.objeto = null;
 
@@ -584,7 +584,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         // Configurar el temporizador
         this.remainingTime = 90; // 30 segundos
         this.time.addEvent({
-            delay: 1000, // Cada segundo
+            delay: 1000,         // Cada segundo
             callback: this.updateTimer,
             callbackScope: this,
             loop: true,
@@ -707,7 +707,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.finalJuego(this.Ania);
     }
 
-    CreateObject(x, y) {
+    CreateObject(x, y) { //Crea un objeto en las coordenadas dadas
         let tipoObjeto = Phaser.Math.RND.pick(['Ataud', 'guadana', 'hueso', 'libro'])
         let objeto = this.objects.create(x, y + 30, tipoObjeto).setDepth(0);
         objeto.canDamage = true;
@@ -764,7 +764,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         const x = Phaser.Math.Between(this.LeftWall.getBounds().right, this.RightWall.getBounds().left);
         const y = Phaser.Math.Between(this.TuboGancho.getBounds().bottom, this.floor.getBounds().top-50);
 
-        console.log("Power Up en: " + x + ", " + y);
+        console.log("Power Up en: " + x + ", " + y); //Posición aleatoria dentro de los límites
         const tipoPowerUp = Phaser.Math.RND.pick(this.powerUpsLista);
         const powerUpActual = this.powerUps.create(x, y, tipoPowerUp);
         powerUpActual.setOrigin(0.5, 0.5).setScale(1.5);
@@ -772,7 +772,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
 
     }
 
-    RecogerPowerUp(jugador, powerUp) {
+    RecogerPowerUp(jugador, powerUp) { //Efecto al recoger Power Up
         this.sonidoPowerUp.play();
         switch (powerUp.type) {
             case 'PowerUpAmarillo':

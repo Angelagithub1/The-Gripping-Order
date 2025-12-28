@@ -1,7 +1,7 @@
 const connectedUsers = new Map();
 
-const connectionController =() => {
-    const checkConnection = (req, res) => {
+const connectionController =() => { //Controlador para gestionar las conexiones de los usuarios
+    const checkConnection = (req, res) => { //Nueva conexión o actualización de estado
 
         const username = req.body.username;
 
@@ -9,25 +9,24 @@ const connectionController =() => {
             console.log(`Nuevo cliente conectado:${username}`);
         }
         connectedUsers.set(username, Date.now());
-        //console.log(username,"enviando mensaje")
 
         res.json({
             username: username,
             connected: connectedUsers.size
         })
     }
-    const userConnected = (req, res) =>{
+    const userConnected = (req, res) =>{    //Comprobar si un usuario está conectado
         console.log(`${req.params.username} consulta su estado de conexión ${connectedUsers.has(req.params.username)}`);
         res.json({
             connected: connectedUsers.has(req.params.username)
         })
     }
-    const usersConnected = (req, res) =>{
+    const usersConnected = (req, res) =>{   //Obtener número de usuarios conectados
         res.json({
             users: connectedUsers.size
         })
     }
-    setInterval(() => {
+    setInterval(() => { //Limpiar usuarios desconectados
         const now = Date.now();
         for(const[user,lastSeen] of connectedUsers.entries()){
             if(now -lastSeen>2000){

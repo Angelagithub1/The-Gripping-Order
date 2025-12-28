@@ -1,7 +1,4 @@
-// Paso de pantalla al mismo tiempo
-// Si puede elegir un personaje o no
-
-const ConfigurationController = () => {
+const ConfigurationController = () => { //Controlador para manejar las solicitudes de cambio de escena y seleccion de personajes
     let selectscene = false;
     let back = false;
     const playersready = new Set();
@@ -47,7 +44,7 @@ const ConfigurationController = () => {
         } else if (selectscene) { //Si ya se ha solicitado el paso a la escena de seleccion
             res.json({ canChange: 'MenuEleccionJugador' });
         } else {
-            res.json({ canChange: '' }); //No se puede cambiar de pantalla aun
+            res.json({ canChange: '' }); 
         }
     };
     const setChangesCharacters = (req, res) => {
@@ -77,7 +74,6 @@ const ConfigurationController = () => {
                     mapusers.set('ania', '');
                 }
                 res.json({ message: "Eres el gancho" })
-                //console.log("Solicitud llegada de un gancho afirmativa")
             } else if (mapusers.get('gancho') == username) {
                 res.status(409).json({ message: "Ya eres el gancho" })
             } else {
@@ -85,7 +81,7 @@ const ConfigurationController = () => {
             }
         }
     };
-    const LimpiezaPorEliminacion = (req, res) => {
+    const LimpiezaPorEliminacion = (req, res) => { //Limpieza de datos cuando se elimina un jugador
         const { actScene } = req.body
         if(actScene == "MenuPrincipal" || actScene == "PantallaFinal") {
             console.log("Limpieza")
@@ -96,7 +92,7 @@ const ConfigurationController = () => {
             mapusers.set('ania', '');
         }
     }
-    const confirmChange = (req, res) => {
+    const confirmChange = (req, res) => { //Confirmar que se ha cambiado de escena
         const { username, actScene } = req.body
         if (!usersConfirmed.has(username)) {
             usersConfirmed.add(username)
@@ -110,46 +106,6 @@ const ConfigurationController = () => {
                     mapusers.set('gancho', '');
                     mapusers.set('ania', '');
                 }
-                /*
-                switch (actScene) {
-                    case "MenuEleccionJugador":
-                        back = false;
-                        selectscene = false;
-                        playersready.clear()
-                        mapusers.set('gancho', '');
-                        mapusers.set('ania', '');
-                        break;
-                    case "MenuPrincipal":
-                        back = false;
-                        selectscene = false;
-                        playersready.clear()
-                        mapusers.set('gancho', '');
-                        mapusers.set('ania', '');
-                        break;
-                    case "PantallaFinal":
-                        break;
-                    case "PantallaJuego":
-                        break;
-                }
-                /*
-                if (actScene == 'MenuPrincipal') { //Se reinician los datos de seleccion si es que volvio a menu principal
-                    back = false;
-                    selectscene = false;
-                } else if (actScene == 'MenuEleccionJugador') { //Se reinician los datos para cambiar a selectscene si esta ya
-                    selectscene = false;
-                    back = false;
-                }
-                if (actScene != 'MenuEleccionJugador') {
-                    playersready.clear()
-                }
-                if (actScene == 'PantallaFinal' || actScene == 'MenuPrincipal') {
-                    console.log("Limpieza")
-
-                    mapusers.set('gancho', '');
-                    mapusers.set('ania', '');
-                }else{
-                    console.log("Escena:",actScene)
-                }*/
             } else if (usersConfirmed.size === 1) {
                 //Si es solo uno
             }
@@ -158,13 +114,13 @@ const ConfigurationController = () => {
             res.json({ message: "Confirmación ya registrada" })
         }
     }
-    const choosen = (req, res) => {
+    const choosen = (req, res) => { //Obtener los personajes elegidos
         res.json({
             ania: mapusers.get('ania'),
             gancho: mapusers.get('gancho'),
         })
     }
-    const getCharacter = (req, res) => {
+    const getCharacter = (req, res) => { //Obtener el personaje de un usuario
         const username = req.params.username
         if (mapusers.get('ania') == username) {
             res.json({ character: "ania" })
@@ -175,14 +131,14 @@ const ConfigurationController = () => {
             res.status(404);
         }
     }
-    return {
-        canChangeScreen,
-        requestChangeScreen,
-        setChangesCharacters,
-        getCharacter,
-        confirmChange,
-        choosen,
-        LimpiezaPorEliminacion
+    return { 
+        shouldChangeScreen: canChangeScreen,
+        requestScreenChange: requestChangeScreen,
+        selectCharacter: setChangesCharacters,
+        getSelectedCharacter: getCharacter,
+        confirmScreenChange: confirmChange,
+        chosenCharacters: choosen,
+        cleanupOnDisconnect: LimpiezaPorEliminacion
     };
 }
 export default ConfigurationController;

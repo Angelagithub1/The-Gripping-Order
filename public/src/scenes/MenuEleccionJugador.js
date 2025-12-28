@@ -84,10 +84,6 @@ export class MenuEleccionJugador extends Phaser.Scene {   //Crear clase que here
 
         this.Gancho = this.add.image(650, 350, 'Gancho').setScale(2);
 
-        /*this.scene.start("PantallaFinal",{
-            ganador: jugador.name,
-        });*/
-
         //Flecha derecha Ania
         this.flechDerAnia = this.add.image(400, 350, 'flechaDerN').setScale(1).setInteractive();
         this.flechDerAnia.on('pointerover', () => { this.flechDerAnia.setTexture('flechaDerE') });
@@ -215,7 +211,7 @@ export class MenuEleccionJugador extends Phaser.Scene {   //Crear clase que here
         }
     }
 
-    async chooseCharacter(isAnia) {
+    async chooseCharacter(isAnia) { //Elegir personaje
         try {
             const response = await fetch('configuration/setChangesCharacters', {
                 method: 'POST',
@@ -252,7 +248,7 @@ export class MenuEleccionJugador extends Phaser.Scene {   //Crear clase que here
             console.error('Error al confirmar que el jugador esta listo:', error);
         }
     }
-    async setSkin(isAnia, skin) {
+    async setSkin(isAnia, skin) { //Cambiar skin
 
         if (isAnia) {
             if (!this.isAniaC) {
@@ -310,7 +306,7 @@ export class MenuEleccionJugador extends Phaser.Scene {   //Crear clase que here
         }
     }
 
-    async ChoosedOne() {
+    async ChoosedOne() { //Comprobar si alguien ha escogido personaje
         try {
             const response = await fetch('configuration/choosen');
             const data = await response.json();
@@ -336,7 +332,6 @@ export class MenuEleccionJugador extends Phaser.Scene {   //Crear clase que here
                     this.flechDerAnia.setVisible(false);
                     this.flechIzqAnia.setVisible(false);
 
-
                     //Se busca la skin que le ha puesto el otro jugador
                     const searchSkin = await fetch('users/AllPlayersSkins');
                     const result = await searchSkin.json()
@@ -344,7 +339,6 @@ export class MenuEleccionJugador extends Phaser.Scene {   //Crear clase que here
                     this.localSkinChange(true, result.AniaSkin)
 
                 } else {
-                    //Aqui poner los brillitos
                     this.flechDerAnia.setVisible(true);
                     this.flechIzqAnia.setVisible(true);
                 }
@@ -387,7 +381,7 @@ export class MenuEleccionJugador extends Phaser.Scene {   //Crear clase que here
         }
     }
 
-    async getPlayerSkin(isAnia) {
+    async getPlayerSkin(isAnia) { //Obtener skin del jugador
         try {
             const response = await fetch(`users/getSkins/${this.scene.get('ConnectionMenu').username}`)
             const data = await response.json();
@@ -403,7 +397,7 @@ export class MenuEleccionJugador extends Phaser.Scene {   //Crear clase que here
 
         }
     }
-    localSkinChange(isAnia, skin) {
+    localSkinChange(isAnia, skin) { //Cambiar skin localmente
         if (isAnia) {
             this.valorAnia = skin;
             switch (skin) {

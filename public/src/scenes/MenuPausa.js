@@ -29,9 +29,6 @@ export class MenuPausa extends Phaser.Scene {   //Crear clase que hereda de Phas
         this.load.image('MenuE', 'Assets/Interfaz/Botones/menuPEncima.png'); 
         this.load.image('MenuP', 'Assets/Interfaz/Botones/menuPPresionado.png');
 
-        //Musica de fondo
-        //this.load.audio('musicaFondoMenuPausa', 'Assets/Musica/musicaMenuPausa.mp3');
-
         //Musica botones
         this.load.audio('SonidoBotonE', 'Assets/Sonidos/BotonEncima.mp3');
         this.load.audio('SonidoBotonP', 'Assets/Sonidos/BotonPulsado.mp3');
@@ -68,19 +65,6 @@ export class MenuPausa extends Phaser.Scene {   //Crear clase que hereda de Phas
         const volumenBotones = this.registry.get('volumen') ?? 0.5;
         this.sonidoE = this.sound.add('SonidoBotonE',{  volume: volumenBotones });
         this.sonidoP = this.sound.add('SonidoBotonP',{  volume: volumenBotones });
-/*
-        //Boton Volver
-        const botonVolver = this.add.image(this.scale.width / 2, this.scale.height / 2+150, 'MenuN').setScale(1.5).setInteractive().setScale(4); 
-        botonVolver.on('pointerover', () => { 
-            this.sonidoE.play();
-            botonVolver.setTexture('MenuE')}); 
-        botonVolver.on('pointerout', () => { botonVolver.setTexture('MenuN')});
-        botonVolver.on('pointerdown', () => { 
-            this.sonidoP.play();
-            botonVolver.setTexture('MenuP') }); 
-        botonVolver.on('pointerup', () => { 
-            this.scene.stop();
-            this.scene.resume('MenuPrincipal');});*/
 
         //Boton Salir
         const botonSalir = this.add.image(120, 60, 'VolverN').setInteractive(); 

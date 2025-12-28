@@ -11,27 +11,27 @@ import { ConnectionMenu } from './scenes/ConnectionMenu.js';
 import { MenuLogin } from './scenes/MenuLogin.js';
 
 const config = {
-    type: Phaser.AUTO,  //Phaser elige WebGL, no canvas siemopre que sea posible
-    width: 960, //Tamaño del juego ESENCIAL QUE SEA ESTA MEDIDA PORQUE QUEDA PROPORCIONADO
+    type: Phaser.AUTO,          //Phaser elige WebGL, no canvas siempre que sea posible
+    width: 960,                 //Tamaño del juego 
     height: 540,
-    pixelArt: true, //Para evitar que las imagenes se vean borrosas    
+    pixelArt: true,             //Para evitar que las imagenes se vean borrosas    
     parent: 'game-container',   //Div donde se renderiza el juego
     physics: {
-        default: 'arcade',  //Sin gravedad, HABRA QUE CAMBIARLO EN EL FUTURO
+        default: 'arcade',      //Sin gravedad
         arcade: {
             gravity: { y: 600 },
             debug: false
         }
     },
     scale: {
-        mode: Phaser.Scale.FIT,          // ajusta al tamaño de la ventana
+        mode: Phaser.Scale.FIT,              // ajusta al tamaño de la ventana
         autoCenter: Phaser.Scale.CENTER_BOTH // centra automáticamente
     },
     dom: {
-        createContainer: true  // ✅ Esto es obligatorio
+        createContainer: true               // Habilita el uso de elementos DOM en las escenas
     },
     scene: [MenuLogin, MenuPrincipal, MenuCreditos, MenuTutorial, MenuEleccionJugador, MenuPausa, PantallaJuego, PantallaFinal, ConnectionMenu, MenuReconexion,],  //Lista de escenas del juego
-    backgroundColor: '#1a1a2e', //Color de fondo del juego
+    backgroundColor: '#1a1a2e',           //Color de fondo del juego
 }
 
-const game = new Phaser.Game(config);   //Crea y lanza el juego con esa configuración
+const game = new Phaser.Game(config);       //Crea y lanza el juego con esa configuración

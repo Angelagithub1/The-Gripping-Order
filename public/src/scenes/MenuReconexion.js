@@ -16,7 +16,6 @@ export class MenuReconexion extends Phaser.Scene {   //Crear clase que hereda de
               .setScale(3)              // ajustar escala 
               .setOrigin(0.5)          // centro
               .setDepth(0);   
-        //this.reconnectInterval = setInterval(() => this.checkServerBackOnline(), 2000);
         this.scene.moveBelow("ConnectionMenu");
     }
 

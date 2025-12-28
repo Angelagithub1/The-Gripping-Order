@@ -3,11 +3,11 @@ import express from 'express';
 
 const router = express.Router();
 const configurationController = ConfigurationController();
-router.post('/requestChangeScreen', configurationController.requestChangeScreen);
-router.get('/canChangeScreen', configurationController.canChangeScreen);
-router.post('/setChangesCharacters', configurationController.setChangesCharacters);
-router.post('/confirmChange',configurationController.confirmChange);
-router.post('/LimpiezaPorEliminacion',configurationController.LimpiezaPorEliminacion);
-router.get('/choosen',configurationController.choosen);
-router.get('/getCharacter/:username',configurationController.getCharacter)
+router.post('/requestChangeScreen', configurationController.requestScreenChange);
+router.get('/canChangeScreen', configurationController.shouldChangeScreen);
+router.post('/setChangesCharacters', configurationController.selectCharacter);
+router.post('/confirmChange',configurationController.confirmScreenChange);
+router.post('/LimpiezaPorEliminacion',configurationController.cleanupOnDisconnect);
+router.get('/choosen',configurationController.chosenCharacters);
+router.get('/getCharacter/:username',configurationController.getSelectedCharacter)
 export default router;
