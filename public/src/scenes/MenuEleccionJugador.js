@@ -28,8 +28,8 @@ export class MenuEleccionJugador extends Phaser.Scene {   //Crear clase que here
         this.load.image('AniaSombrero', 'Assets/Sprites/Personajes/AniaSombrero.png');
         this.load.image('AniaLazo', 'Assets/Sprites/Personajes/AniaLazo.png');
         this.load.image('Gancho', 'Assets/Sprites/Personajes/Gancho.png');
-        this.load.image('GanchoSombrero', 'Assets/Sprites/Personajes/Gancho1.png');
-        this.load.image('GanchoLazo', 'Assets/Sprites/Personajes/Gancho2.png');
+        this.load.image('GanchoNaranja', 'Assets/Sprites/Personajes/Gancho1.png');
+        this.load.image('GanchoRosado', 'Assets/Sprites/Personajes/Gancho2.png');
         this.load.image('ContenedorNormal', 'Assets/Interfaz/interfazMedianoNormal.png');
         this.load.image('ContenedorPulsado', 'Assets/Interfaz/interfazMedianoPulsado.png');
 
@@ -421,10 +421,10 @@ export class MenuEleccionJugador extends Phaser.Scene {   //Crear clase que here
             this.valorGancho = skin;
             switch (skin) {
                 case 2:
-                    this.Gancho.setTexture('GanchoLazo');
+                    this.Gancho.setTexture('GanchoRosado');
                     break;
                 case 1:
-                    this.Gancho.setTexture('GanchoSombrero');
+                    this.Gancho.setTexture('GanchoNaranja');
                     break;
                 case 0:
                     this.Gancho.setTexture('Gancho');

@@ -13,8 +13,8 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         */
         this.GanchoSkin = data.GanchoSkin;
         /*
-        2 -> GanchoLazo
-        1 -> GanchoSombrero
+        2 -> GanchoRosado
+        1 -> GanchoNaranja
         0 -> Gancho
         */
     }
@@ -74,6 +74,8 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.load.spritesheet('AniaSombreroWalkVerde', 'Assets/Sprites/Ania/SKINS/HAT/Color/VerdeHat-WALK.png', { frameWidth: 42, frameHeight: 36 });
         //Sprite Gancho
         this.load.spritesheet('GanchoIdle', 'Assets/Sprites/gancho.png', { frameWidth: 108, frameHeight: 50 });
+        this.load.spritesheet('GanchoIdleNaranja', 'Assets/Sprites/Gancho/Color/ganchoNaranja.png', { frameWidth: 108, frameHeight: 50 });
+        this.load.spritesheet('GanchoIdleRosa', 'Assets/Sprites/Gancho/Color/ganchoRosa.png', { frameWidth: 108, frameHeight: 50 });
 
         //Sprites Ania PowerUps
         this.load.spritesheet('AniaIdleAmarillo', 'Assets/Sprites/Ania/Color/Amarillo-IDLE.png', { frameWidth: 42, frameHeight: 25 });
@@ -386,6 +388,22 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             repeat: -1 //-1 para que se repita indefinidamente
         });
 
+        //Gancho Naranja
+        this.anims.create({
+            key: 'Anim_GanchoIdleNaranja',
+            frames: this.anims.generateFrameNumbers('GanchoIdleNaranja', { start: 0, end: 9 }),
+            frameRate: 10, //numero de frames
+            repeat: -1 //-1 para que se repita indefinidamente
+        });
+
+        //Gancho Rosado
+        this.anims.create({
+            key: 'Anim_GanchoIdleRosa',
+            frames: this.anims.generateFrameNumbers('GanchoIdleRosa', { start: 0, end: 9 }),
+            frameRate: 10, //numero de frames
+            repeat: -1 //-1 para que se repita indefinidamente
+        });
+
         //Regiones
         //Piso
         this.floor = this.add.rectangle(480, this.scale.height, this.scale.width, 150/*,0x00ff00*/); //Crear un rectángulo invisible que hará de suelo
@@ -409,7 +427,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         } else if (this.AniaSkin==1){
             this.Ania = this.physics.add.sprite(42, 32, 'AniaSombreroIdle'); //Crear sprite de Ania Sombrero
         } else {    
-        this.Ania = this.physics.add.sprite(42, 25, 'Ania'); //Crear sprite de Ania
+        this.Ania = this.physics.add.sprite(42, 25, 'AniaIdle'); //Crear sprite de Ania
         }
         
         this.Ania.setScale(1.5).setFrame(1); //Escalar y poner frame inicial
@@ -430,14 +448,26 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             this.add.sprite(this.scale.width - 280, 50, 'Heart').setOrigin(0.5).setScale(1.5)
         ];
         //Crear Gancho
-        this.Gancho = this.physics.add.sprite(108, 50, 'GanchoIdle').setImmovable(true).setDepth(1);
+        if (this.GanchoSkin==2){
+            this.Gancho = this.physics.add.sprite(108, 50, 'GanchoIdleRosa').setImmovable(true).setDepth(1);
+            this.Gancho.anims.play('Anim_GanchoIdleRosa', true);
+
+        } else if (this.GanchoSkin==1){
+            this.Gancho = this.physics.add.sprite(108, 50, 'GanchoIdleNaranja').setImmovable(true).setDepth(1);
+            this.Gancho.anims.play('Anim_GanchoIdleNaranja', true);
+
+        } else {        
+            this.Gancho = this.physics.add.sprite(108, 50, 'GanchoIdle').setImmovable(true).setDepth(1);
+            this.Gancho.anims.play('Anim_GanchoIdle', true);
+
+        }
+
         this.Gancho.setScale(1.5).setFrame(1);
         this.Gancho.y = 80;
         this.Gancho.name = "Gancho";
         this.Gancho.x = this.scale.width / 2;
         this.Gancho.setOrigin(0.5, 0.1); // 0.1 lo pone el pivote cerca de la parte superior
         this.Gancho.body.setAllowGravity(false); //Desactivar gravedad
-        this.Gancho.anims.play('Anim_GanchoIdle', true);
         this.Gancho.objeto = null;
 
         // Punto visual que sigue la parte visible del gancho
