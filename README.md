@@ -141,7 +141,7 @@ Por un lado, una vez que al gancho le aparezca la pieza, debe intentar soltar la
 Por otro lado, Ania tendrá libertad de movimiento dentro de los límites de la pantalla, ya sea moviéndose de un lado a otro o saltando sobre las piezas que le lancen encima. Además, podrá obtener Power Ups pasando sobre estos cuando aparezcan en la pantalla. 
 
 Es un juego en 2D con cámara fija lateral en una posición estática predeterminada (como cualquier Mario Bros clásico pero sin el desplazamiento).
-![](./Assets/Capturas/Juego.png)
+![](The-Gripping-Order/Assets/Capturas/Juego.png)
 
 
 ## **Género** 
@@ -207,7 +207,7 @@ Nivel 1: Cementerio abandonado
 * Ambiente: Niebla espesa, lápidas rotas, árboles secos y cuervos que observan desde las ramas.
 * Estética: Colores apagados y menos saturados para transmitir una atmósfera melancólica.
 * Jugabilidad: Ania puede interactuar con las lápidas, usándolas como plataformas para subir y saltar.
-![](./Assets/Capturas/Juego.png)
+![](The-Gripping-Order/Assets/Capturas/Juego.png)
   
 Nivel 2: Morgue subterránea
 * Ambiente: Pasillos estrechos, luces parpadeantes, refrigeradores abiertos y sonidos metálicos constantes.
@@ -227,7 +227,7 @@ Nivel 3: Fiesta fúnebre en el más allá
 
 Es uno de los personajes que puede llevar un jugador. Consiste en una garra inspirada en los juegos de gancho de las salas de recreativos, que, al contrario que estos, dejará caer piezas en vez de cogerlas.
 
-![](./Assets/Sprites/gancho.gif)
+![](The-Gripping-Order/Assets/Sprites/gancho.gif)
 
 Se cuenta con 3 skins diferentes entre las que puede elegir el jugador, cada una con las variaciones de color correspondientes según el power up que se recoja:
 
@@ -239,7 +239,7 @@ Se cuenta con 3 skins diferentes entre las que puede elegir el jugador, cada una
 
 Es el otro personaje que puede llevar un jugador. Consiste en una pequeña criatura de colores vivos parecida a un escarabajo. Esta compuesta por fragmentos de sprites corrompidos, dando así la apariencia de un glitch. Su supervivencia depende por completo de su capacidad para predecir los movimientos de su oponente.
 
-![](./Assets/Sprites/Ania-IDLE.gif)
+![](The-Gripping-Order/Assets/Sprites/Ania-IDLE.gif)
 
 Se cuenta con 3 skins diferentes entre las que puede elegir el jugador, cada una con las variaciones de color correspondientes según el power up que se recoja:
 
@@ -253,10 +253,10 @@ Se cuenta con 3 skins diferentes entre las que puede elegir el jugador, cada una
 
 Siguiendo con la narrativa actual del juego, la cual tiene una temática oscura, el gancho lanzará objetos típicos de funerales a Ania, como guadañas, ataúdes, jarrones de cenizas y huesos varios.
 
-![](./Assets/ObjResolucion/ataud.png)
-![](./Assets/ObjResolucion/guadaña.png)
-![](./Assets/ObjResolucion/hueso.png)
-![](./Assets/ObjResolucion/libro.png)
+![](The-Gripping-Order/Assets/ObjResolucion/ataud.png)
+![](The-Gripping-Order/Assets/ObjResolucion/guadaña.png)
+![](The-Gripping-Order/Assets/ObjResolucion/hueso.png)
+![](The-Gripping-Order/Assets/ObjResolucion/libro.png)
 
 ## **Power Ups** 
 
@@ -267,16 +267,16 @@ Los Power Ups serán llamas de diferentes colores, y son exclusivos para el juga
 * Rojo: hace al jugador invulnerable, permitiendo una mayor tranquilidad durante ese tiempo.  
 * Verde: aumenta la velocidad del jugador, haciendo más difícil que el gancho le acierte con una pieza.
 
-![](./Assets/ObjResolucion/VELA1.png)
-![](./Assets/ObjResolucion/VELA2.png)
-![](./Assets/ObjResolucion/VELA3.png)
-![](./Assets/ObjResolucion/VELA4.png)
+![](The-Gripping-Order/Assets/ObjResolucion/VELA1.png)
+![](The-Gripping-Order/Assets/ObjResolucion/VELA2.png)
+![](The-Gripping-Order/Assets/ObjResolucion/VELA3.png)
+![](The-Gripping-Order/Assets/ObjResolucion/VELA4.png)
 
 # **Estados e interfaces** 
 
 ## **Diagrama de estados** 
 
-![](./Assets/DiagramaDeInterfaces.jpg)
+![](The-Gripping-Order/Assets/DiagramaDeInterfaces.jpg)
 
 Este diagrama irá creciendo con el tiempo según se añadan nuevas pantallas en las próximas entregas, como un futuro chat y la selección de jugar en local u online.
 
@@ -286,31 +286,31 @@ Actualmente solo se tiene el diseño de cómo serán las interfaces, aunque su e
 
 ### Pantalla de inicio 
 
-![](./Assets/Capturas/MenuInicio.png)
+![](The-Gripping-Order/Assets/Capturas/MenuInicio.png)
 
 ### Tutorial 
 
-![](./Assets/Capturas/Tutorial.png)
+![](The-Gripping-Order/Assets/Capturas/Tutorial.png)
 
 ### Créditos 
 
-![](./Assets/Capturas/Creditos.png)
+![](The-Gripping-Order/Assets/Capturas/Creditos.png)
 ### Elección de jugador 
 
 Aunque esta pantalla no es accesible a nivel local, ya se ha diseñado e implementado de cara al modo online.
-![](./Assets/Capturas/EleccionJugador.png)
+![](The-Gripping-Order/Assets/Capturas/EleccionJugador.png)
 
 ### Pantalla de juego 
 
-![](./Assets/Capturas/JuegoAvanzado.png)
+![](The-Gripping-Order/Assets/Capturas/JuegoAvanzado.png)
 
 ### Pantalla de victoria/derrota 
 
-![](./Assets/Capturas/VictoriaGancho.png)
+![](The-Gripping-Order/Assets/Capturas/VictoriaGancho.png)
 
 ### Menú de pausa
 
-![](./Assets/Capturas/Pausa.png)
+![](The-Gripping-Order/Assets/Capturas/Pausa.png)
 
 # **Mecánicas \- Diagrama de Flujo** 
 
@@ -323,7 +323,7 @@ Al inicio de cada partida en Crush Factory, los jugadores tendrán que elegir en
 
   ## **Flujo del Juego** 
 
-![](./Assets/DiagramaDeFlujo.jpg)
+![](The-Gripping-Order/Assets/DiagramaDeFlujo.jpg)
 
 ## **Mecánicas y Físicas** 
 
