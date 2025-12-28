@@ -192,6 +192,7 @@ Análisis DAFO:
 Crush Factory es un juego en su totalidad original, desarrollado desde cero y sin estar basado en ninguna otra franquicia, marca o adaptación de otro tipo de producto multimedia preexistente. Su diseño, personajes, mecánicas y estética son fruto de una creación única y autónoma, lo que garantiza una identidad propia y distintiva en el mercado.
 Además se contemplan planes a futuro  para el lanzamiento de contenidos adicionales que expandan y enriquezcan esta entrega, manteniendo la originalidad y coherencia del universo creado. 
 Esta independencia creativa permite al proyecto tener libertad para evolucionar según las necesidades y el feedback de la comunidad, asegurando un desarrollo alineado con la visión original del juego y las expectativas de sus jugadores.
+El juego se rige por la licencia Apache-2.0 .
 
 
 # **Escenario** 
@@ -231,9 +232,12 @@ Es uno de los personajes que puede llevar un jugador. Consiste en una garra insp
 
 Se cuenta con 3 skins diferentes entre las que puede elegir el jugador, cada una con las variaciones de color correspondientes según el power up que se recoja:
 
-* Normal  
-* Naranja  
+* Normal
+![](The-Gripping-Order/Assets/Sprites/gancho.gif)  
+* Naranja
+* ![](The-Gripping-Order/Assets/Sprites/gancho.gif)  
 * Rosa
+* ![](The-Gripping-Order/Assets/Sprites/gancho.gif)
 
 ## **Ania** 
 
@@ -243,9 +247,12 @@ Es el otro personaje que puede llevar un jugador. Consiste en una pequeña criat
 
 Se cuenta con 3 skins diferentes entre las que puede elegir el jugador, cada una con las variaciones de color correspondientes según el power up que se recoja:
 
-* Normal  
-* Lazo  
+* Normal
+![](The-Gripping-Order/Assets/Sprites/Ania-IDLE.gif)
+* Lazo
+![](The-Gripping-Order/Assets/Sprites/Ania-IDLE.gif)
 * Sombrero
+![](The-Gripping-Order/Assets/Sprites/Ania-IDLE.gif)
 
 # **Items** 
 
