@@ -114,6 +114,10 @@
 
 [**Comunicación**](#comunicación)
 
+[**API REST	22**](#api-rest)
+
+[**Bibliografía	26**](#bibliografía)
+
 # 
 
 # **Introducción** 
@@ -225,11 +229,23 @@ Es uno de los personajes que puede llevar un jugador. Consiste en una garra insp
 
 ![](./Assets/Sprites/gancho.gif)
 
+Se cuenta con 3 skins diferentes entre las que puede elegir el jugador, cada una con las variaciones de color correspondientes según el power up que se recoja:
+
+* Normal  
+* Naranja  
+* Rosa
+
 ## **Ania** 
 
 Es el otro personaje que puede llevar un jugador. Consiste en una pequeña criatura de colores vivos parecida a un escarabajo. Esta compuesta por fragmentos de sprites corrompidos, dando así la apariencia de un glitch. Su supervivencia depende por completo de su capacidad para predecir los movimientos de su oponente.
 
 ![](./Assets/Sprites/Ania-IDLE.gif)
+
+Se cuenta con 3 skins diferentes entre las que puede elegir el jugador, cada una con las variaciones de color correspondientes según el power up que se recoja:
+
+* Normal  
+* Lazo  
+* Sombrero
 
 # **Items** 
 
@@ -355,6 +371,64 @@ Se buscará construir una base de jugadores comprometidos mediante el uso de red
 Además de realizar encuestas o preguntas para que el público objetivo pueda interactuar con los desarrolladores y que estos puedan escuchar sus opiniones y feedback para mejorar el juego. Buscando hacer sentir que la opinión del jugador es importante para el equipo de desarrollo. 
 
 El videojuego **Crush Factory**, desarrollado por *The Gripping Order*, se distribuirá bajo una **licencia freeware**. Esto significa que el juego se ofrece de manera gratuita para su descarga y uso personal, sin coste alguno para el usuario.
+
+# **API REST** 
+
+Se partió asignando en el *app.js*  el prefijo de cada grupo de rutas.  
+
+*UserRoutes.js*
+
+Cuenta con un total de siete rutas variando entre get, post, delete y put. 
+
+Entre los get se tiene:
+
+* loginUser: En su prefijo se debe especificar el usuario y contraseña para poder obtener, si es que está registrado, la confirmación para poder iniciar sesión. Se optó por get puesto a que no hay ningún tipo de modificación de datos.  
+* getSkins: Al igual que loginUser se debe especificar el usuario del que se quieren obtener las skins guardadas. Este método devuelve las preferencias de skins que se han guardado del jugador que las solicita.  Se optó por get puesto a que no hay ningún tipo de modificación en los datos.  
+* AllPlayersSkins: Permite obtener las skins que han sido configuradas por ambos jugadores. Permitiendo conocer al jugador 1 la skin que ha elegido el jugador 2 y viceversa. 
+
+Respecto al post solo se tiene registerUser. Puesto que es el único que añade un nuevo dato. Permitiendo el registro de nuevas cuentas verificando que no sean cuentas ya existentes.
+
+Por otro lado, el delete se tiene solo deleteUser, el cual permite eliminar alguna cuenta ya registrada. Siempre y cuando exista y no esté en uso en ese momento.
+
+Por último, respecto al put se tiene changeSkinAnia y changeSkinGancho, ambos métodos permitiendo cambiar la skin de Ania o del Gancho. Debido a que modifica los datos del usuario se optó por usar put.
+
+*ConnectionRoutes.js*
+
+Cuenta con solo tres rutas compuesta por un post y dos get. 
+
+* checkConnection: Es el post que envía constantemente el cliente para confirmar al servidor que sigue conectado. Este método añade nuevos clientes si es que es la primera vez que se registra su conexión o actualiza el momento en que mandó por última vez el mensaje. Por lo que si un cliente lleva más de dos segundos sin dar señales se lo detecta como desconectado y es eliminado de la lista de usuarios conectados.  Se optó por usar post debido a que más allá de solo actualizar también agrega nuevos usuarios, aunque podría usarse de igual forma un put.  
+* userconnected: Se trata de un get al que se debe especificar el usuario, que permite conocer si el usuario mandado está conectado o no.   
+* users: Este get permite conocer el número de usuarios conectados. Permitiendo mostrarlo en pantalla.
+
+*ConfigurationRoutes.js*
+
+Cuenta con siete rutas, cuatro post y tres get.
+
+Entre los post estan:
+
+* requestChangeScreen: Este post permite al cliente solicitar un cambio de pantalla. Permitiendo ya sea pasar a la pantalla de MenuEleccionJugador y de allí a la pantalla de PantallaJuego o volver a la pantalla de MenuPrincipal. El servidor tiene guardados variables las cuales se actualizan con estas llamadas.   
+  * Si uno de los jugadores le da al boton de jugar en el menú principal, se podrá acceder a esta pantalla  
+  * Si uno de los jugadores le da al botón de volver en la pantalla de elección de jugador ambos podrán volver al menú principal.   
+  * Solo si los dos jugadores le han dado al botón de jugar en la pantalla de elección de jugador se podrá iniciar la partida  
+* setChangesCharacters: Este método permite a los jugadores elegir si quieren usar a Ania o el gancho. Verificando siempre que el otro jugador no lo hubiera escogido antes. Así como si quieren cambiar de personaje por otro si es que no está elegido.   
+* confirmChange: Este método permite realizar una limpieza con el cambio de pantallas, una vez que se realiza una, el cliente confirma que ha cambiado de pantalla y cuando ambos clientes confirmen este cambio entonces se resetean algunos datos guardados en el servidor.   
+* LimpiezaPorEliminacion: Este método es parecido a confirmChange solo que en vez de esperar a las dos confirmaciones de ambos clientes. Este limpia los datos con la llegada de la primera solicitud, puesto que este método solo se llama si uno de los clientes se ha desconectado. 
+
+Entre los get se tiene:
+
+* canChangeScreen: Este get permite saber al cliente si debe cambiar de pantalla o no. Se llama constantemente y dependiendo de las llamadas previas recibidas con requestChangeScreen, cambiará de pantalla o no. Esto permite que ambos jugadores puedan cambiar casi al mismo tiempo de pantalla.  
+* choosen: Este get permite obtener qué usuario ha escogido a Ania y que usuario ha escogido al Gancho. Si es que alguno de los dos o los dos no han sido escogidos por un usuario mandarán espacios en blanco.   
+* getCharacter: Se le debe proporcionar el usuario. Devolviendo la elección del usuario, si ha escogido a Ania devolverá un string con Ania y de igual forma con el gancho. 
+
+Para manejar las conexiones se tiene una pantalla que se ejecuta en todo momento encima de todas las escenas, ConnectionMenu. La cual hace las llamadas keepalive al servidor. 
+
+Si el servidor se ha caído, siempre y cuando no se encuentre en la pantalla de MenuLogin, aparecerá una pantalla encima informando que se ha caído el servidor y que está intentando reconectarse. En caso de la pantalla de MenuLogin, aparecerá un mensaje informando que el servidor no está disponible en esos momentos si intenta realizar alguna petición. 
+
+Cuando el servidor se vuelve a conectar, los cliente al detectar esto si estaban registrados realizarán login de nuevo. Puesto ConnectionMenu guarda el usuario y la contraseña si es que ya inició sesión. Permitiendo retomar desde el punto en que estaba antes de que se cayera.  En caso de la pantalla de MenuEleccionJugador, si ya se ha enviado una confirmación para comenzar a jugar se reenvía al servidor así como si ya se ha elegido algún personaje, permitiendo que la elección de los personajes se restablezca una vez que el servidor vuelva a funcionar. Debido a que cada cliente puede tardar un poco más en reconectarse y hacer todo este proceso. Se le da un lapso de un segundo para conectarse, antes de que se considere que se ha desconectado. 
+
+Si uno de los clientes se desconecta, en la pantalla de inicio no permitirá iniciar el juego, puesto que requiere de dos jugadores. En caso de la pantalla de menú de elección del jugador se manda de nuevo a la pantalla de inicio al jugador que siga conectado. Por último, respecto a la pantalla de juego, si se detecta que falta un jugador entonces se da directamente la victoria al jugador que siga conectado. Esto último, teniendo en cuenta la siguiente fase donde el juego será completamente en línea. Por el momento si los dos siguen conectados el final de la partida se sigue determinando de principio por el jugador que gane o pierda de forma local. 
+
+Por último, si un tercer jugador trata de iniciar sesión o registrarse, aparecerá un mensaje en pantalla avisando que no puede hacerlo puesto a que ya hay dos jugadores conectados. 
 
 # **Bibliografía** 
 
