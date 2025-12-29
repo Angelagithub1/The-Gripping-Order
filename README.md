@@ -141,7 +141,7 @@ Por un lado, una vez que al gancho le aparezca la pieza, debe intentar soltar la
 Por otro lado, Ania tendrá libertad de movimiento dentro de los límites de la pantalla, ya sea moviéndose de un lado a otro o saltando sobre las piezas que le lancen encima. Además, podrá obtener Power Ups pasando sobre estos cuando aparezcan en la pantalla. 
 
 Es un juego en 2D con cámara fija lateral en una posición estática predeterminada (como cualquier Mario Bros clásico pero sin el desplazamiento).
-![](The-Gripping-Order/public/Assets/Capturas/Juego.png)
+![](./public/Assets/Capturas/Juego.png)
 
 
 ## **Género** 
@@ -413,19 +413,19 @@ Cuenta con siete rutas, cuatro post y tres get.
 
 Entre los post estan:
 
-* requestChangeScreen: Este post permite al cliente solicitar un cambio de pantalla. Permitiendo ya sea pasar a la pantalla de MenuEleccionJugador y de allí a la pantalla de PantallaJuego o volver a la pantalla de MenuPrincipal. El servidor tiene guardados variables las cuales se actualizan con estas llamadas.   
+* requestScreenChange: Este post permite al cliente solicitar un cambio de pantalla. Permitiendo ya sea pasar a la pantalla de MenuEleccionJugador y de allí a la pantalla de PantallaJuego o volver a la pantalla de MenuPrincipal. El servidor tiene guardados variables las cuales se actualizan con estas llamadas.   
   * Si uno de los jugadores le da al boton de jugar en el menú principal, se podrá acceder a esta pantalla  
   * Si uno de los jugadores le da al botón de volver en la pantalla de elección de jugador ambos podrán volver al menú principal.   
   * Solo si los dos jugadores le han dado al botón de jugar en la pantalla de elección de jugador se podrá iniciar la partida  
-* setChangesCharacters: Este método permite a los jugadores elegir si quieren usar a Ania o el gancho. Verificando siempre que el otro jugador no lo hubiera escogido antes. Así como si quieren cambiar de personaje por otro si es que no está elegido.   
+* selectCharacter: Este método permite a los jugadores elegir si quieren usar a Ania o el gancho. Verificando siempre que el otro jugador no lo hubiera escogido antes. Así como si quieren cambiar de personaje por otro si es que no está elegido.   
 * confirmChange: Este método permite realizar una limpieza con el cambio de pantallas, una vez que se realiza una, el cliente confirma que ha cambiado de pantalla y cuando ambos clientes confirmen este cambio entonces se resetean algunos datos guardados en el servidor.   
-* LimpiezaPorEliminacion: Este método es parecido a confirmChange solo que en vez de esperar a las dos confirmaciones de ambos clientes. Este limpia los datos con la llegada de la primera solicitud, puesto que este método solo se llama si uno de los clientes se ha desconectado. 
+* cleanupOnDisconnect: Este método es parecido a confirmChange solo que en vez de esperar a las dos confirmaciones de ambos clientes. Este limpia los datos con la llegada de la primera solicitud, puesto que este método solo se llama si uno de los clientes se ha desconectado. 
 
 Entre los get se tiene:
 
-* canChangeScreen: Este get permite saber al cliente si debe cambiar de pantalla o no. Se llama constantemente y dependiendo de las llamadas previas recibidas con requestChangeScreen, cambiará de pantalla o no. Esto permite que ambos jugadores puedan cambiar casi al mismo tiempo de pantalla.  
-* choosen: Este get permite obtener qué usuario ha escogido a Ania y que usuario ha escogido al Gancho. Si es que alguno de los dos o los dos no han sido escogidos por un usuario mandarán espacios en blanco.   
-* getCharacter: Se le debe proporcionar el usuario. Devolviendo la elección del usuario, si ha escogido a Ania devolverá un string con Ania y de igual forma con el gancho. 
+* shouldChangeScreen: Este get permite saber al cliente si debe cambiar de pantalla o no. Se llama constantemente y dependiendo de las llamadas previas recibidas con requestScreenChange, cambiará de pantalla o no. Esto permite que ambos jugadores puedan cambiar casi al mismo tiempo de pantalla.  
+* chosenCharacters: Este get permite obtener qué usuario ha escogido a Ania y que usuario ha escogido al Gancho. Si es que alguno de los dos o los dos no han sido escogidos por un usuario mandarán espacios en blanco.   
+* getSelectedCharacter: Se le debe proporcionar el usuario. Devolviendo la elección del usuario, si ha escogido a Ania devolverá un string con Ania y de igual forma con el gancho. 
 
 Para manejar las conexiones se tiene una pantalla que se ejecuta en todo momento encima de todas las escenas, ConnectionMenu. La cual hace las llamadas keepalive al servidor. 
 
