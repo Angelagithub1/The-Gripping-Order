@@ -141,7 +141,7 @@ Por un lado, una vez que al gancho le aparezca la pieza, debe intentar soltar la
 Por otro lado, Ania tendrá libertad de movimiento dentro de los límites de la pantalla, ya sea moviéndose de un lado a otro o saltando sobre las piezas que le lancen encima. Además, podrá obtener Power Ups pasando sobre estos cuando aparezcan en la pantalla. 
 
 Es un juego en 2D con cámara fija lateral en una posición estática predeterminada (como cualquier Mario Bros clásico pero sin el desplazamiento).
-![](The-Gripping-Order/Assets/Capturas/Juego.png)
+![](The-Gripping-Order/public/Assets/Capturas/Juego.png)
 
 
 ## **Género** 
@@ -208,7 +208,7 @@ Nivel 1: Cementerio abandonado
 * Ambiente: Niebla espesa, lápidas rotas, árboles secos y cuervos que observan desde las ramas.
 * Estética: Colores apagados y menos saturados para transmitir una atmósfera melancólica.
 * Jugabilidad: Ania puede interactuar con las lápidas, usándolas como plataformas para subir y saltar.
-![](The-Gripping-Order/Assets/Capturas/Juego.png)
+![](./Assets/Capturas/Juego.png)
   
 Nivel 2: Morgue subterránea
 * Ambiente: Pasillos estrechos, luces parpadeantes, refrigeradores abiertos y sonidos metálicos constantes.
@@ -233,7 +233,7 @@ Es uno de los personajes que puede llevar un jugador. Consiste en una garra insp
 Se cuenta con 3 skins diferentes entre las que puede elegir el jugador, cada una con las variaciones de color correspondientes según el power up que se recoja:
 
 * Normal
-![](The-Gripping-Order/Assets/Sprites/gancho.gif)  
+![](The-Gripping-Order/public/Assets/Sprites/Personajes/Gif/BIGAnia-IDLE.gif)  
 * Naranja
 * ![](The-Gripping-Order/Assets/Sprites/gancho.gif)  
 * Rosa
