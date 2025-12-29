@@ -208,7 +208,7 @@ Nivel 1: Cementerio abandonado
 * Ambiente: Niebla espesa, lápidas rotas, árboles secos y cuervos que observan desde las ramas.
 * Estética: Colores apagados y menos saturados para transmitir una atmósfera melancólica.
 * Jugabilidad: Ania puede interactuar con las lápidas, usándolas como plataformas para subir y saltar.
-![](./Assets/Capturas/Juego.png)
+![](./public/Assets/Capturas/Juego.png)
   
 Nivel 2: Morgue subterránea
 * Ambiente: Pasillos estrechos, luces parpadeantes, refrigeradores abiertos y sonidos metálicos constantes.
@@ -228,31 +228,31 @@ Nivel 3: Fiesta fúnebre en el más allá
 
 Es uno de los personajes que puede llevar un jugador. Consiste en una garra inspirada en los juegos de gancho de las salas de recreativos, que, al contrario que estos, dejará caer piezas en vez de cogerlas.
 
-![](The-Gripping-Order/Assets/Sprites/gancho.gif)
+![](./public/Assets/Sprites/gancho.gif)
 
 Se cuenta con 3 skins diferentes entre las que puede elegir el jugador, cada una con las variaciones de color correspondientes según el power up que se recoja:
 
 * Normal
-![](The-Gripping-Order/public/Assets/Sprites/Personajes/Gif/BIGAnia-IDLE.gif)  
+![](./public/Assets/Sprites/Personajes/Gif/BIGAnia-IDLE.gif)  
 * Naranja
-* ![](The-Gripping-Order/Assets/Sprites/gancho.gif)  
+![](./public/Assets/Sprites/Personajes/Gif/BIGAniaLazo.gif)    
 * Rosa
-* ![](The-Gripping-Order/Assets/Sprites/gancho.gif)
+![](./public/Assets/Sprites/Personajes/Gif/BIGAniaSombrero.gif)
 
 ## **Ania** 
 
 Es el otro personaje que puede llevar un jugador. Consiste en una pequeña criatura de colores vivos parecida a un escarabajo. Esta compuesta por fragmentos de sprites corrompidos, dando así la apariencia de un glitch. Su supervivencia depende por completo de su capacidad para predecir los movimientos de su oponente.
 
-![](The-Gripping-Order/Assets/Sprites/Ania-IDLE.gif)
+![](./public/Assets/Sprites/Ania-IDLE.gif)
 
 Se cuenta con 3 skins diferentes entre las que puede elegir el jugador, cada una con las variaciones de color correspondientes según el power up que se recoja:
 
 * Normal
-![](The-Gripping-Order/Assets/Sprites/Ania-IDLE.gif)
+![](./public/Assets/Sprites/Personajes/Gif/BIGgancho.gif)
 * Lazo
-![](The-Gripping-Order/Assets/Sprites/Ania-IDLE.gif)
+![](./public/Assets/Sprites/Personajes/Gif/BIGganchoNaranja.gif)
 * Sombrero
-![](The-Gripping-Order/Assets/Sprites/Ania-IDLE.gif)
+![](./public/Assets/Sprites/Personajes/Gif/BIGganchoRosa.gif)
 
 # **Items** 
 
@@ -260,10 +260,10 @@ Se cuenta con 3 skins diferentes entre las que puede elegir el jugador, cada una
 
 Siguiendo con la narrativa actual del juego, la cual tiene una temática oscura, el gancho lanzará objetos típicos de funerales a Ania, como guadañas, ataúdes, jarrones de cenizas y huesos varios.
 
-![](The-Gripping-Order/Assets/ObjResolucion/ataud.png)
-![](The-Gripping-Order/Assets/ObjResolucion/guadaña.png)
-![](The-Gripping-Order/Assets/ObjResolucion/hueso.png)
-![](The-Gripping-Order/Assets/ObjResolucion/libro.png)
+![](./public/Assets/ObjResolucion/ataud.png)
+![](./public/Assets/ObjResolucion/guadaña.png)
+![](./public/Assets/ObjResolucion/hueso.png)
+![](./public/Assets/ObjResolucion/libro.png)
 
 ## **Power Ups** 
 
@@ -274,16 +274,16 @@ Los Power Ups serán llamas de diferentes colores, y son exclusivos para el juga
 * Rojo: hace al jugador invulnerable, permitiendo una mayor tranquilidad durante ese tiempo.  
 * Verde: aumenta la velocidad del jugador, haciendo más difícil que el gancho le acierte con una pieza.
 
-![](The-Gripping-Order/Assets/ObjResolucion/VELA1.png)
-![](The-Gripping-Order/Assets/ObjResolucion/VELA2.png)
-![](The-Gripping-Order/Assets/ObjResolucion/VELA3.png)
-![](The-Gripping-Order/Assets/ObjResolucion/VELA4.png)
+![](./public/Assets/ObjResolucion/VELA1.png)
+![](./public/Assets/ObjResolucion/VELA2.png)
+![](./public/Assets/ObjResolucion/VELA3.png)
+![](./public/Assets/ObjResolucion/VELA4.png)
 
 # **Estados e interfaces** 
 
 ## **Diagrama de estados** 
 
-![](The-Gripping-Order/Assets/DiagramaDeInterfaces.jpg)
+![](./public/Assets/DiagramaDeInterfaces.jpg)
 
 Este diagrama irá creciendo con el tiempo según se añadan nuevas pantallas en las próximas entregas, como un futuro chat y la selección de jugar en local u online.
 
@@ -293,31 +293,31 @@ Actualmente solo se tiene el diseño de cómo serán las interfaces, aunque su e
 
 ### Pantalla de inicio 
 
-![](The-Gripping-Order/Assets/Capturas/MenuInicio.png)
+![](./public/Assets/Capturas/MenuInicio.png)
 
 ### Tutorial 
 
-![](The-Gripping-Order/Assets/Capturas/Tutorial.png)
+![](./public/Assets/Capturas/Tutorial.png)
 
 ### Créditos 
 
-![](The-Gripping-Order/Assets/Capturas/Creditos.png)
+![](./public/Assets/Capturas/Creditos.png)
 ### Elección de jugador 
 
 Aunque esta pantalla no es accesible a nivel local, ya se ha diseñado e implementado de cara al modo online.
-![](The-Gripping-Order/Assets/Capturas/EleccionJugador.png)
+![](./public/Assets/Capturas/EleccionJugador.png)
 
 ### Pantalla de juego 
 
-![](The-Gripping-Order/Assets/Capturas/JuegoAvanzado.png)
+![](./public/Assets/Capturas/JuegoAvanzado.png)
 
 ### Pantalla de victoria/derrota 
 
-![](The-Gripping-Order/Assets/Capturas/VictoriaGancho.png)
+![](./public/Assets/Capturas/VictoriaGancho.png)
 
 ### Menú de pausa
 
-![](The-Gripping-Order/Assets/Capturas/Pausa.png)
+![](./public/Assets/Capturas/Pausa.png)
 
 # **Mecánicas \- Diagrama de Flujo** 
 
@@ -330,7 +330,7 @@ Al inicio de cada partida en Crush Factory, los jugadores tendrán que elegir en
 
   ## **Flujo del Juego** 
 
-![](The-Gripping-Order/Assets/DiagramaDeFlujo.jpg)
+![](./public/Assets/DiagramaDeFlujo.jpg)
 
 ## **Mecánicas y Físicas** 
 
