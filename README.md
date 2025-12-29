@@ -141,7 +141,7 @@ Por un lado, una vez que al gancho le aparezca la pieza, debe intentar soltar la
 Por otro lado, Ania tendrá libertad de movimiento dentro de los límites de la pantalla, ya sea moviéndose de un lado a otro o saltando sobre las piezas que le lancen encima. Además, podrá obtener Power Ups pasando sobre estos cuando aparezcan en la pantalla. 
 
 Es un juego en 2D con cámara fija lateral en una posición estática predeterminada (como cualquier Mario Bros clásico pero sin el desplazamiento).
-![](The-Gripping-Order/Assets/Capturas/Juego.png)
+![](./Assets/Capturas/Juego.png)
 
 
 ## **Género** 
