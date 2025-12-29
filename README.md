@@ -233,11 +233,14 @@ Es uno de los personajes que puede llevar un jugador. Consiste en una garra insp
 Se cuenta con 3 skins diferentes entre las que puede elegir el jugador, cada una con las variaciones de color correspondientes según el power up que se recoja:
 
 * Normal
-![](./public/Assets/Sprites/Personajes/Gif/BIGAnia-IDLE.gif)  
+![](./public/Assets/Sprites/Personajes/Gif/BIGgancho.gif)
+
 * Naranja
-![](./public/Assets/Sprites/Personajes/Gif/BIGAniaLazo.gif)    
+![](./public/Assets/Sprites/Personajes/Gif/BIGganchoNaranja.gif)
+  
 * Rosa
-![](./public/Assets/Sprites/Personajes/Gif/BIGAniaSombrero.gif)
+![](./public/Assets/Sprites/Personajes/Gif/BIGganchoRosa.gif)
+
 
 ## **Ania** 
 
@@ -248,11 +251,14 @@ Es el otro personaje que puede llevar un jugador. Consiste en una pequeña criat
 Se cuenta con 3 skins diferentes entre las que puede elegir el jugador, cada una con las variaciones de color correspondientes según el power up que se recoja:
 
 * Normal
-![](./public/Assets/Sprites/Personajes/Gif/BIGgancho.gif)
+![](./public/Assets/Sprites/Personajes/Gif/BIGAnia-IDLE.gif)
+
 * Lazo
-![](./public/Assets/Sprites/Personajes/Gif/BIGganchoNaranja.gif)
+![](./public/Assets/Sprites/Personajes/Gif/BIGAniaLazo.gif)
+
 * Sombrero
-![](./public/Assets/Sprites/Personajes/Gif/BIGganchoRosa.gif)
+![](./public/Assets/Sprites/Personajes/Gif/BIGAniaSombrero.gif)
+
 
 # **Items** 
 
