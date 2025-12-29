@@ -228,8 +228,6 @@ Nivel 3: Fiesta fúnebre en el más allá
 
 Es uno de los personajes que puede llevar un jugador. Consiste en una garra inspirada en los juegos de gancho de las salas de recreativos, que, al contrario que estos, dejará caer piezas en vez de cogerlas.
 
-![](./public/Assets/Sprites/gancho.gif)
-
 Se cuenta con 3 skins diferentes entre las que puede elegir el jugador, cada una con las variaciones de color correspondientes según el power up que se recoja:
 
 * Normal
@@ -245,8 +243,6 @@ Se cuenta con 3 skins diferentes entre las que puede elegir el jugador, cada una
 ## **Ania** 
 
 Es el otro personaje que puede llevar un jugador. Consiste en una pequeña criatura de colores vivos parecida a un escarabajo. Esta compuesta por fragmentos de sprites corrompidos, dando así la apariencia de un glitch. Su supervivencia depende por completo de su capacidad para predecir los movimientos de su oponente.
-
-![](./public/Assets/Sprites/Ania-IDLE.gif)
 
 Se cuenta con 3 skins diferentes entre las que puede elegir el jugador, cada una con las variaciones de color correspondientes según el power up que se recoja:
 
