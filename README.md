@@ -208,7 +208,7 @@ Nivel 1: Cementerio abandonado
 * Ambiente: Niebla espesa, lápidas rotas, árboles secos y cuervos que observan desde las ramas.
 * Estética: Colores apagados y menos saturados para transmitir una atmósfera melancólica.
 * Jugabilidad: Ania puede interactuar con las lápidas, usándolas como plataformas para subir y saltar.
-![](The-Gripping-Order/public/Assets/Capturas/Juego.png)
+![](./Assets/Capturas/Juego.png)
   
 Nivel 2: Morgue subterránea
 * Ambiente: Pasillos estrechos, luces parpadeantes, refrigeradores abiertos y sonidos metálicos constantes.
