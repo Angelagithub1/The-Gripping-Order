@@ -1,5 +1,4 @@
 import fs from 'fs';
-//const usersConnected = new Set();
 const UserController = () => {
     const skins = new Map([
         ['ania', 0],

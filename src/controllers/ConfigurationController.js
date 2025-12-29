@@ -35,7 +35,6 @@ const ConfigurationController = () => { //Controlador para manejar las solicitud
 
     };
     const canChangeScreen = (req, res) => {
-        //const { actscene } = req.body;
         if (back) { //Si se ha mandado una solicitud de volver
             res.json({ canChange: 'MenuPrincipal' });
         } else if (playersready.size === 2) { //Si los dos jugadores estan listos para iniciar

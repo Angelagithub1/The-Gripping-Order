@@ -223,7 +223,7 @@ export class MenuEleccionJugador extends Phaser.Scene {   //Crear clase que here
             const data = await response.json();
 
             if (response.ok) {
-                console.log("Se puede")
+                //console.log("Se puede")
                 const response = await fetch(`users/getSkins/${this.scene.get('ConnectionMenu').username}`)
                 const data = await response.json();
                 if (isAnia) {
@@ -240,9 +240,7 @@ export class MenuEleccionJugador extends Phaser.Scene {   //Crear clase que here
             } else if (response.status == "409") {
                 this.messageChoosen.setText(data.message)
                 //console.log("Mensaje:", data.message)
-            } else {
-                console.log("NO SE QUE PASA")
-            }
+            } 
 
         } catch (error) {
             console.error('Error al confirmar que el jugador esta listo:', error);
@@ -273,7 +271,6 @@ export class MenuEleccionJugador extends Phaser.Scene {   //Crear clase que here
                     console.log("mensaje:", response)
                 }
             } catch (error) {
-                console.log("No se que pasa");
             }
         } else {
             if (!this.isGanchoC) {
@@ -300,7 +297,6 @@ export class MenuEleccionJugador extends Phaser.Scene {   //Crear clase que here
                 }
 
             } catch (error) {
-                console.log("No se que pasa");
 
             }
         }
