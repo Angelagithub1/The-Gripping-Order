@@ -444,6 +444,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.Ania.canMove = true;            //Capacidad de moverse
         this.Ania.invulnerable = false;      //Estado de invulnerabilidad
         this.Ania.masVelocidad = false;      //Estado de aumento de velocidad
+        this.Ania.directionRight = true;        //Dirección inicial
 
         //Vidas de ania
         this.hearts = [
@@ -635,22 +636,56 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
     }
 
     async ProcessMovement(data) {
-        if (!this.isAnia) {
-            //Si es el gancho se hace una aproximacion al Gancho
-            const nuevoX = (data.Gancho.x + this.Gancho.x) / 2;
-            this.Gancho.x = nuevoX;
+        //console.log("Nueva informacion recibida")
+        const umbralDeError = 5;
+        const suavizado = 0.15;
 
-            //Se actualiza la posicion tal cual de ania
+        if (!this.isAnia) {
+            if (Math.abs(this.Gancho.x - data.Gancho.x) > umbralDeError) {
+                //Si es el gancho se hace una aproximacion al Gancho
+                const nuevoX = this.Gancho.x + (data.Gancho.x - this.Gancho.x) * suavizado;
+                this.Gancho.x = nuevoX;
+            }
+
+            const AntiguoX = this.Ania.x;
             this.Ania.x = data.Ania.x;
-            this.Ania.y = data.Ania.y;
+            //this.Ania.y = data.Ania.y;
+            this.Ania.y += (data.Ania.y - this.Ania.y) * (0.5); //Suavizado en Y
+            //Se actualiza la posicion tal cual de ania
+            if (AntiguoX > this.Ania.x) {
+                // Se mueve a la izquierda
+                if (this.Ania.directionRight) {//Si estaba mirando a la derecha
+                    //Voltear sprite
+                    this.Ania.flipX = true;
+                    this.Ania.directionRight = false;
+                }
+                this.updateWalkAnimation(this.Ania);
+
+            } else if (AntiguoX < this.Ania.x) {
+                //Se mueve a la derecha
+                if (!this.Ania.directionRight) {//Si estaba mirando a la izquierda
+                    //Voltear sprite
+                    this.Ania.flipX = false;
+                    this.Ania.directionRight = true;
+                }
+                this.updateWalkAnimation(this.Ania);
+            } else {
+                //No se mueve
+                this.updateIdleAnimation(this.Ania);//Reproducir animación de idle
+            }
+
 
         } else {
-            //Si es Ania se hace una aproximacion a Ania
-            const nuevoX = (data.Ania.x + this.Ania.x) / 2;
-            const nuevoY = (data.Ania.y + this.Ania.y) / 2;
-            this.Ania.x = nuevoX;
-            this.Ania.y = nuevoY;
+            if (Math.abs(this.Ania.x - data.Ania.x) > umbralDeError ||
+                Math.abs(this.Ania.y - data.Ania.y) > umbralDeError) {
+                //Si es Ania se hace una aproximacion a Ania
+                const nuevoX = this.Ania.x + (data.Ania.x - this.Ania.x) * suavizado;
+                const nuevoY = this.Ania.y + (data.Ania.y - this.Ania.y) * suavizado;
 
+                this.Ania.x = nuevoX;
+                this.Ania.y = nuevoY;
+
+            }
             //Se actualiza la posicion tal cual del gancho
             this.Gancho.x = data.Gancho.x;
         }
@@ -661,7 +696,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             return; // Salir si la conexión no está abierta
         }
         if (this.isAnia) {
-            console.log("Enviando posicion de ania");
+            //console.log("Enviando posicion de ania");
             this.connection.send(JSON.stringify({
                 type: 'updatePosition',
                 character: true,
@@ -669,7 +704,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
                 y: this.Ania.y,
             }));
         } else {
-            console.log("Enviando posicion de gancho");
+            //console.log("Enviando posicion de gancho");
             this.connection.send(JSON.stringify({
                 type: 'updatePosition',
                 character: false,
@@ -700,6 +735,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
                 this.Ania.x = this.scale.width - 121.5;
             }
             if (this.keys.D.isDown && this.Ania.canMove) { //Si presiona D
+                this.Ania.directionRight = true;
                 if (!this.Ania.masVelocidad) {
                     this.Ania.setVelocityX(160); //Se mueve a la derecha
                 } else {
@@ -709,6 +745,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
                 this.Ania.flipX = false; //No voltear sprite
 
             } else if (this.keys.A.isDown && this.Ania.canMove) { //Si presiona A
+                this.Ania.directionRight = false;
                 if (!this.Ania.masVelocidad) {
                     this.Ania.setVelocityX(-160);//se mueve a la izquierda  
                 } else {
@@ -844,18 +881,22 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.sonidoPowerUp.play();
         switch (powerUp.type) {
             case 'PowerUpAmarillo':
+                // Congelación
                 console.log("Efecto Power Up Amarillo");
                 this.Congelación(jugador);
                 break;
             case 'PowerUpAzul':
+                //Doble salto
                 console.log("Efecto Power Up Azul");
                 this.DobleSalto(jugador);
                 break;
             case 'PowerUpRojo':
+                //Invulnerabilidad
                 console.log("Efecto Power Up Rojo");
                 this.Invulnerabilidad(jugador);
                 break;
             case 'PowerUpVerde':
+                //Aumento de velocidad
                 console.log("Efecto Power Up Verde");
                 this.AumentoVelocidad(jugador);
                 break;
