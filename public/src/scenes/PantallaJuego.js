@@ -1,3 +1,5 @@
+//import e from "express";
+
 //import Phaser from 'phaser';
 export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de Phaser
     constructor() {
@@ -597,9 +599,12 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
 
         //PowerUps
         this.powerUps = this.physics.add.group();
-        this.physics.add.overlap(this.Ania, this.powerUps, this.RecogerPowerUp, null, this); //Colision Ania con PowerUps
+        this.powerUps.children.iterate(child => child && child.setDepth(50));
+        //this.physics.add.overlap(this.Ania, this.powerUps, this.RecogerPowerUp, null, this); //Colision Ania con PowerUps
         this.maxPowerUps = 2;   //Limite de PowerUps en pantalla
-        this.AparicionesPowerUp(); //Evento para crear PowerUps cada cierto tiempo
+        //this.AparicionesPowerUp(); //Evento para crear PowerUps cada cierto tiempo
+
+        this.powerUpsById = new Map(); // Mapa para rastrear los power-ups por ID
 
         this.physics.add.collider(this.powerUps, this.floor);
         this.physics.add.collider(this.powerUps, this.platform1);
@@ -631,6 +636,48 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             const data = JSON.parse(event.data);
             if (data.type === 'playerPosition') {
                 this.ProcessMovement(data);
+            }
+            else if (data.type === 'spawn_powerup') {
+                const sprite = this.powerUps.create(data.x, data.y, data.type);
+                sprite.setOrigin(0.5).setScale(1.5);
+                //a ver si asi se ve
+                sprite.setDepth(50);
+                sprite.setAlpha(1);
+                sprite.visible = true;
+
+                sprite.body.setAllowGravity(false);
+                sprite.type = data.type;
+                this.powerUpsById.set(data.id, sprite); // Almacenar el power-up en el mapa
+
+                //porque coño no se ve
+                const mark = this.add.circle(data.x, data.y, 10, 0xff0000).setDepth(1000);
+                this.time.delayedCall(1200, () => {
+                    mark.destroy();
+                });
+
+            } else if (data.type === 'remove_powerup') {
+                const sprite = this.powerUpsById.get(data.id);
+                if (sprite) {
+                    sprite.destroy();
+                    this.powerUpsById.delete(data.id); // Eliminar del mapa
+                }
+            } else if (data.type === 'powerup_started') {
+                const jugador = this.Ania;
+                switch (data.effect) {
+                    case 'freeze': jugador.canMove = false; break;
+                    case 'double_jump': jugador.canDoubleJump = true; break;
+                    case 'speed': jugador.masVelocidad = true; break;
+                    case 'invulnerable': jugador.invulnerable = true; break;
+                }
+                this.sonidoPowerUp.play();
+            } else if (data.type === 'powerup_ended') {
+                const jugador = this.Ania;
+                switch (data.effect) {
+                    case 'freeze': jugador.canMove = true; break;
+                    case 'double_jump': jugador.canDoubleJump = false; break;
+                    case 'speed': jugador.masVelocidad = false; break;
+                    case 'invulnerable': jugador.invulnerable = false; break;
+                }
             }
         }
     }
