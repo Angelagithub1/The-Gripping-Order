@@ -4,8 +4,8 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         super('PantallaJuego');                     //Asignación de un nombre interno
     }
 
-    init(data){
-        this.AniaSkin= data.AniaSkin;
+    init(data) {
+        this.AniaSkin = data.AniaSkin;
         /* 
         2 -> AniaLazo
         1 -> AniaSombrero
@@ -17,6 +17,8 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         1 -> GanchoNaranja
         0 -> Gancho
         */
+        this.isAnia = data.isAnia; //Booleano para saber si el jugador es Ania o Gancho
+        console.log("Es Ania:", this.isAnia);
     }
 
     preload() {  //Se ejecuta antes de que empiece la escena
@@ -115,7 +117,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.load.audio('AniaDanada', 'Assets/Sonidos/AniaHurt.mp3');
         this.load.audio('GanchoSuelta', 'Assets/Sonidos/GanchoDisparo.mp3');
         this.load.audio('PowerUp', 'Assets/Sonidos/Powerup.mp3');
-        
+
     }
     create() {
         //console.log("Ania:",this.AniaSkin, "gancho:",this.GanchoSkin);
@@ -127,14 +129,14 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
 
         //Musica
         const volumen = this.registry.get('volumen') ?? 0.5;
-        let musica =this.sound.get('MusicaFondo');
+        let musica = this.sound.get('MusicaFondo');
 
-        if(musica && musica.isPlaying){    //Parar la musica si está sonando
+        if (musica && musica.isPlaying) {    //Parar la musica si está sonando
             musica.stop();
             musica.destroy();
-        } 
+        }
 
-        const musicaJuego=this.sound.add('MusicaJuego',{
+        const musicaJuego = this.sound.add('MusicaJuego', {
             loop: true,
             volume: volumen,
         });
@@ -142,24 +144,26 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
 
         //Sonido botones
         const volumenBotones = this.registry.get('volumen') ?? 0.5;
-        this.sonidoE = this.sound.add('SonidoBotonE',{  volume: volumenBotones });
-        this.sonidoP = this.sound.add('SonidoBotonP',{  volume: volumenBotones });
+        this.sonidoE = this.sound.add('SonidoBotonE', { volume: volumenBotones });
+        this.sonidoP = this.sound.add('SonidoBotonP', { volume: volumenBotones });
 
         //Sonidos juego
-        this.sonidoAniaDanada = this.sound.add('AniaDanada',{  volume: volumenBotones });
-        this.sonidoGanchoSuelta = this.sound.add('GanchoSuelta',{  volume: volumenBotones });   
-        this.sonidoPowerUp = this.sound.add('PowerUp',{  volume: volumenBotones });
-        
+        this.sonidoAniaDanada = this.sound.add('AniaDanada', { volume: volumenBotones });
+        this.sonidoGanchoSuelta = this.sound.add('GanchoSuelta', { volume: volumenBotones });
+        this.sonidoPowerUp = this.sound.add('PowerUp', { volume: volumenBotones });
+
 
         //Boton Pausa
-        const botonPausa = this.add.image(850, 55, 'BotonPausaN').setScale(1.5).setInteractive().setScale(2); 
-        botonPausa.on('pointerover', () => { 
+        const botonPausa = this.add.image(850, 55, 'BotonPausaN').setScale(1.5).setInteractive().setScale(2);
+        botonPausa.on('pointerover', () => {
             this.sonidoE.play();
-            botonPausa.setTexture('BotonPausaE')}); 
-        botonPausa.on('pointerout', () => { botonPausa.setTexture('BotonPausaN')});
-        botonPausa.on('pointerdown', () => { 
+            botonPausa.setTexture('BotonPausaE')
+        });
+        botonPausa.on('pointerout', () => { botonPausa.setTexture('BotonPausaN') });
+        botonPausa.on('pointerdown', () => {
             this.sonidoP.play();
-            botonPausa.setTexture('BotonPausaP') }); 
+            botonPausa.setTexture('BotonPausaP')
+        });
         botonPausa.on('pointerup', () => {
             console.log("Pausa");
             this.scene.pause();
@@ -422,20 +426,20 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.TuboGancho.setAlpha(0.5); //Hace el tubo semi-transparente
 
         //Crear Ania
-        if (this.AniaSkin==2) {
+        if (this.AniaSkin == 2) {
             this.Ania = this.physics.add.sprite(42, 32, 'AniaLazoIdle'); //Crear sprite de Ania Lazo
-        } else if (this.AniaSkin==1){
+        } else if (this.AniaSkin == 1) {
             this.Ania = this.physics.add.sprite(42, 32, 'AniaSombreroIdle'); //Crear sprite de Ania Sombrero
-        } else {    
-        this.Ania = this.physics.add.sprite(42, 25, 'AniaIdle'); //Crear sprite de Ania
+        } else {
+            this.Ania = this.physics.add.sprite(42, 25, 'AniaIdle'); //Crear sprite de Ania
         }
-        
+
         this.Ania.setScale(1.5).setFrame(1); //Escalar y poner frame inicial
         this.Ania.y = this.scale.height / 2; //Posición inicial Y
         this.Ania.x = this.scale.width / 2;  //Posición inicial X
         this.Ania.name = "Ania";
         this.Ania.lives = 3;                 //Vidas de Ania
-        this.Ania.currentSkin= 'Normal';     //Skin actual de Ania
+        this.Ania.currentSkin = 'Normal';     //Skin actual de Ania
         this.Ania.canDoubleJump = false;     //Capacidad de doble salto
         this.Ania.canMove = true;            //Capacidad de moverse
         this.Ania.invulnerable = false;      //Estado de invulnerabilidad
@@ -448,15 +452,15 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             this.add.sprite(this.scale.width - 280, 50, 'Heart').setOrigin(0.5).setScale(1.5)
         ];
         //Crear Gancho
-        if (this.GanchoSkin==2){
+        if (this.GanchoSkin == 2) {
             this.Gancho = this.physics.add.sprite(108, 50, 'GanchoIdleRosa').setImmovable(true).setDepth(1);
             this.Gancho.anims.play('Anim_GanchoIdleRosa', true);
 
-        } else if (this.GanchoSkin==1){
+        } else if (this.GanchoSkin == 1) {
             this.Gancho = this.physics.add.sprite(108, 50, 'GanchoIdleNaranja').setImmovable(true).setDepth(1);
             this.Gancho.anims.play('Anim_GanchoIdleNaranja', true);
 
-        } else {        
+        } else {
             this.Gancho = this.physics.add.sprite(108, 50, 'GanchoIdle').setImmovable(true).setDepth(1);
             this.Gancho.anims.play('Anim_GanchoIdle', true);
 
@@ -611,9 +615,69 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.powerUpsLista = ['PowerUpAmarillo', 'PowerUpAzul', 'PowerUpRojo', 'PowerUpVerde'];
         this.scene.moveBelow("ConnectionMenu");
 
+        this.connection = new WebSocket('ws://localhost:8080');
+        this.connection.onopen = () => {
+            console.log("Conectado al servidor");
+
+            const mensajeInicial = {
+                type: 'player_join',
+                character: this.isAnia
+            }
+            this.connection.send(JSON.stringify(mensajeInicial));
+        }
+
+        this.connection.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            if (data.type === 'playerPosition') {
+                this.ProcessMovement(data);
+            }
+        }
     }
 
+    async ProcessMovement(data) {
+        if (!this.isAnia) {
+            //Si es el gancho se hace una aproximacion al Gancho
+            const nuevoX = (data.Gancho.x + this.Gancho.x) / 2;
+            this.Gancho.x = nuevoX;
 
+            //Se actualiza la posicion tal cual de ania
+            this.Ania.x = data.Ania.x;
+            this.Ania.y = data.Ania.y;
+
+        } else {
+            //Si es Ania se hace una aproximacion a Ania
+            const nuevoX = (data.Ania.x + this.Ania.x) / 2;
+            const nuevoY = (data.Ania.y + this.Ania.y) / 2;
+            this.Ania.x = nuevoX;
+            this.Ania.y = nuevoY;
+
+            //Se actualiza la posicion tal cual del gancho
+            this.Gancho.x = data.Gancho.x;
+        }
+    }
+    async sendPosition() {
+        //const socket = new WebSocket('ws://localhost:8080');
+        if (!this.connection || this.connection.readyState !== WebSocket.OPEN) {
+            return; // Salir si la conexión no está abierta
+        }
+        if (this.isAnia) {
+            console.log("Enviando posicion de ania");
+            this.connection.send(JSON.stringify({
+                type: 'updatePosition',
+                character: true,
+                x: this.Ania.x,
+                y: this.Ania.y,
+            }));
+        } else {
+            console.log("Enviando posicion de gancho");
+            this.connection.send(JSON.stringify({
+                type: 'updatePosition',
+                character: false,
+                x: this.Gancho.x,
+                y: this.Gancho.y,
+            }));
+        }
+    }
 
     update() {
 
@@ -625,7 +689,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             this.Gancho.objeto.x = this.ganchoPoint.x;
             this.Gancho.objeto.y = this.ganchoPoint.y;
         }
-        if (this.Ania) {
+        if (this.isAnia && this.Ania) {
             //Hay un bug si ania salta y colisiona con el gancho, este le empuja fuera de la pantalla
             if (this.Ania.x < this.Ania.width / 2 + 100) {
                 console.log("Fuera");
@@ -666,28 +730,32 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             } else if (this.keys.SPACE.isDown && this.Ania.body.touching.down && this.Ania.canDoubleJump && this.Ania.canMove) {
                 this.Ania.setVelocityY(-550);
             }
-        }
-        
-        // Mover el gancho
-        if (this.keys.Right.isDown && this.Gancho.x < this.Gancho.width / 2 + this.scale.width - 225) {
-            this.Gancho.setVelocityX(160);
-        }
-        else if (this.keys.Left.isDown && this.Gancho.x > this.Gancho.width / 2 + 115) {
-            this.Gancho.setVelocityX(-160);
-        } else {
-            this.Gancho.setVelocityX(0);
+            this.sendPosition();
         }
 
-        //Solo detecta una pulsación
-        if (Phaser.Input.Keyboard.JustDown(this.keys.ENTER) && this.Gancho.objeto != null && this.Gancho.objeto.Soltar == false) {
-            //Se avisa que se ha soltado el objeto y se activa la gravedad
-            this.Gancho.objeto.Soltar = true;
-            this.sonidoGanchoSuelta.play();
-            this.Gancho.objeto.body.setAllowGravity(true);
-            this.time.delayedCall(800, () => {
-                //Se espera un tiempo para avisar que no hay objeto para que no se cree uno nuevo inmediatamente
-                this.Gancho.objeto = null;
-            });
+        if (!this.isAnia) {
+            // Mover el gancho
+            if (this.keys.Right.isDown && this.Gancho.x < this.Gancho.width / 2 + this.scale.width - 225) {
+                this.Gancho.setVelocityX(160);
+            }
+            else if (this.keys.Left.isDown && this.Gancho.x > this.Gancho.width / 2 + 115) {
+                this.Gancho.setVelocityX(-160);
+            } else {
+                this.Gancho.setVelocityX(0);
+            }
+
+            //Solo detecta una pulsación
+            if (Phaser.Input.Keyboard.JustDown(this.keys.ENTER) && this.Gancho.objeto != null && this.Gancho.objeto.Soltar == false) {
+                //Se avisa que se ha soltado el objeto y se activa la gravedad
+                this.Gancho.objeto.Soltar = true;
+                this.sonidoGanchoSuelta.play();
+                this.Gancho.objeto.body.setAllowGravity(true);
+                this.time.delayedCall(800, () => {
+                    //Se espera un tiempo para avisar que no hay objeto para que no se cree uno nuevo inmediatamente
+                    this.Gancho.objeto = null;
+                });
+            }
+            this.sendPosition();
         }
     }
 
@@ -731,19 +799,19 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         }
         this.sonidoAniaDanada.play();
         objeto.canDamage = false; // Marcar el objeto como ya usado para daño
-        this.Ania.lives =this.Ania.lives- 1; // Restar una vida a Ania
+        this.Ania.lives = this.Ania.lives - 1; // Restar una vida a Ania
         if (this.hearts.length > 1) {
             const heart = this.hearts.pop();
             heart.setTexture('HeartEmpty'); // Cambiar la textura a corazón vacío
 
         } else {
             this.finalJuego(this.Gancho);
-             // Cambiar a la escena ResultScreen
+            // Cambiar a la escena ResultScreen
         }
         console.log("Ania ha sido dañada");
     }
     DestroyPowrUp(powerUp, objeto) {
-        if (objeto.Soltar== false) return; // Evitar daño si el gancho no ha soltado el objeto
+        if (objeto.Soltar == false) return; // Evitar daño si el gancho no ha soltado el objeto
         powerUp.destroy();
     }
 
@@ -762,7 +830,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         const margen = 30;
 
         const x = Phaser.Math.Between(this.LeftWall.getBounds().right, this.RightWall.getBounds().left);
-        const y = Phaser.Math.Between(this.TuboGancho.getBounds().bottom, this.floor.getBounds().top-50);
+        const y = Phaser.Math.Between(this.TuboGancho.getBounds().bottom, this.floor.getBounds().top - 50);
 
         console.log("Power Up en: " + x + ", " + y); //Posición aleatoria dentro de los límites
         const tipoPowerUp = Phaser.Math.RND.pick(this.powerUpsLista);
@@ -802,7 +870,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
     DobleSalto(jugador) {
         console.log("Efecto Doble Salto");
         jugador.canDoubleJump = true; // Permitir doble salto
-        this.time.delayedCall(5000, () => { 
+        this.time.delayedCall(5000, () => {
             jugador.canDoubleJump = false; // Desactivar doble salto después de 15 segundos
         });
     }
@@ -831,81 +899,81 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         });
     }
 
-    updateWalkAnimation(jugador){
-        if(this.AniaSkin==2){   //Ania con Lazo
-            if(jugador.canDoubleJump){
+    updateWalkAnimation(jugador) {
+        if (this.AniaSkin == 2) {   //Ania con Lazo
+            if (jugador.canDoubleJump) {
                 jugador.anims.play('Anim_AniaLazoWalkAzul', true);
-            } else if(jugador.masVelocidad){
+            } else if (jugador.masVelocidad) {
                 jugador.anims.play('Anim_AniaLazoWalkVerde', true);
-            } else if(jugador.invulnerable){
+            } else if (jugador.invulnerable) {
                 jugador.anims.play('Anim_AniaLazoWalkRojo', true);
-            } else{
+            } else {
                 jugador.anims.play('Anim_AniaLazoWalk', true);
             }
-        } else if(this.AniaSkin==1){    //Ania con Sombrero
-            if(jugador.canDoubleJump){
+        } else if (this.AniaSkin == 1) {    //Ania con Sombrero
+            if (jugador.canDoubleJump) {
                 jugador.anims.play('Anim_AniaSombreroWalkAzul', true);
-            } else if(jugador.masVelocidad){
+            } else if (jugador.masVelocidad) {
                 jugador.anims.play('Anim_AniaSombreroWalkVerde', true);
-            } else if(jugador.invulnerable){
+            } else if (jugador.invulnerable) {
                 jugador.anims.play('Anim_AniaSombreroWalkRojo', true);
-            } else{
+            } else {
                 jugador.anims.play('Anim_AniaSombreroWalk', true);
             }
-        } else{ //Ania normal
-            if(jugador.canDoubleJump){
+        } else { //Ania normal
+            if (jugador.canDoubleJump) {
                 jugador.anims.play('Anim_AniaWalkAzul', true);
-            } else if(jugador.masVelocidad){
+            } else if (jugador.masVelocidad) {
                 jugador.anims.play('Anim_AniaWalkVerde', true);
-            } else if(jugador.invulnerable){
+            } else if (jugador.invulnerable) {
                 jugador.anims.play('Anim_AniaWalkRojo', true);
-            } else{
+            } else {
                 jugador.anims.play('Anim_AniaWalk', true);
             }
-        }      
+        }
     }
-    updateIdleAnimation(jugador){
-        if(this.AniaSkin==2){   //Ania con Lazo
-            if(jugador.canDoubleJump){
+    updateIdleAnimation(jugador) {
+        if (this.AniaSkin == 2) {   //Ania con Lazo
+            if (jugador.canDoubleJump) {
                 jugador.anims.play('Anim_AniaLazoIdleAzul', true);
-            } else if(jugador.masVelocidad){
+            } else if (jugador.masVelocidad) {
                 jugador.anims.play('Anim_AniaLazoIdleVerde', true);
-            } else if(jugador.invulnerable){
+            } else if (jugador.invulnerable) {
                 jugador.anims.play('Anim_AniaLazoIdleRojo', true);
-            } else if (!jugador.canMove){
+            } else if (!jugador.canMove) {
                 jugador.anims.play('Anim_AniaLazoIdleAmarillo', true);
-            } else{
+            } else {
                 jugador.anims.play('Anim_AniaLazoIdle', true);
             }
-        } else if(this.AniaSkin==1){    //Ania con Sombrero
-            if(jugador.canDoubleJump){
+        } else if (this.AniaSkin == 1) {    //Ania con Sombrero
+            if (jugador.canDoubleJump) {
                 jugador.anims.play('Anim_AniaSombreroIdleAzul', true);
-            } else if(jugador.masVelocidad){
+            } else if (jugador.masVelocidad) {
                 jugador.anims.play('Anim_AniaSombreroIdleVerde', true);
-            } else if(jugador.invulnerable){
+            } else if (jugador.invulnerable) {
                 jugador.anims.play('Anim_AniaSombreroIdleRojo', true);
-            } else if (!jugador.canMove){
+            } else if (!jugador.canMove) {
                 jugador.anims.play('Anim_AniaSombreroIdleAmarillo', true);
-            } else{
+            } else {
                 jugador.anims.play('Anim_AniaSombreroIdle', true);
             }
-        } else{ //Ania normal
-            if(jugador.canDoubleJump){
+        } else { //Ania normal
+            if (jugador.canDoubleJump) {
                 jugador.anims.play('Anim_AniaIdleAzul', true);
-            } else if(jugador.masVelocidad){
+            } else if (jugador.masVelocidad) {
                 jugador.anims.play('Anim_AniaIdleVerde', true);
-            } else if(jugador.invulnerable){
+            } else if (jugador.invulnerable) {
                 jugador.anims.play('Anim_AniaIdleRojo', true);
-            } else if (!jugador.canMove){
+            } else if (!jugador.canMove) {
                 jugador.anims.play('Anim_AniaIdleAmarillo', true);
-            } else{
+            } else {
                 jugador.anims.play('Anim_AniaIdle', true);
             }
         }
     }
 
     finalJuego(jugador) {
-        this.scene.start("PantallaFinal",{
+        this.scene.start("PantallaFinal", {
             ganador: jugador.name,
         }); // Cambiar a la escena ResultScreen
     }

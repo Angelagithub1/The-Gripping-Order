@@ -15,7 +15,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "^5.2.1",
-    "phaser": "^3.90.0"
+    "phaser": "^3.90.0",
+    "ws": "^8.18.3"
   },
   "devDependencies": {
     "vite": "^6.4.1"

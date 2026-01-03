@@ -170,7 +170,7 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
         }
     }
     async CanPassNextScene() {
-        if (this.escenaActual === 'PantallaJuego' || this.username=='') {
+        if (this.escenaActual === 'PantallaJuego' || this.username == '') {
             //Si no esta en la pantalla de juego porque no se puede cambiar de alli
             //O no ha iniciado sesion
             return;
@@ -194,7 +194,11 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
                 if (this.escenaActual == 'PantallaJuego') {
                     const searchSkin = await fetch('users/AllPlayersSkins');
                     const result = await searchSkin.json()
-                    this.scene.launch('PantallaJuego', { AniaSkin: result.AniaSkin, GanchoSkin: result.GanchoSkin })
+
+                    const getCharacter = await fetch(`/configuration/getCharacter/${this.username}`)
+                    const character = await getCharacter.json()
+
+                    this.scene.launch('PantallaJuego', { AniaSkin: result.AniaSkin, GanchoSkin: result.GanchoSkin, isAnia: character.character === 'ania' });
 
                 } else {
                     this.scene.launch(data.canChange);
