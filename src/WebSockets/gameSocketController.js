@@ -23,7 +23,11 @@ export const initGameSocketController = (wss) => {
         const type = poweUpTypes[Math.floor(Math.random() * poweUpTypes.length)];
         const id = String(nextPowerUpId++);
         powerUps.set(id, { id, type, x, y, active: true });
-        broadcast({ type: 'spawn_powerup', id, x, y, type });
+
+        ////mas pruebas
+        console.log('[SERVER] spawn_powerup', { id, x, y, type });
+///////////////////
+        broadcast({ type: 'spawn_powerup', id, x, y, puType:type });
     }
 
     function startSpawnLoop(){
@@ -52,18 +56,6 @@ export const initGameSocketController = (wss) => {
     }
 
     setInterval(() => {
-        
-        /*//Bucle
-        //Se envia las posiciones a todos los clientes si hubo un cambio
-        wss.clients.forEach((client) => {
-            if (client.readyState === 1) {
-                client.send(JSON.stringify({
-                    type: 'playerPosition',
-                    Ania: ania,
-                    Gancho: gancho
-                }));
-            }
-        });*/
 
         broadcast({
             type: 'playerPosition',
@@ -75,47 +67,25 @@ export const initGameSocketController = (wss) => {
     wss.on('connection', (ws) => {
         for (const pu of powerUps.values()){
             if (pu.active) {
-                ws.send(JSON.stringify({ type: 'spawn_powerup', id: pu.id, x: pu.x, y: pu.y, type: pu.type }));
+                ws.send(JSON.stringify({ type: 'spawn_powerup', id: pu.id, x: pu.x, y: pu.y, puType: pu.type }));
             }
         }
         ws.on('message', (message) => {
             const data = JSON.parse(message);
+
+            //A ver si se reciben bien pq n se q pasa
+            if (data.type === 'request_powerups') {
+                for (const pu of powerUps.values()){
+                    if (pu.active) {
+                        ws.send(JSON.stringify({ type: 'spawn_powerup', id: pu.id, x: pu.x, y: pu.y, type: pu.type }));
+                    }
+                }
+                return;
+            }////////////////////////////
+
             if (data.type === 'updatePosition') {
                 //Actualizar posicion
                 if (data.character) {//Ania
-                    /*if (powerUpActivoAnia == 'Congelación') {
-                        //Si se envia una posicion cuando esta congelado no se actualiza
-                        return;
-                    }
-                    if (ania.x !== data.x || ania.y !== data.y) {
-                        //Verificar si el movimiento en X es posible
-                        /*
-                        let velocidadMax = 160;
-                        if (powerUpActivoAnia == 'PowerUpVerde') {
-                            //Si tiene el power up de velocidad aumentada
-                            velocidadMax = 250;
-                        }
-                        const deltaX = ania.x - data.x;
-                        const deltaY = ania.y - data.y;
-                        const distancia = Math.sqrt(deltaX * deltaX + deltaY * deltaY); //Se calcula la distancia
-
-                        //Se calcula la distancia maxima que puede recorrer en 33ms
-                        const distanciaMAx = velocidadMax * (33 / 1000); 
-
-                        //Si la distancia es menor o igual a la maxima permitida, se actualiza la posicion
-                        if (distancia <= distanciaMAx) {
-                            ania.x = data.x;
-                        } else {
-                            //Si no, se mueve en la direccion del cliente pero solo la distancia maxima permitida
-                            const ratio = distanciaMAx / distancia;
-                            ania.x = ania.x + (deltaX * ratio);
-                        }
-
-                        
-                       //Falla algo con la velocidad, por ahora se actualiza directamente
-                        ania.x = data.x;
-                        //Falta verificar doble salto
-                        ania.y = data.y;*/
                     ania.x = data.x;
                     ania.y = data.y;
                     //detección de powerUp
@@ -123,17 +93,20 @@ export const initGameSocketController = (wss) => {
                         if (!pu.active) continue;
                         if (Math.abs(ania.x - pu.x) < 30 && Math.abs(ania.y - pu.y) < 30) {
                             pu.active = false;
-                            broadcast({ type: 'remove_powerup', id: pu.id });
+                            broadcast({ type: 'remove_powerup', id: pu.id,x: pu.x, y: pu.y, puType: pu.type });
                             startEffect(effectFromType(pu.type));
                         }
                     }
-                /*} else {
-                    if (gancho.x !== data.x || gancho.y !== data.y) {
-                        gancho.x = data.x;
-                    }
-                }*/
                 } else {
                     gancho.x = data.x;
+                }
+            } else if (data.type === 'powerup_touch') {
+                const id = String(data.id);
+                const pu = powerUps.get(id);
+                if (pu && pu.active) {
+                    pu.active = false;
+                    broadcast({ type: 'remove_powerup', id: pu.id, x: pu.x, y: pu.y, puType: pu.type });
+                    startEffect(effectFromType(pu.type));
                 }
             }
         });
