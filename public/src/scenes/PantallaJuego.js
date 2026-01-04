@@ -21,6 +21,10 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         console.log("Es Ania:", this.isAnia);
 
         this.IndexMessage = 0; //Indice de mensajes recibidos por WebSocket
+
+        // Para sincronizacion de objetos
+        this.currentServerObjectType = null;
+        this.waitingForNewObject = false;
     }
 
     preload() {  //Se ejecuta antes de que empiece la escena
@@ -618,6 +622,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.powerUpsLista = ['PowerUpAmarillo', 'PowerUpAzul', 'PowerUpRojo', 'PowerUpVerde'];
         this.scene.moveBelow("ConnectionMenu");
 
+        // WebSocket
         this.connection = new WebSocket('ws://localhost:8080');
         this.connection.onopen = () => {
             console.log("Conectado al servidor");
@@ -633,6 +638,49 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             const data = JSON.parse(event.data);
             if (data.type === 'playerPosition') {
                 this.ProcessMovement(data);
+                
+                // Actualizar el tipo de objeto segun el servidor
+                if (data.currentObjectType && !this.waitingForNewObject) {
+                    this.currentServerObjectType = data.currentObjectType;
+                }
+            }
+
+            if (data.type === 'initObject') {
+                // El servidor nos envia el objeto inicial
+                this.currentServerObjectType = data.objectType;
+            }
+            
+            if (data.type === 'objectDropped') {
+                // El servidor notifica que el objeto se cae
+                // Si somos el jugador del Gancho, ya lo hicimos localmente
+                // Si somos Ania, necesitamos soltar el objeto en nuestro cliente   
+
+                if (!this.isAnia) {
+                    // Como Gancho, ya soltamos el objeto localmente
+                    // Solo verificamos que nuestra accion fue aceptada
+                    console.log("Servidor: Cae el objeto");
+                } else {
+                    if (this.Gancho.objeto) {
+                        this.Gancho.objeto.Soltar = true;
+                        this.Gancho.objeto.body.setAllowGravity(true);
+                        this.sonidoGanchoSuelta.play();
+                        
+                        // Ajustar posicion exacta del objeto soltado
+                        this.Gancho.objeto.x = data.x;
+                        this.Gancho.objeto.y = data.y;
+                        
+                        this.time.delayedCall(800, () => {
+                            this.Gancho.objeto = null;
+                        });
+                    }
+                }
+                this.waitingForNewObject = false;
+            }
+            
+            if (data.type === 'nextObject') {
+                // El servidor envia el proximo objeto
+                this.currentServerObjectType = data.objectType;
+                this.waitingForNewObject = false;
             }
         }
     }
@@ -722,10 +770,10 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
 
     update() {
 
-        if (this.Gancho.objeto == null) {
-            //Si no hay objeto lo crea
-            this.CreateObject(this.ganchoPoint.x, this.ganchoPoint.y);
-        } else if (this.Gancho.objeto.Soltar == false) {
+        // Solo crear objeto si no hay uno y el servidor nos dice que crear
+        if (this.Gancho.objeto == null && this.currentServerObjectType && !this.waitingForNewObject) {
+            this.CreateObject(this.ganchoPoint.x, this.ganchoPoint.y, this.currentServerObjectType);
+        } else if (this.Gancho.objeto && this.Gancho.objeto.Soltar == false) {
             // Si no ha soltado el objeto lo mantiene pegado al gancho
             this.Gancho.objeto.x = this.ganchoPoint.x;
             this.Gancho.objeto.y = this.ganchoPoint.y;
@@ -787,16 +835,35 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
                 this.Gancho.setVelocityX(0);
             }
 
-            //Solo detecta una pulsación
+            // Soltar objeto (Solo detecta una pulsacion)
             if (Phaser.Input.Keyboard.JustDown(this.keys.ENTER) && this.Gancho.objeto != null && this.Gancho.objeto.Soltar == false) {
+                
                 //Se avisa que se ha soltado el objeto y se activa la gravedad
                 this.Gancho.objeto.Soltar = true;
                 this.sonidoGanchoSuelta.play();
                 this.Gancho.objeto.body.setAllowGravity(true);
+                
+                // Guardar referencia al objeto actual por si necesitamos revertir
+                const objetoActual = this.Gancho.objeto;
+                
+                // Enviar solicitud al servidor
+                this.connection.send(JSON.stringify({
+                    type: 'requestDrop',
+                    x: this.ganchoPoint.x,
+                    y: this.ganchoPoint.y
+                }));
+                
+                // Marcar que estamos esperando confirmacion
+                this.waitingForNewObject = true;
+                
+                // Limpiar referencia despues de un tiempo
                 this.time.delayedCall(800, () => {
-                    //Se espera un tiempo para avisar que no hay objeto para que no se cree uno nuevo inmediatamente
-                    this.Gancho.objeto = null;
+                    // Solo limpiar si este sigue siendo el objeto actual
+                    if (this.Gancho.objeto === objetoActual) {
+                        this.Gancho.objeto = null;
+                    }
                 });
+                
             }
             this.sendPosition();
         }
@@ -818,8 +885,8 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.finalJuego(this.Ania);
     }
 
-    CreateObject(x, y) { //Crea un objeto en las coordenadas dadas
-        let tipoObjeto = Phaser.Math.RND.pick(['Ataud', 'guadana', 'hueso', 'libro'])
+    CreateObject(x, y, tipoObjeto) { //Crea un objeto en las coordenadas dadas
+        //let tipoObjeto = Phaser.Math.RND.pick(['Ataud', 'guadana', 'hueso', 'libro'])
         let objeto = this.objects.create(x, y + 30, tipoObjeto).setDepth(0);
         objeto.canDamage = true;
         objeto.setOrigin(0.5, 0.5);
