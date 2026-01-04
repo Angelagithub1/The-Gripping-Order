@@ -140,7 +140,7 @@ export class MenuLogin extends Phaser.Scene {   //Crear clase que hereda de Phas
           borderRadius: '6px',
           outline: 'none',
           color: '#3b1b00',
-          fontFamily: 'Arial, sans-serif',
+          fontFamily: 'PixelFont, Arial, sans-serif',
           fontSize: '18px',
           fontWeight: 'bold',
           letterSpacing: '0.5px',
@@ -244,7 +244,7 @@ export class MenuLogin extends Phaser.Scene {   //Crear clase que hereda de Phas
 
       // Mensajes dinámicos 
       this.messageError = this.add.text(cx, cy - 145, '', {
-        color: 'red', fontFamily: 'Arial', fontSize: '20px'
+        color: 'red', fontFamily: 'PixelFont, Arial', fontSize: '20px'
       }).setOrigin(0.5);
 
       // Orden con ConnectionMenu

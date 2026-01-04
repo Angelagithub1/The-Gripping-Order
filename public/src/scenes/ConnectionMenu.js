@@ -12,8 +12,8 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
     create() {
 
         //Conexion
-        this.statusText = this.add.text(16, this.scale.height - 32, '', { fontSize: '20px', fill: '#ffffff' });
-        this.messageNotEnoughPlayers = this.add.text(this.scale.width / 2 - 250, this.scale.height - 65, '', { fontSize: '20px', fill: '#ff0000ff' });
+        this.statusText = this.add.text(16, this.scale.height - 32, '', { fontFamily: 'PixelFont', fontSize: '20px', fill: '#ffffff' });
+        this.messageNotEnoughPlayers = this.add.text(this.scale.width / 2 - 250, this.scale.height - 65, '', { fontFamily: 'PixelFont', fontSize: '20px', fill: '#ff0000ff' });
 
         //Verificacion de conexion con el servidor
         this.connectionInterval = setInterval(() => this.checkServerStatus(), 500);
@@ -101,11 +101,6 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
                         console.error('Error al reintentar el inicio de sesión:', error);
                         this.scene.start('MenuLogin');
                         this.escenaActual = 'MenuLogin';
-                    }
-                    if (this.escenaActual == 'PantallaJuego') {
-                        //Actualizar pantalla de juego tema de index de mensajes
-                        this.escenaActual.IndexMessage=0;
-
                     }
                     if (this.escenaActual == 'MenuEleccionJugador' && this.scene.get(this.escenaActual).readyToPlay) {
                         console.log('Mandando aviso que dio a aceptar')
