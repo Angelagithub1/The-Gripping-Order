@@ -19,6 +19,8 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         */
         this.isAnia = data.isAnia; //Booleano para saber si el jugador es Ania o Gancho
         console.log("Es Ania:", this.isAnia);
+
+        this.IndexMessage = 0; //Indice de mensajes recibidos por WebSocket
     }
 
     preload() {  //Se ejecuta antes de que empiece la escena
@@ -636,6 +638,11 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
     }
 
     async ProcessMovement(data) {
+        if(data.Index < this.IndexMessage){
+            //Es un mensaje antiguo
+            return;
+        }
+        this.IndexMessage = data.Index;
         //console.log("Nueva informacion recibida")
         const umbralDeError = 5;
         const suavizado = 0.15;
@@ -646,11 +653,10 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
                 const nuevoX = this.Gancho.x + (data.Gancho.x - this.Gancho.x) * suavizado;
                 this.Gancho.x = nuevoX;
             }
-
+            this.Ania.body.setAllowGravity(false); //Desactivar gravedad para ania remota
             const AntiguoX = this.Ania.x;
             this.Ania.x = data.Ania.x;
-            //this.Ania.y = data.Ania.y;
-            this.Ania.y += (data.Ania.y - this.Ania.y) * (0.5); //Suavizado en Y
+            this.Ania.y = data.Ania.y;
             //Se actualiza la posicion tal cual de ania
             if (AntiguoX > this.Ania.x) {
                 // Se mueve a la izquierda

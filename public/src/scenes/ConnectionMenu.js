@@ -102,6 +102,11 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
                         this.scene.start('MenuLogin');
                         this.escenaActual = 'MenuLogin';
                     }
+                    if (this.escenaActual == 'PantallaJuego') {
+                        //Actualizar pantalla de juego tema de index de mensajes
+                        this.escenaActual.IndexMessage=0;
+
+                    }
                     if (this.escenaActual == 'MenuEleccionJugador' && this.scene.get(this.escenaActual).readyToPlay) {
                         console.log('Mandando aviso que dio a aceptar')
                         //Si esta en el menu de eleccion de jugador y estaba listo entonces se reenvia
