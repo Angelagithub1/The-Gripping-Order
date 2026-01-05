@@ -643,19 +643,11 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
                 if (data.currentObjectType && !this.waitingForNewObject) {
                     this.currentServerObjectType = data.currentObjectType;
                 }
-
-                // Actualizar vidas desde el servidor
-                if (data.aniaLives !== undefined) {
-                    this.updateLives(data.aniaLives);
-                }
             }
 
             if (data.type === 'initObject') {
                 // El servidor nos envia el objeto inicial
                 this.currentServerObjectType = data.objectType;
-                if (data.aniaLives !== undefined) {
-                    this.updateLives(data.aniaLives);
-                }
             }
             
             if (data.type === 'objectDropped') {
@@ -682,23 +674,6 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
                 // El servidor envia el proximo objeto
                 this.currentServerObjectType = data.objectType;
                 this.waitingForNewObject = false;
-            }
-
-            if (data.type === 'aniaDamaged') {
-                console.log(`Servidor: Vidas: ${data.remainingLives}`);
-                this.updateLives(data.remainingLives);
-                this.sonidoAniaDanada.play();
-                
-                if (data.remainingLives <= 0) {
-                    this.time.delayedCall(500, () => {
-                        this.finalJuego(this.Gancho);
-                    });
-                }
-            }
-            
-            if (data.type === 'gameOver') {
-                console.log("Fin de la partida. Ganador:", data.winner);
-                this.finalJuego({ name: data.winner });
             }
         }
     }
@@ -912,11 +887,6 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.Gancho.objeto = objeto;
     }
 
-    updateLives(serverLives) {
-        if (this.Ania.lives !== serverLives) {
-            this.Ania.lives = serverLives;
-        }
-    }
 
     DamageAnia(ania, objeto) {
         if (objeto.Soltar == false) {
@@ -929,7 +899,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         }
         this.sonidoAniaDanada.play();
         objeto.canDamage = false; // Marcar el objeto como ya usado para daño
-        //this.Ania.lives = this.Ania.lives - 1; // Restar una vida a Ania
+        this.Ania.lives = this.Ania.lives - 1; // Restar una vida a Ania
 
         if (this.hearts.length > 1) {
             const heart = this.hearts.pop();
@@ -940,8 +910,8 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             // Cambiar a la escena ResultScreen
         }
 
-        this.connection.send(JSON.stringify({type: 'damageRequest'}));
-        console.log("Solicitud de daño");
+        //this.connection.send(JSON.stringify({type: 'damageRequest'}));
+        //console.log("Solicitud de daño");
     }
 
     
