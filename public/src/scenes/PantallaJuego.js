@@ -622,7 +622,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.powerUpsLista = ['PowerUpAmarillo', 'PowerUpAzul', 'PowerUpRojo', 'PowerUpVerde'];
         this.scene.moveBelow("ConnectionMenu");
 
-        // WebSocket
+    // WebSocket //
         this.connection = new WebSocket('ws://localhost:8080');
         this.connection.onopen = () => {
             console.log("Conectado al servidor");
@@ -643,37 +643,38 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
                 if (data.currentObjectType && !this.waitingForNewObject) {
                     this.currentServerObjectType = data.currentObjectType;
                 }
+
+                // Actualizar vidas desde el servidor
+                if (data.aniaLives !== undefined) {
+                    this.updateLives(data.aniaLives);
+                }
             }
 
             if (data.type === 'initObject') {
                 // El servidor nos envia el objeto inicial
                 this.currentServerObjectType = data.objectType;
+                if (data.aniaLives !== undefined) {
+                    this.updateLives(data.aniaLives);
+                }
             }
             
             if (data.type === 'objectDropped') {
-                // El servidor notifica que el objeto se cae
-                // Si somos el jugador del Gancho, ya lo hicimos localmente
-                // Si somos Ania, necesitamos soltar el objeto en nuestro cliente   
-
-                if (!this.isAnia) {
-                    // Como Gancho, ya soltamos el objeto localmente
-                    // Solo verificamos que nuestra accion fue aceptada
-                    console.log("Servidor: Cae el objeto");
-                } else {
-                    if (this.Gancho.objeto) {
-                        this.Gancho.objeto.Soltar = true;
-                        this.Gancho.objeto.body.setAllowGravity(true);
-                        this.sonidoGanchoSuelta.play();
-                        
-                        // Ajustar posicion exacta del objeto soltado
-                        this.Gancho.objeto.x = data.x;
-                        this.Gancho.objeto.y = data.y;
-                        
-                        this.time.delayedCall(800, () => {
-                            this.Gancho.objeto = null;
-                        });
-                    }
+                // El servidor notifica que el objeto se cae 
+                console.log("Servidor: Cae el objeto en", data.x, data.y);
+                if (this.Gancho.objeto) {
+                    this.Gancho.objeto.Soltar = true;
+                    this.Gancho.objeto.body.setAllowGravity(true);
+                    this.sonidoGanchoSuelta.play();
+                    
+                    // Ajustar posicion exacta del objeto soltado
+                    this.Gancho.objeto.x = data.x;
+                    this.Gancho.objeto.y = data.y;
+                    
+                    this.time.delayedCall(800, () => {
+                        this.Gancho.objeto = null;
+                    });
                 }
+                
                 this.waitingForNewObject = false;
             }
             
@@ -681,6 +682,23 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
                 // El servidor envia el proximo objeto
                 this.currentServerObjectType = data.objectType;
                 this.waitingForNewObject = false;
+            }
+
+            if (data.type === 'aniaDamaged') {
+                console.log(`Servidor: Vidas: ${data.remainingLives}`);
+                this.updateLives(data.remainingLives);
+                this.sonidoAniaDanada.play();
+                
+                if (data.remainingLives <= 0) {
+                    this.time.delayedCall(500, () => {
+                        this.finalJuego(this.Gancho);
+                    });
+                }
+            }
+            
+            if (data.type === 'gameOver') {
+                console.log("Fin de la partida. Ganador:", data.winner);
+                this.finalJuego({ name: data.winner });
             }
         }
     }
@@ -836,13 +854,8 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             }
 
             // Soltar objeto (Solo detecta una pulsacion)
-            if (Phaser.Input.Keyboard.JustDown(this.keys.ENTER) && this.Gancho.objeto != null && this.Gancho.objeto.Soltar == false) {
-                
-                //Se avisa que se ha soltado el objeto y se activa la gravedad
-                this.Gancho.objeto.Soltar = true;
-                this.sonidoGanchoSuelta.play();
-                this.Gancho.objeto.body.setAllowGravity(true);
-                
+            if (Phaser.Input.Keyboard.JustDown(this.keys.ENTER) && this.Gancho.objeto != null && this.Gancho.objeto.Soltar == false && !this.waitingForNewObject) {
+                                
                 // Guardar referencia al objeto actual por si necesitamos revertir
                 const objetoActual = this.Gancho.objeto;
                 
@@ -867,6 +880,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             }
             this.sendPosition();
         }
+
     }
 
     updateTimer() {
@@ -898,6 +912,12 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.Gancho.objeto = objeto;
     }
 
+    updateLives(serverLives) {
+        if (this.Ania.lives !== serverLives) {
+            this.Ania.lives = serverLives;
+        }
+    }
+
     DamageAnia(ania, objeto) {
         if (objeto.Soltar == false) {
             console.log("Gancho no ha soltado");
@@ -909,7 +929,8 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         }
         this.sonidoAniaDanada.play();
         objeto.canDamage = false; // Marcar el objeto como ya usado para daño
-        this.Ania.lives = this.Ania.lives - 1; // Restar una vida a Ania
+        //this.Ania.lives = this.Ania.lives - 1; // Restar una vida a Ania
+
         if (this.hearts.length > 1) {
             const heart = this.hearts.pop();
             heart.setTexture('HeartEmpty'); // Cambiar la textura a corazón vacío
@@ -918,8 +939,12 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             this.finalJuego(this.Gancho);
             // Cambiar a la escena ResultScreen
         }
-        console.log("Ania ha sido dañada");
+
+        this.connection.send(JSON.stringify({type: 'damageRequest'}));
+        console.log("Solicitud de daño");
     }
+
+    
     DestroyPowrUp(powerUp, objeto) {
         if (objeto.Soltar == false) return; // Evitar daño si el gancho no ha soltado el objeto
         powerUp.destroy();
@@ -1091,6 +1116,5 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             ganador: jugador.name,
         }); // Cambiar a la escena ResultScreen
     }
-
 
 }
