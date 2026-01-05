@@ -6,9 +6,6 @@ export const initGameSocketController = (wss) => {
     const powerUpActivoAnia = '';
     let indexAct = 0;
 
-    //Vidas de Ania
-    let aniaLives = 3;
-
     // Objeto actual del gancho
     const tiposObjetos = ['Ataud', 'guadana', 'hueso', 'libro'];
     let currentObjectType = tiposObjetos[Math.floor(Math.random() * tiposObjetos.length)];
@@ -29,8 +26,6 @@ export const initGameSocketController = (wss) => {
                     currentObjectType: currentObjectType,
                     isObjectDropped: isObjectDropped,
                     objectDropPosition: objectDropPosition,
-                    // Enviar vidas actualizadas
-                    aniaLives: aniaLives
                 }));
             }
         });
@@ -43,7 +38,6 @@ export const initGameSocketController = (wss) => {
         ws.send(JSON.stringify({
             type: 'initObject',
             objectType: currentObjectType,
-            aniaLives: aniaLives
         }));
         
         ws.on('message', (message) => {
@@ -109,39 +103,6 @@ export const initGameSocketController = (wss) => {
                     }, 800);
                 }
             }
-
-            if (data.type === 'damageRequest'){
-                // Verificamos que Ania tenga vidas disponibles y el objeto actual no haya causado daño ya
-                if (aniaLives > 0) {
-                    aniaLives--;
-                    console.log(`Vidas restantes: ${aniaLives}`);
-                    
-                    // Notificar a todos los clientes sobre el daño
-                    wss.clients.forEach((client) => {
-                        if (client.readyState === 1) {
-                            client.send(JSON.stringify({
-                                type: 'aniaDamaged',
-                                remainingLives: aniaLives
-                            }));
-                        }
-                    });
-                }    
-
-                // Si Ania se queda sin vidas, notificar fin del juego
-                if (aniaLives <= 0) {
-                    setTimeout(() => {
-                        wss.clients.forEach((client) => {
-                            if (client.readyState === 1) {
-                                client.send(JSON.stringify({
-                                    type: 'gameOver',
-                                    winner: 'Gancho'
-                                }));
-                            }
-                        });
-                    }, 500);
-                }
-            }
-
         });
     });
 
