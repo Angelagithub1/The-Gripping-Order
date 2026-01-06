@@ -182,7 +182,14 @@ export const initGameSocketController = (wss) => {
                         // Detección de recogida de powerup por proximidad (Ania)
                         for (const pu of powerUps.values()) {
                             if (!pu.active) continue;
-                            if (Math.abs(ania.x - pu.x) < 30 && Math.abs(ania.y - pu.y) < 30) {
+                            
+                            // Usar la X inicial e Y actualizada del powerup
+                            const distance = Math.sqrt(
+                                Math.pow(ania.x - pu.x, 2) + 
+                                Math.pow(ania.y - pu.y, 2)
+                            );
+                            
+                            if (distance < 30) { // Radio de colisión
                                 destroyPowerUp(pu.id, 'ania_collect');
                                 startEffect(effectFromType(pu.type));
                             }
@@ -190,7 +197,16 @@ export const initGameSocketController = (wss) => {
                     } else {
                         gancho.x = data.x;
                     }
-                } 
+                }
+                else if (data.type === 'powerup_y_positions') {
+                    // Actualizar posiciones Y de todos los powerups
+                    for (const pos of data.positions) {
+                        const pu = powerUps.get(pos.id);
+                        if (pu && pu.active) {
+                            pu.y = pos.y; // Solo actualizamos Y
+                        }
+                    }
+                }
                 else if (data.type === 'powerup_touch') {
                     // Si el cliente avisa de toque explícito
                     const id = String(data.id); 
@@ -203,15 +219,18 @@ export const initGameSocketController = (wss) => {
                 else if (data.type === 'object_hit_powerup') {
                     // Cliente reporta colisión entre objeto y powerup
                     const powerUpId = String(data.powerUpId);
+                    const powerUpY = data.powerUpY;
                     const objectX = data.objectX;
                     const objectY = data.objectY;
                     
-                    console.log(`[SERVER] Client reports object hit powerup ${powerUpId} at (${objectX}, ${objectY})`);
+                    console.log(`[SERVER] Client reports object hit powerup ${powerUpId} at (${objectX}, ${powerUpY}`);
                     
                     // Verificar que el powerup existe y está activo
                     const pu = powerUps.get(powerUpId);
                     if (pu && pu.active) {
-                        // Verificar proximidad (doble verificación del servidor)
+                        // ACTUALIZAR solo la coordenada Y del powerup en el servidor
+                        pu.y = powerUpY;
+                        // Verificar proximidad (usando X original e Y actualizada)
                         const distance = Math.sqrt(
                             Math.pow(objectX - pu.x, 2) + 
                             Math.pow(objectY - pu.y, 2)
