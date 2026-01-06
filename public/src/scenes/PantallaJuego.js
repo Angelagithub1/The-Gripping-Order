@@ -132,6 +132,8 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
           if (this.powerUps) {
             this.powerUps.clear(true, true); // destruye todos los hijos si existieran
           }
+
+          this.frameCounter = 0;
       
         this.scene.get('ConnectionMenu').escenaActual = this.scene.key;
         //Fondo
@@ -643,7 +645,45 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.physics.add.collider(this.powerUps, this.platform7);
         this.physics.add.collider(this.powerUps, this.platform8);
 
-        this.physics.add.overlap(this.powerUps, this.objects, this.DestroyPowrUp, null, this);
+        this.physics.add.overlap(this.powerUps, this.objects, (powerUp, objeto) => {
+            if (objeto.Soltar == false) return; // Evitar si el gancho no ha soltado el objeto
+            
+            // Buscar el ID del powerup desde el mapa
+            let powerUpId = null;
+            for (const [id, sprite] of this.powerUpsById.entries()) {
+                if (sprite === powerUp) {
+                    powerUpId = id;
+                    break;
+                }
+            }
+            
+            if (!powerUpId) return;
+            
+            // Enviar mensaje al servidor sobre la colisión
+            if (this.connection && this.connection.readyState === WebSocket.OPEN) {
+                this.connection.send(JSON.stringify({
+                    type: 'object_hit_powerup',
+                    powerUpId: powerUpId,
+                    objectX: objeto.x,
+                    objectY: objeto.y
+                }));
+                
+                console.log(`[CLIENT] Enviando colisión objeto-powerup: ${powerUpId} en (${objeto.x}, ${objeto.y})`);
+            }
+            
+            // También enviar posición del objeto para verificación del servidor
+            if (this.connection && this.connection.readyState === WebSocket.OPEN) {
+                this.connection.send(JSON.stringify({
+                    type: 'object_position',
+                    x: objeto.x,
+                    y: objeto.y,
+                    objectId: objeto.name || 'unknown'
+                }));
+            }
+            
+            // NO destruir localmente - esperar confirmación del servidor
+        }, null, this);
+
 
         this.powerUpsLista = ['PowerUpAmarillo', 'PowerUpAzul', 'PowerUpRojo', 'PowerUpVerde'];
         this.scene.moveBelow("ConnectionMenu");
@@ -1009,6 +1049,24 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             this.Gancho.objeto.x = this.ganchoPoint.x;
             this.Gancho.objeto.y = this.ganchoPoint.y;
         }
+
+        // Si el objeto ha sido soltado, enviar su posición al servidor
+        if (this.Gancho.objeto && this.Gancho.objeto.Soltar == true) {
+            if (this.connection && this.connection.readyState === WebSocket.OPEN) {
+                // Enviar posición cada 5 frames para no saturar
+                if (this.frameCounter % 5 === 0) {
+                    this.connection.send(JSON.stringify({
+                        type: 'object_position',
+                        x: this.Gancho.objeto.x,
+                        y: this.Gancho.objeto.y,
+                        objectId: this.Gancho.objeto.name || 'unknown'
+                    }));
+                }
+            }
+        }
+        // Incrementar contador de frames
+        this.frameCounter = (this.frameCounter || 0) + 1;
+
         if (this.isAnia && this.Ania) {
             //Hay un bug si ania salta y colisiona con el gancho, este le empuja fuera de la pantalla
             if (this.Ania.x < this.Ania.width / 2 + 100) {
@@ -1136,10 +1194,11 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         }
         console.log("Ania ha sido dañada");
     }
+    /*
     DestroyPowrUp(powerUp, objeto) {
         if (objeto.Soltar == false) return; // Evitar daño si el gancho no ha soltado el objeto
         powerUp.destroy();
-    }
+    }*/
 
     AparicionesPowerUp() {
         console.log("Funcion base PowerUp");
