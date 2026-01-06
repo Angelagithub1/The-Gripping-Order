@@ -662,9 +662,8 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
                     this.Gancho.objeto.x = data.x;
                     this.Gancho.objeto.y = data.y;
                     
-                    this.time.delayedCall(800, () => {
-                        this.Gancho.objeto = null;
-                    });
+                    this.Gancho.objeto = null;
+
                 }
                 
                 this.waitingForNewObject = false;
@@ -843,14 +842,6 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
                 
                 // Marcar que estamos esperando confirmacion
                 this.waitingForNewObject = true;
-                
-                // Limpiar referencia despues de un tiempo
-                this.time.delayedCall(800, () => {
-                    // Solo limpiar si este sigue siendo el objeto actual
-                    if (this.Gancho.objeto === objetoActual) {
-                        this.Gancho.objeto = null;
-                    }
-                });
                 
             }
             this.sendPosition();
