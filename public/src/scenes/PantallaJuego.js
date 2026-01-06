@@ -664,6 +664,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
                 this.connection.send(JSON.stringify({
                     type: 'object_hit_powerup',
                     powerUpId: powerUpId,
+                    powerUpY: powerUp.y,
                     objectX: objeto.x,
                     objectY: objeto.y
                 }));
@@ -1067,6 +1068,11 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         // Incrementar contador de frames
         this.frameCounter = (this.frameCounter || 0) + 1;
 
+        // Enviar posiciones Y actualizadas de powerups cada 30 frames
+        if (this.frameCounter % 30 === 0) {
+            this.sendPowerUpYPositions();
+        }
+
         if (this.isAnia && this.Ania) {
             //Hay un bug si ania salta y colisiona con el gancho, este le empuja fuera de la pantalla
             if (this.Ania.x < this.Ania.width / 2 + 100) {
@@ -1204,6 +1210,25 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         console.log("Funcion base PowerUp");
         const tiempo = Phaser.Math.Between(10000, 20000); // Tiempo aleatorio entre 10 y 20 segundos
         this.time.delayedCall(tiempo, () => { this.SpawnPowerUp(); this.AparicionesPowerUp(); }, [], this); //Se usa delayedCall en vez de loop pq cada vez se quiere un ritmo distinto
+    }
+
+    sendPowerUpYPositions() {
+        if (!this.connection || this.connection.readyState !== WebSocket.OPEN) return;
+        
+        const yPositions = [];
+        for (const [id, sprite] of this.powerUpsById.entries()) {
+            yPositions.push({
+                id: id,
+                y: sprite.y  // Solo enviamos Y
+            });
+        }
+        
+        if (yPositions.length > 0) {
+            this.connection.send(JSON.stringify({
+                type: 'powerup_y_positions',
+                positions: yPositions
+            }));
+        }
     }
 
     SpawnPowerUp() {
