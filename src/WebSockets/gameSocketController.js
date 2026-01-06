@@ -4,11 +4,15 @@ export const initGameSocketController = (wss) => {
 
     //PowerUpActivoAnia
     //const powerUpActivoAnia = '';
-    
     const powerUps = new Map(); // id -> { id, type, x, y, active }
-
     const poweUpTypes = ['PowerUpAmarillo', 'PowerUpVerde', 'PowerUpAzul', 'PowerUpRojo'];
     let nextPowerUpId = 1;
+
+    // Variables para objetos
+    const tiposObjetos = ['Ataud', 'guadana', 'hueso', 'libro'];
+    let currentObjectType = tiposObjetos[Math.floor(Math.random() * tiposObjetos.length)];
+    let isObjectDropped = false;
+    let objectDropPosition = { x: 0, y: 0 };
 
     function broadcast(obj){
         const msg = JSON.stringify(obj);
@@ -71,6 +75,10 @@ export const initGameSocketController = (wss) => {
               Ania: ania,
               Gancho: gancho,
               Index: indexAct++,
+              // Información del objeto
+              currentObjectType: currentObjectType,
+              isObjectDropped: isObjectDropped,
+              objectDropPosition: objectDropPosition,
             });
           }, 33);
       
@@ -90,75 +98,111 @@ export const initGameSocketController = (wss) => {
     }, 33);*/
     wss.on('connection', (ws) => {
         
-        for (const pu of powerUps.values()) {
-              if (pu.active) {
-                ws.send(JSON.stringify({ type: 'spawn_powerup', id: pu.id, x: pu.x, y: pu.y, puType: pu.type }));
-              }
-            }
-        
-        ws.on('message', (message) => {
-            const data = JSON.parse(message);
+      for (const pu of powerUps.values()) {
+        if (pu.active) {
+          ws.send(JSON.stringify({ type: 'spawn_powerup', id: pu.id, x: pu.x, y: pu.y, puType: pu.type }));
+        }
+      }
 
-            
-            if (data.type === 'request_powerups') {
-                    for (const pu of powerUps.values()) {
-                      if (pu.active) {
-                        ws.send(JSON.stringify({ type: 'spawn_powerup', id: pu.id, x: pu.x, y: pu.y, puType: pu.type }));
-                      }
-                    }
-                    return;
-                  }
+      // Enviar información del objeto actual al nuevo cliente
+      ws.send(JSON.stringify({
+          type: 'initObject',
+          objectType: currentObjectType,
+      }));
+      
+      ws.on('message', (message) => {
+          const data = JSON.parse(message);
+
           
+        if (data.type === 'request_powerups') {
+                for (const pu of powerUps.values()) {
+                  if (pu.active) {
+                    ws.send(JSON.stringify({ type: 'spawn_powerup', id: pu.id, x: pu.x, y: pu.y, puType: pu.type }));
+                  }
+                }
+                return;
+              }
+      
 
-            if (data.type === 'updatePosition') { 
-                if (data.character) { // Ania
+        if (data.type === 'updatePosition') { 
+            if (data.character) { // Ania
+                ania.x = data.x;
+                ania.y = data.y;
+
+      // --- DETECCIÓN DE RECOGIDA DE POWERUP POR PROXIMIDAD (servidor) ---
+                for (const pu of powerUps.values()) {
+                    if (!pu.active) continue;
+                    if (Math.abs(ania.x - pu.x) < 30 && Math.abs(ania.y - pu.y) < 30) {
+                      pu.active = false;
+                      broadcast({ type: 'remove_powerup', id: pu.id, x: pu.x, y: pu.y, puType: pu.type });
+                      startEffect(effectFromType(pu.type));
+                    }
+
+                }
+            } else {
+                gancho.x = data.x;
+                // Nota: tu versión inicial no actualizaba y; dejamos igual para no tocar nada ajeno
+            }
+        } else if (data.type === 'powerup_touch') {
+            // Si el cliente avisa de toque explícito (redundante pero útil)
+            const id = String(data.id); 
+            const pu = powerUps.get(id);
+            if (pu && pu.active) {
+                pu.active = false;
+                broadcast({ type: 'remove_powerup', id: pu.id, x:pu.x, y: pu.y, puType: pu.type });
+                startEffect(effectFromType(pu.type));
+            }
+
+            /*//Actualizar posicion
+            if (data.character) {
+                if (powerUpActivoAnia == 'Congelación') {
+                    //Si se envia una posicion cuando esta congelado no se actualiza
+                    return;
+                }
+                if (ania.x !== data.x || ania.y !== data.y) {
                     ania.x = data.x;
                     ania.y = data.y;
 
-          // --- DETECCIÓN DE RECOGIDA DE POWERUP POR PROXIMIDAD (servidor) ---
-                    for (const pu of powerUps.values()) {
-                        if (!pu.active) continue;
-                        if (Math.abs(ania.x - pu.x) < 30 && Math.abs(ania.y - pu.y) < 30) {
-                          pu.active = false;
-                          broadcast({ type: 'remove_powerup', id: pu.id, x: pu.x, y: pu.y, puType: pu.type });
-                          startEffect(effectFromType(pu.type));
-                        }
-
-                    }
-                } else {
+                }
+            } else {
+                if (gancho.x !== data.x || gancho.y !== data.y) {
                     gancho.x = data.x;
-                    // Nota: tu versión inicial no actualizaba y; dejamos igual para no tocar nada ajeno
                 }
-            } else if (data.type === 'powerup_touch') {
-                // Si el cliente avisa de toque explícito (redundante pero útil)
-                const id = String(data.id); 
-                const pu = powerUps.get(id);
-                if (pu && pu.active) {
-                    pu.active = false;
-                    broadcast({ type: 'remove_powerup', id: pu.id, x:pu.x, y: pu.y, puType: pu.type });
-                    startEffect(effectFromType(pu.type));
-                }
-      
-  
+            }*/
+        } else if (data.type === 'requestDrop') { // Manejar solicitud de soltar objeto
+            // El gancho solicita soltar el objeto
+          if (!isObjectDropped) {
+            isObjectDropped = true;
+            objectDropPosition = { 
+                x: gancho.x,  // Usar la posicion actual del gancho del servidor
+                y: gancho.y + 50  // Ajustar segun la posicion del punto del gancho
+            };
+            
+            console.log(`[SERVER] Soltando objeto en ${objectDropPosition.x}, ${objectDropPosition.y}`);
 
-                /*//Actualizar posicion
-                if (data.character) {
-                    if (powerUpActivoAnia == 'Congelación') {
-                        //Si se envia una posicion cuando esta congelado no se actualiza
-                        return;
-                    }
-                    if (ania.x !== data.x || ania.y !== data.y) {
-                        ania.x = data.x;
-                        ania.y = data.y;
+            // Notificar a todos los clientes que el objeto se ha soltado
+            broadcast({
+                type: 'objectDropped',
+                x: objectDropPosition.x,
+                y: objectDropPosition.y,
+                objectType: currentObjectType
+            });
 
-                    }
-                } else {
-                    if (gancho.x !== data.x || gancho.y !== data.y) {
-                        gancho.x = data.x;
-                    }
-                }*/
-            }
-        });
+            // Despues de un tiempo, generar un nuevo objeto
+            setTimeout(() => {
+                currentObjectType = tiposObjetos[Math.floor(Math.random() * tiposObjetos.length)];
+                isObjectDropped = false;
+                
+                // Notificar a todos los clientes del nuevo objeto
+                broadcast({
+                    type: 'nextObject',
+                    objectType: currentObjectType
+                });
+            }, 800);
+          }
+        }
+
+      });
 
 
     });
