@@ -21,6 +21,10 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         */
         this.isAnia = data.isAnia; //Booleano para saber si el jugador es Ania o Gancho
         console.log("Es Ania:", this.isAnia);
+
+        // Variables para objetos
+        this.currentServerObjectType = null;
+        this.waitingForNewObject = false;
     }
 
     preload() {  //Se ejecuta antes de que empiece la escena
@@ -757,8 +761,45 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             }
             return;
           }
+
+          // 4) Manejo de objetos
+          if (data.type === 'initObject') {
+                // El servidor nos envia el objeto inicial
+                this.currentServerObjectType = data.objectType;
+                return;
+            }
+            
+            if (data.type === 'objectDropped') {
+                // El servidor notifica que el objeto se cae 
+                console.log("[CLIENT] Cae el objeto en", data.x, data.y);
+                if (this.Gancho.objeto) {
+                    this.Gancho.objeto.Soltar = true;
+                    this.Gancho.objeto.body.setAllowGravity(true);
+                    this.sonidoGanchoSuelta.play();
+                    
+                    // Ajustar posicion exacta del objeto soltado
+                    this.Gancho.objeto.x = data.x;
+                    this.Gancho.objeto.y = data.y;
+                    
+                    // Esperar un tiempo antes de marcar como null
+                    this.time.delayedCall(800, () => {
+                        this.Gancho.objeto = null;
+                    });
+                }
+                
+                this.waitingForNewObject = false;
+                return;
+            }
+            
+            if (data.type === 'nextObject') {
+                // El servidor envia el proximo objeto
+                this.currentServerObjectType = data.objectType;
+                this.waitingForNewObject = false;
+                return;
+            }
+          
       
-          // 4) Efectos
+          // Efectos
           /*if (data.type === 'powerup_started') {
             const j = this.Ania;
             switch (data.effect) {
@@ -879,6 +920,11 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         const umbralDeError = 5;
         const suavizado = 0.15;
 
+        // Actualizar información del objeto del servidor
+        if (data.currentObjectType && !this.waitingForNewObject) {
+            this.currentServerObjectType = data.currentObjectType;
+        }
+
         if (!this.isAnia) {
             if (Math.abs(this.Gancho.x - data.Gancho.x) > umbralDeError) {
                 //Si es el gancho se hace una aproximacion al Gancho
@@ -955,10 +1001,10 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
 
     update() {
 
-        if (this.Gancho.objeto == null) {
-            //Si no hay objeto lo crea
-            this.CreateObject(this.ganchoPoint.x, this.ganchoPoint.y);
-        } else if (this.Gancho.objeto.Soltar == false) {
+        // Solo crear objeto si no hay uno y el servidor nos dice que crear
+        if (this.Gancho.objeto == null && this.currentServerObjectType && !this.waitingForNewObject) {
+            this.CreateObject(this.ganchoPoint.x, this.ganchoPoint.y, this.currentServerObjectType);
+        } else if (this.Gancho.objeto && this.Gancho.objeto.Soltar == false) {
             // Si no ha soltado el objeto lo mantiene pegado al gancho
             this.Gancho.objeto.x = this.ganchoPoint.x;
             this.Gancho.objeto.y = this.ganchoPoint.y;
@@ -1020,16 +1066,20 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
                 this.Gancho.setVelocityX(0);
             }
 
-            //Solo detecta una pulsación
-            if (Phaser.Input.Keyboard.JustDown(this.keys.ENTER) && this.Gancho.objeto != null && this.Gancho.objeto.Soltar == false) {
-                //Se avisa que se ha soltado el objeto y se activa la gravedad
-                this.Gancho.objeto.Soltar = true;
-                this.sonidoGanchoSuelta.play();
-                this.Gancho.objeto.body.setAllowGravity(true);
-                this.time.delayedCall(800, () => {
-                    //Se espera un tiempo para avisar que no hay objeto para que no se cree uno nuevo inmediatamente
-                    this.Gancho.objeto = null;
-                });
+            //// Soltar objeto (Solo detecta una pulsacion)
+            if (Phaser.Input.Keyboard.JustDown(this.keys.ENTER) && this.Gancho.objeto != null && this.Gancho.objeto.Soltar == false && !this.waitingForNewObject) {
+                
+                // Enviar solicitud al servidor
+                if (this.connection && this.connection.readyState === WebSocket.OPEN) {
+                    this.connection.send(JSON.stringify({
+                        type: 'requestDrop',
+                        x: this.ganchoPoint.x,
+                        y: this.ganchoPoint.y
+                    }));
+                    
+                    // Marcar que estamos esperando confirmacion
+                    this.waitingForNewObject = true;
+                }
             }
             this.sendPosition();
         }
@@ -1051,8 +1101,8 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.finalJuego(this.Ania);
     }
 
-    CreateObject(x, y) { //Crea un objeto en las coordenadas dadas
-        let tipoObjeto = Phaser.Math.RND.pick(['Ataud', 'guadana', 'hueso', 'libro'])
+    CreateObject(x, y, tipoObjeto) { //Crea un objeto en las coordenadas dadas
+        // let tipoObjeto = Phaser.Math.RND.pick(['Ataud', 'guadana', 'hueso', 'libro'])
         let objeto = this.objects.create(x, y + 30, tipoObjeto).setDepth(0);
         objeto.canDamage = true;
         objeto.setOrigin(0.5, 0.5);
