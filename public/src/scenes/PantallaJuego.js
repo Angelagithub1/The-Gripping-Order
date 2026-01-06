@@ -1,3 +1,5 @@
+//import e from "express";
+
 //import Phaser from 'phaser';
 export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de Phaser
     constructor() {
@@ -19,8 +21,6 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         */
         this.isAnia = data.isAnia; //Booleano para saber si el jugador es Ania o Gancho
         console.log("Es Ania:", this.isAnia);
-
-        this.IndexMessage = 0; //Indice de mensajes recibidos por WebSocket
     }
 
     preload() {  //Se ejecuta antes de que empiece la escena
@@ -124,6 +124,11 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
     create() {
         //console.log("Ania:",this.AniaSkin, "gancho:",this.GanchoSkin);
 
+         this.powerUpsById = new Map();
+          if (this.powerUps) {
+            this.powerUps.clear(true, true); // destruye todos los hijos si existieran
+          }
+      
         this.scene.get('ConnectionMenu').escenaActual = this.scene.key;
         //Fondo
         const background = this.add.image(0, 0, 'BackgroundGraveyard').setOrigin(0); //Añadir imagen de fondo
@@ -599,9 +604,30 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
 
         //PowerUps
         this.powerUps = this.physics.add.group();
-        this.physics.add.overlap(this.Ania, this.powerUps, this.RecogerPowerUp, null, this); //Colision Ania con PowerUps
+        this.powerUps.children.iterate(child => child && child.setDepth(50));
+        //this.physics.add.overlap(this.Ania, this.powerUps, this.RecogerPowerUp, null, this); //Colision Ania con PowerUps
         this.maxPowerUps = 2;   //Limite de PowerUps en pantalla
-        this.AparicionesPowerUp(); //Evento para crear PowerUps cada cierto tiempo
+        //this.AparicionesPowerUp(); //Evento para crear PowerUps cada cierto tiempo
+
+        this.powerUpsById = new Map(); // Mapa para rastrear los power-ups por ID
+
+        this.physics.add.overlap(this.Ania, this.powerUps, (ania,puSprite) => {
+            let touchedId = null;
+            for (let [id, sprite] of this.powerUpsById.entries()) {
+                if (sprite === puSprite) {
+                    touchedId = id;
+                    break;
+                }
+            }
+            if (!touchedId) return; // No se encontró el ID, salir
+            if (this.connection && this.connection.readyState === WebSocket.OPEN) {
+                this.connection.send(JSON.stringify({
+                    type: 'powerup_touch',
+                    id: touchedId
+                }));
+            }
+        }, null, this);
+             //Colision Ania con PowerUps
 
         this.physics.add.collider(this.powerUps, this.floor);
         this.physics.add.collider(this.powerUps, this.platform1);
@@ -627,22 +653,228 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
                 character: this.isAnia
             }
             this.connection.send(JSON.stringify(mensajeInicial));
+        
+            /*//lista de powerups activos
+            this.connection.send(JSON.stringify({
+                type: 'request_powerups'
+            }));*/
+
         }
 
+        
         this.connection.onmessage = (event) => {
+          const data = JSON.parse(event.data);
+          console.log('[WS] recibido:', data.type, data);
+           
+        if (data.type === 'powerup_started') {
+          const j = this.Ania; 
+          this.applyEffectFromServer(j, data.effect, data.duration);
+          this.sonidoPowerUp.play();
+          return;
+        }
+        if (data.type === 'powerup_ended') {
+          const j = this.Ania;
+          this.endEffectFromServer(j, data.effect);
+          return;
+        }
+
+          
+        
+        if (data.type === 'spawn_powerup') {
+          const { id, x, y, puType } = data;
+          
+        if (this.powerUpsById.has(id)) {
+            console.warn('[CLIENT] spawn_powerup duplicado ignorado:', id);
+            return;
+          }
+
+          const pu = this.powerUps.create(x, y, puType).setOrigin(0.5, 0.5).setScale(1.5);
+          pu.type = puType;
+          pu.powerUpId = id;
+          pu.body.setAllowGravity(true);
+          this.powerUpsById.set(id, pu);   // <-- Añadir al mapa
+        }
+
+
+          // 1) SPAWN (soporta ambos formatos antiguos y nuevos)
+          /*const isPuType = ['PowerUpAmarillo','PowerUpAzul','PowerUpRojo','PowerUpVerde'].includes(data.type); // legado
+          const isSpawn = (data.type === 'spawn_powerup'); // nuevo formato unificado
+        
+          if (isPuType || isSpawn) {
+            const id       = data.id;
+            const texture  = isSpawn ? (data.puType) : data.type; // si viene 'spawn_powerup', usar data.puType
+            const x        = data.x, y = data.y;
+        
+            // DEDUPE: si ya existe ese id, no crees otro sprite
+            if (this.powerUpsById.has(id)) {
+              console.warn('[CLIENT] spawn duplicado ignorado id=', id);
+              return;
+            }
+            const sprite = this.powerUps.create(x, y, texture);
+            sprite.setOrigin(0.5).setScale(1.5).setDepth(50).setAlpha(1);
+            sprite.visible = true;
+            sprite.body.setAllowGravity(true); // pon false si no quieres caída
+            sprite.type = texture;
+            this.powerUpsById.set(id, sprite);
+            console.log('[CLIENT] spawn guardado', id, texture, x, y);
+            return;
+          }*/
+      
+          // 2) Movimiento
+          if (data.type === 'playerPosition') {
+            this.ProcessMovement(data);
+            return;
+          }
+      
+          // 3) REMOVE (ahora el server envía id + x,y + puType)
+          if (data.type === 'remove_powerup') {
+            const id = data.id;
+            let sprite = this.powerUpsById.get(id);
+        
+            if (sprite) {
+              console.log('[CLIENT] remove_powerup', id);
+              sprite.destroy();
+              this.powerUpsById.delete(id);
+              return;
+            }
+        
+            // Fallback por (x,y) si por algún motivo no existiera en el mapa
+            if (typeof data.x === 'number' && typeof data.y === 'number') {
+              let closest = null, best = Infinity;
+              this.powerUps.children.iterate(s => {
+                if (!s) return;
+                const dx = s.x - data.x, dy = s.y - data.y;
+                const d2 = dx*dx + dy*dy;
+                if (d2 < best) { best = d2; closest = s; }
+              });
+              if (closest) {
+                console.warn('[CLIENT] remove fallback id desconocido -> destruyendo sprite más cercano', id);
+                for (const [k, v] of this.powerUpsById.entries()) { if (v === closest) { this.powerUpsById.delete(k); break; } }
+                closest.destroy();
+              } else {
+                console.warn('[CLIENT] remove_powerup sin id en mapa y sin fallback posible', id);
+              }
+            }
+            return;
+          }
+      
+          // 4) Efectos
+          /*if (data.type === 'powerup_started') {
+            const j = this.Ania;
+            switch (data.effect) {
+              case 'freeze':       j.canMove = false;      break;
+              case 'double_jump':  j.canDoubleJump = true; break;
+              case 'speed':        j.masVelocidad = true;  break;
+              case 'invulnerable': j.invulnerable = true;  break;
+            }
+            this.sonidoPowerUp.play();
+            return;
+          }
+          if (data.type === 'powerup_ended') {
+            const j = this.Ania;
+            switch (data.effect) {
+              case 'freeze':       j.canMove = true;       break;
+              case 'double_jump':  j.canDoubleJump = false;break;
+              case 'speed':        j.masVelocidad = false; break;
+              case 'invulnerable': j.invulnerable = false; break;
+            }
+            return;
+          }*/
+      
+          console.warn('[WS][UNKNOWN TYPE]', data.type, data);
+        };
+        
+
+        /*this.connection.onmessage = (event) => {
             const data = JSON.parse(event.data);
+
+            //pruebas y mas pruebas
+            console.log('[WS] recibido:', data.type, data);
+
+            const powerUpTypesKeys = ['PowerUpAmarillo', 'PowerUpAzul', 'PowerUpRojo', 'PowerUpVerde'];
+            if (powerUpTypesKeys.includes(data.type)) {
+                const sprite = this.powerUps.create(data.x, data.y, data.type);
+                sprite.setOrigin(0.5).setScale(1.5);
+                //a ver si asi se ve
+                sprite.setDepth(50);
+                sprite.setAlpha(1);
+                sprite.visible = true;
+                sprite.body.setAllowGravity(true);
+                sprite.type = data.type;
+                this.powerUpsById.set(data.id, sprite);
+
+                return; // Salir para evitar procesar más de una vez
+            }
+
             if (data.type === 'playerPosition') {
                 this.ProcessMovement(data);
             }
-        }
+            else if (data.type === 'spawn_powerup') {
+                ///mas pruebas
+                console.log('[CLIENT] spawn_powerup recibido:', data);
+                
+                const debugSprite = this.add.image(data.x, data.y, data.type)
+                    .setScale(1.5)
+                    .setDepth(2000)
+                    .setAlpha(0.85);
+                this.time.delayedCall(2000, () => {
+                    debugSprite.destroy();
+                });
+                
+                //porque coño no se ve
+                const mark = this.add.circle(data.x, data.y, 14, 0xff0000)
+                    .setDepth(2500)
+                    .setAlpha(0.9);
+                this.time.delayedCall(2000, () => {
+                    mark.destroy();
+                });
+
+                ///////////////////
+
+
+                const sprite = this.powerUps.create(data.x, data.y, data.type);
+                sprite.setOrigin(0.5).setScale(1.5);
+                //a ver si asi se ve
+                sprite.setDepth(50);
+                sprite.setAlpha(1);
+                sprite.visible = true;
+
+                sprite.body.setAllowGravity(true);
+                sprite.type = data.type;
+                this.powerUpsById.set(data.id, sprite); // Almacenar el power-up en el mapa
+
+            } else if (data.type === 'remove_powerup') {
+                const sprite = this.powerUpsById.get(data.id);
+                if (sprite) {
+                    //
+                    console.log('[CLIENT] remove_powerup', data.id);
+                    sprite.destroy();
+                    this.powerUpsById.delete(data.id); // Eliminar del mapa
+                } else {
+                    console.warn('[CLIENT] remove_powerup recibido para id desconocido:', data.id);
+                }
+            } else if (data.type === 'powerup_started') {
+                const jugador = this.Ania;
+                switch (data.effect) {
+                    case 'freeze': jugador.canMove = false; break;
+                    case 'double_jump': jugador.canDoubleJump = true; break;
+                    case 'speed': jugador.masVelocidad = true; break;
+                    case 'invulnerable': jugador.invulnerable = true; break;
+                }
+                this.sonidoPowerUp.play();
+            } else if (data.type === 'powerup_ended') {
+                const jugador = this.Ania;
+                switch (data.effect) {
+                    case 'freeze': jugador.canMove = true; break;
+                    case 'double_jump': jugador.canDoubleJump = false; break;
+                    case 'speed': jugador.masVelocidad = false; break;
+                    case 'invulnerable': jugador.invulnerable = false; break;
+                }
+            }
+        }*/
     }
 
     async ProcessMovement(data) {
-        if(data.Index < this.IndexMessage){
-            //Es un mensaje antiguo
-            return;
-        }
-        this.IndexMessage = data.Index;
         //console.log("Nueva informacion recibida")
         const umbralDeError = 5;
         const suavizado = 0.15;
@@ -653,10 +885,11 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
                 const nuevoX = this.Gancho.x + (data.Gancho.x - this.Gancho.x) * suavizado;
                 this.Gancho.x = nuevoX;
             }
-            this.Ania.body.setAllowGravity(false); //Desactivar gravedad para ania remota
+
             const AntiguoX = this.Ania.x;
             this.Ania.x = data.Ania.x;
-            this.Ania.y = data.Ania.y;
+            //this.Ania.y = data.Ania.y;
+            this.Ania.y += (data.Ania.y - this.Ania.y) * (0.5); //Suavizado en Y
             //Se actualiza la posicion tal cual de ania
             if (AntiguoX > this.Ania.x) {
                 // Se mueve a la izquierda
@@ -885,7 +1118,16 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
 
     RecogerPowerUp(jugador, powerUp) { //Efecto al recoger Power Up
         this.sonidoPowerUp.play();
-        switch (powerUp.type) {
+
+        
+        if (this.connection && this.connection.readyState === WebSocket.OPEN) {
+            this.connection.send(JSON.stringify({
+              type: 'powerup_touch',
+              id: powerUp.powerUpId
+            }));
+          }
+      
+        /*switch (powerUp.type) {
             case 'PowerUpAmarillo':
                 // Congelación
                 console.log("Efecto Power Up Amarillo");
@@ -911,8 +1153,36 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         }
 
         powerUp.destroy(); //Eliminar el power up
-        console.log("Power Up recogido");
+        console.log("Power Up recogido");*/
     }
+
+
+    applyEffectFromServer(jugador, effect, duration) {
+      switch (effect) {
+        case 'freeze':        jugador.canMove = false;      break;
+        case 'double_jump':   jugador.canDoubleJump = true; break;
+        case 'speed':         jugador.masVelocidad = true;  break;
+        case 'invulnerable':  jugador.invulnerable = true;  break;
+      }
+  
+        // Refrescar animación visible inmediatamente
+          this.updateIdleAnimation(jugador);
+          if (duration && effect !== 'freeze') {
+            // Si algún servidor envía duración sin 'powerup_ended', hacemos fallback
+            this.time.delayedCall(duration, () => this.endEffectFromServer(jugador, effect));
+          }
+        }
+
+        endEffectFromServer(jugador, effect) {
+          switch (effect) {
+            case 'freeze':        jugador.canMove = true;       break;
+            case 'double_jump':   jugador.canDoubleJump = false;break;
+            case 'speed':         jugador.masVelocidad = false; break;
+            case 'invulnerable':  jugador.invulnerable = false; break;
+          }
+          this.updateIdleAnimation(jugador);
+        }
+
 
     DobleSalto(jugador) {
         console.log("Efecto Doble Salto");
