@@ -170,8 +170,8 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         });
         botonPausa.on('pointerup', () => {
             console.log("Pausa");
-            this.scene.pause();
-            this.scene.launch('MenuPausa', { escenaPrevia: this.scene.key });
+            this.passNextScene();
+            
         });
 
         //Animaciones
@@ -1194,5 +1194,19 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
 
         // Y arranca la final
         this.scene.start('PantallaFinal', { ganador: jugador.name });
+    }
+
+    async passNextScene() { //Notificar al servidor que se quiere cambiar de escena
+        try {
+            const response = await fetch('/configuration/requestChangeScreen', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username: this.scene.get('ConnectionMenu').username, actscene: this.scene.key, next: 'MenuPausa' })
+            });
+        } catch (error) {
+            console.error('Error al solicitar el cambio de escena:', error);
+        }
     }
 }

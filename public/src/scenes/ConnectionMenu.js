@@ -171,8 +171,7 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
         }
     }
     async CanPassNextScene() {
-        if ((this.escenaActual === 'PantallaFinal' || this.escenaActual === 'MenuPrincipal') && !this.pendingChange) {
-            console.log("No se puede cambiar de escena desde PantallaFinal o MenuPrincipal");
+        if (this.escenaActual === 'PantallaFinal') {
             return;
         }
         if (this.escenaActual === 'PantallaJuego' || this.username == '') {
@@ -192,6 +191,7 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
                     return;
                 }
 
+                console.log("escena:",this.escenaActual)
                 this.scene.stop(this.escenaActual);
                 this.escenaActual = data.canChange;
                 if (this.scene.isActive('MenuPausa')) {

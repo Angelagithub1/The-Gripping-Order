@@ -5,8 +5,6 @@ export class MenuPrincipal extends Phaser.Scene {   //Crear clase que hereda de 
     }
 
     preload() {  //Se ejecuta antes de que empiece la escena
-        
-        this.scene.get('ConnectionMenu').input && (this.scene.get('ConnectionMenu').input.enabled = false);
 
         //Assets de pantalla de reconexion  
         this.load.image('FondoReconexion', 'Assets/Backgrounds/fondoTrans.png'); //Cargar imagen de fondo
@@ -50,6 +48,8 @@ export class MenuPrincipal extends Phaser.Scene {   //Crear clase que hereda de 
     
     create() {   //Se ejecuta al iniciar la escena
         console.log("Menu Principal");
+        this.scene.get('ConnectionMenu').escenaActual = this.scene.key;
+        this.scene.get('ConnectionMenu').input && (this.scene.get('ConnectionMenu').input.enabled = false);
         //Fondo
         const background = this.add.image(0, 0, 'Menus').setOrigin(0); //Añadir imagen de fondo
         background.setScale(Math.max(this.scale.width / background.width, this.scale.height / background.height));
@@ -72,6 +72,7 @@ export class MenuPrincipal extends Phaser.Scene {   //Crear clase que hereda de 
             botonJugar.setTexture('BotonJugarP')
         }); //Efecto encima
         botonJugar.on('pointerup', () => {
+            console.log("Jugar");
             this.RequestButtonPlay();
         
         }); //Al hacer click, iniciar escena principal
@@ -125,8 +126,10 @@ export class MenuPrincipal extends Phaser.Scene {   //Crear clase que hereda de 
         const response = await fetch(`/connected/users`);
         const result = await response.json();
         if (result.users === 2) {
+            console.log("Se puede iniciar la partida");
             this.passNextScene();
         } else {
+            console.log(" NO Se puede iniciar la partida");
             this.statusText = this.add.text(this.scale.width / 2-250, this.scale.height -65, 'Porfavor espere a que se conecte otro jugador', { fontSize: '20px', fill: '#ff0000ff' });
             this.time.delayedCall(3000, () => {
                 this.statusText.setText('');
@@ -135,6 +138,8 @@ export class MenuPrincipal extends Phaser.Scene {   //Crear clase que hereda de 
     }
 
     async passNextScene() { //Notificar al servidor que se quiere cambiar de escena
+        
+        console.log("eSTAMOS PIDIENDO CAMBIO DE ESCENA");
         try {
             const response = await fetch('/configuration/requestChangeScreen', {
                 method: 'POST',

@@ -60,6 +60,7 @@ export const initGameSocketController = (wss) => {
 
       if (remainingMs === 0) {
         matchEnded = true;
+        matchStarted = false;
         console.log("matchEnd")
         broadcast({ type: "matchEnd", reason: "timeout" });
 

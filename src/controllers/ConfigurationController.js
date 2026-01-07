@@ -11,6 +11,7 @@ const ConfigurationController = () => { //Controlador para manejar las solicitud
     const usersConfirmed = new Set();
     const requestChangeScreen = (req, res) => {
         const { username, actscene, next } = req.body; //next true es para siguiente y back para volver
+        console.log(selectscene);
         if (next) {
             if (actscene === 'MenuPrincipal' && !selectscene) {
                 // Si se esta en el menu principal y es la primera persona en darle a pasar a la escena de seleccion
@@ -37,10 +38,12 @@ const ConfigurationController = () => { //Controlador para manejar las solicitud
     const canChangeScreen = (req, res) => {
         if (back) { //Si se ha mandado una solicitud de volver
             res.json({ canChange: 'MenuPrincipal' });
-        } else if (playersready.size === 2) { //Si los dos jugadores estan listos para iniciar
+        } 
+        if (playersready.size === 2) { //Si los dos jugadores estan listos para iniciar
             res.json({ canChange: 'PantallaJuego' });
 
-        } else if (selectscene) { //Si ya se ha solicitado el paso a la escena de seleccion
+        } 
+        if (selectscene) { //Si ya se ha solicitado el paso a la escena de seleccion
             res.json({ canChange: 'MenuEleccionJugador' });
         } else {
             res.json({ canChange: '' }); 
@@ -82,14 +85,12 @@ const ConfigurationController = () => { //Controlador para manejar las solicitud
     };
     const LimpiezaPorEliminacion = (req, res) => { //Limpieza de datos cuando se elimina un jugador
         const { actScene } = req.body
-        if(actScene == "MenuPrincipal" || actScene == "PantallaFinal") {
             console.log("Limpieza")
             back = false;
             selectscene = false;
             playersready.clear()
             mapusers.set('gancho', '');
-            mapusers.set('ania', '');
-        }
+            mapusers.set('ania', ''); 
     }
     const confirmChange = (req, res) => { //Confirmar que se ha cambiado de escena
         const { username, actScene } = req.body
@@ -97,14 +98,12 @@ const ConfigurationController = () => { //Controlador para manejar las solicitud
             usersConfirmed.add(username)
             if (usersConfirmed.size === 2) { //Si los dos usuarios han confirmado que cambiaron de escena
                 usersConfirmed.clear();
-                if (actScene == "MenuPrincipal" || actScene == "PantallaFinal") {
                     console.log("Limpieza")
                     back = false;
                     selectscene = false;
                     playersready.clear()
                     mapusers.set('gancho', '');
                     mapusers.set('ania', '');
-                }
             } else if (usersConfirmed.size === 1) {
                 //Si es solo uno
             }
