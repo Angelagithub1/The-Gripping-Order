@@ -465,6 +465,8 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             this.add.sprite(this.scale.width - 250, 50, 'Heart').setOrigin(0.5).setScale(1.5),
             this.add.sprite(this.scale.width - 280, 50, 'Heart').setOrigin(0.5).setScale(1.5)
         ];
+        this.updateHearts(); // Inicializar desde el servidor
+
         //Crear Gancho
         if (this.GanchoSkin == 2) {
             this.Gancho = this.physics.add.sprite(108, 50, 'GanchoIdleRosa').setImmovable(true).setDepth(1);
@@ -838,6 +840,44 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
                 this.waitingForNewObject = false;
                 return;
             }
+
+            if (data.type === 'ania_initial_state') {
+                // El servidor nos envía el estado inicial de Ania
+                this.Ania.lives = data.lives;
+                this.updateHearts();
+                return;
+            }
+
+            if (data.type === 'ania_life_update') {
+                // El servidor actualiza las vidas de Ania
+                this.Ania.lives = data.lives;
+                this.Ania.invulnerable = data.invulnerable;
+                this.updateHearts();
+                
+                // Efecto visual de invulnerabilidad (parpadeo)
+                if (data.invulnerable) {
+                    this.flashEffect(this.Ania, 2000); // 2 segundos de parpadeo
+                }
+                
+                console.log(`[CLIENT] Vidas de Ania actualizadas: ${this.Ania.lives}`);
+                return;
+            }
+
+            if (data.type === 'ania_invulnerable_end') {
+                // El servidor indica que la invulnerabilidad terminó
+                this.Ania.invulnerable = false;
+                this.Ania.clearTint(); // Quitar cualquier efecto visual
+                return;
+            }
+
+            if (data.type === 'game_over') {
+                // El juego ha terminado
+                console.log(`[CLIENT] Juego terminado. Ganador: ${data.winner}, Razón: ${data.reason}`);
+                this.scene.start("PantallaFinal", {
+                    ganador: data.winner,
+                });
+                return;
+            }
           
       
           // Efectos
@@ -1187,19 +1227,32 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             console.log("Ya daño a ania");
             return; // Evitar daño múltiple
         }
-        this.sonidoAniaDanada.play();
-        objeto.canDamage = false; // Marcar el objeto como ya usado para daño
-        this.Ania.lives = this.Ania.lives - 1; // Restar una vida a Ania
-        if (this.hearts.length > 1) {
-            const heart = this.hearts.pop();
-            heart.setTexture('HeartEmpty'); // Cambiar la textura a corazón vacío
-
-        } else {
-            this.finalJuego(this.Gancho);
-            // Cambiar a la escena ResultScreen
+        
+        // Marcar el objeto como ya usado para daño
+        objeto.canDamage = false;
+        
+        // Enviar mensaje al servidor para reportar el golpe
+        if (this.connection && this.connection.readyState === WebSocket.OPEN) {
+            this.connection.send(JSON.stringify({
+                type: 'ania_hit'
+            }));
+            
+            console.log("[CLIENT] Reportando golpe a Ania al servidor");
         }
-        console.log("Ania ha sido dañada");
+        this.sonidoAniaDanada.play();
     }
+    
+    updateHearts() {
+        // Actualizar los corazones basado en las vidas de Ania
+        for (let i = 0; i < 3; i++) {
+            if (i < this.Ania.lives) {
+                this.hearts[i].setTexture('Heart');
+            } else {
+                this.hearts[i].setTexture('HeartEmpty');
+            }
+        }
+    }
+
     /*
     DestroyPowrUp(powerUp, objeto) {
         if (objeto.Soltar == false) return; // Evitar daño si el gancho no ha soltado el objeto
