@@ -1,81 +1,130 @@
 export const initGameSocketController = (wss) => {
-    const ania = { x: 480, y: 270 };
-    const gancho = { x: 480, y: 80 };
+  const ania = { x: 480, y: 270 };
+  const gancho = { x: 480, y: 80 };
 
-    //PowerUpActivoAnia
-    const powerUpActivoAnia = '';
+  // PowerUpActivoAnia
+  const powerUpActivoAnia = '';
 
+  // --- CRONÓMETRO ---
+  const MATCH_DURATION_MS = 60_000;
+  let matchStarted = false;
+  let matchEnded = false;
+  let endTime = 0;
+  let partida =false;
 
-    setInterval(() => {
-        //Bucle
-        //Se envia las posiciones a todos los clientes si hubo un cambio
-        wss.clients.forEach((client) => {
-            if (client.readyState === 1) {
-                client.send(JSON.stringify({
-                    type: 'playerPosition',
-                    Ania: ania,
-                    Gancho: gancho
-                }));
-            }
-        });
+  let timerIntervalId = null;   // IMPORTANTÍSIMO
+  let joinedPlayers = 0;        // para arrancar con 2
 
-    }, 33);
-    wss.on('connection', (ws) => {
+  function broadcast(obj) {
+    const msg = JSON.stringify(obj);
+    wss.clients.forEach((client) => {
+      if (client.readyState === 1) client.send(msg);
+    });
+  }
 
-        ws.on('message', (message) => {
-            const data = JSON.parse(message);
+  function startMatch() {
+    // evita dobles arranques
+    if (matchStarted) {
+      console.log("startMatch ignorado (ya empezó)");
+      return;
+    }
 
-            if (data.type === 'updatePosition') {
-                //Actualizar posicion
-                if (data.character) {
-                    if (powerUpActivoAnia == 'Congelación') {
-                        //Si se envia una posicion cuando esta congelado no se actualiza
-                        return;
-                    }
-                    if (ania.x !== data.x || ania.y !== data.y) {
-                        //Verificar si el movimiento en X es posible
-                        /*
-                        let velocidadMax = 160;
-                        if (powerUpActivoAnia == 'PowerUpVerde') {
-                            //Si tiene el power up de velocidad aumentada
-                            velocidadMax = 250;
-                        }
-                        const deltaX = ania.x - data.x;
-                        const deltaY = ania.y - data.y;
-                        const distancia = Math.sqrt(deltaX * deltaX + deltaY * deltaY); //Se calcula la distancia
+    matchStarted = true;
+    partida= true;
+    matchEnded = false;
+    endTime = Date.now() + MATCH_DURATION_MS;
 
-                        //Se calcula la distancia maxima que puede recorrer en 33ms
-                        const distanciaMAx = velocidadMax * (33 / 1000); 
+    console.log("startMatch OK");
+    broadcast({ type: "matchStart", durationMs: MATCH_DURATION_MS });
 
-                        //Si la distancia es menor o igual a la maxima permitida, se actualiza la posicion
-                        if (distancia <= distanciaMAx) {
-                            ania.x = data.x;
-                        } else {
-                            //Si no, se mueve en la direccion del cliente pero solo la distancia maxima permitida
-                            const ratio = distanciaMAx / distancia;
-                            ania.x = ania.x + (deltaX * ratio);
-                        }
+    // si existiera un timer anterior, lo limpias
+    if (timerIntervalId) clearInterval(timerIntervalId);
 
-                        */
-                       //Falla algo con la velocidad, por ahora se actualiza directamente
-                        ania.x = data.x;
-                        //Falta verificar doble salto
-                        ania.y = data.y;
+    // manda timer 1 vez por segundo
+    timerIntervalId = setInterval(() => {
+      if (matchEnded) return;
 
-                    }
-                } else {
-                    if (gancho.x !== data.x || gancho.y !== data.y) {
-                        gancho.x = data.x;
-                    }
-                }
-            }
-        });
+      const remainingMs = Math.max(0, endTime - Date.now());
+      const remainingSec = Math.ceil(remainingMs / 1000);
 
+      broadcast({ type: "timer", remainingSec, remainingMs });
 
+      if (remainingMs === 0) {
+        matchEnded = true;
+        console.log("matchEnd")
+        broadcast({ type: "matchEnd", reason: "timeout" });
+
+        clearInterval(timerIntervalId);
+        timerIntervalId = null;
+      }
+    }, 1000);
+  }
+
+  // --- LOOP DE POSICIONES (SOLO POSICIONES) ---
+  setInterval(() => {
+    if (matchEnded) return;
+    broadcast({
+      type: 'playerPosition',
+      Ania: ania,
+      Gancho: gancho
+    });
+  }, 33);
+
+  wss.on('connection', (ws) => {
+    ws.on('message', (message) => {
+      let data;
+      try {
+        data = JSON.parse(message);
+      } catch (e) {
+        console.log("Mensaje no JSON:", message);
+        return;
+      }
+
+      //JOIN (arranque del match cuando haya 2)
+      if (data.type === 'player_join') {
+        joinedPlayers += 1;
+        console.log("player_join. total:", joinedPlayers);
+
+        if (joinedPlayers >= 2) {
+            console.log("startMatch")
+            startMatch();
+            
+        }
+        return;
+      }
+
+      // Movimiento (lo de tu compi)
+      if (data.type === 'updatePosition') {
+        if (data.character) {
+          if (powerUpActivoAnia === 'Congelación') {
+            return;
+          }
+
+          if (ania.x !== data.x || ania.y !== data.y) {
+            ania.x = data.x;
+            ania.y = data.y;
+          }
+        } else {
+          if (gancho.x !== data.x || gancho.y !== data.y) {
+            gancho.x = data.x;
+            gancho.y = data.y; // por si acaso también enviáis y
+          }
+        }
+        return;
+      }
+
+      // (Opcional) si queréis arrancar por mensaje de escena:
+      // if (data.type === 'start_match') startMatch();
     });
 
-    wss.on('close', () => {
+    ws.on('close', () => {
+      joinedPlayers = Math.max(0, joinedPlayers - 1);
 
-    })
-
-}
+      // Opcional: si se va alguien, puedes terminar la partida
+      // if (matchStarted && !matchEnded) {
+      //   matchEnded = true;
+      //   broadcast({ type: "matchEnd", reason: "disconnect" });
+      // }
+    });
+  });
+};

@@ -6,7 +6,8 @@ export class MenuPrincipal extends Phaser.Scene {   //Crear clase que hereda de 
 
     preload() {  //Se ejecuta antes de que empiece la escena
         
-        this.scene.get('ConnectionMenu').escenaActual = this.scene.key;
+        //this.scene.get('ConnectionMenu').escenaActual = this.scene.key;
+        this.scene.get('ConnectionMenu').input && (this.scene.get('ConnectionMenu').input.enabled = false);
 
         //Assets de pantalla de reconexion  
         this.load.image('FondoReconexion', 'Assets/Backgrounds/fondoTrans.png'); //Cargar imagen de fondo

@@ -49,7 +49,9 @@ export class PantallaFinal extends Phaser.Scene {   //Crear clase que hereda de 
     }
 
     create(){   //Se ejecuta al iniciar la escena
-        this.scene.get('ConnectionMenu').escenaActual = this.scene.key;
+        console.log(">>> ENTER VICTORY", Date.now());
+
+       // this.scene.get('ConnectionMenu').escenaActual = this.scene.key;
         //Fondo
         const background = this.add.image(0, 0, 'Menus').setOrigin(0); //Añadir imagen de fondo
         background.setScale(Math.max(this.scale.width / background.width, this.scale.height / background.height));
@@ -129,6 +131,7 @@ export class PantallaFinal extends Phaser.Scene {   //Crear clase que hereda de 
         botonVolver.on('pointerup', () => { this.scene.start('MenuPrincipal'); });
 
 
-                this.scene.moveBelow("ConnectionMenu");
+                //this.scene.moveBelow("ConnectionMenu");
+            this.scene.get('ConnectionMenu').input && (this.scene.get('ConnectionMenu').input.enabled = false);
     }
 }
