@@ -2,36 +2,31 @@ export const initGameSocketController = (wss) => {
     const ania = { x: 480, y: 270 };
     const gancho = { x: 480, y: 80 };
 
-    // Estado de vidas de Ania
+    // Estados de Ania
     let aniaLives = 3;
     let gameOver = false;
     let aniaInvulnerable = false;
     let aniaInvulnerableTimer = null;
 
     //PowerUpActivoAnia
+    const powerUpActivoAnia = '';
+    let indexAct = 0;
+
+    // Sistema de PowerUps
     const powerUps = new Map(); // id -> { id, type, x, y, active }
     const poweUpTypes = ['PowerUpAmarillo', 'PowerUpVerde', 'PowerUpAzul', 'PowerUpRojo'];
     const MAX_ACTIVE_POWERUPS = 2;
     let nextPowerUpId = 1;
 
-    // Variables para objetos
+    // Sistema de Objetos
     const tiposObjetos = ['Ataud', 'guadana', 'hueso', 'libro'];
     let currentObjectType = tiposObjetos[Math.floor(Math.random() * tiposObjetos.length)];
     let isObjectDropped = false;
     let objectDropPosition = { x: 0, y: 0 };
 
-    function broadcast(obj){
-        const msg = JSON.stringify(obj);
-        wss.clients.forEach(c => {
-            if (c.readyState === 1) {
-                c.send(msg);
-            }
-        });
-    }
-
     // Función para dañar a Ania
     function damageAnia() {
-        if (gameOver || aniaInvulnerable) return;
+        if (gameOver || aniaInvulnerable || powerUpActivoAnia === 'Congelación') return;
         
         aniaLives--;
         console.log(`[SERVER] Ania golpeada. Vidas restantes: ${aniaLives}`);
@@ -43,18 +38,17 @@ export const initGameSocketController = (wss) => {
             invulnerable: true
         });
         
-        // Activar invulnerabilidad temporal después de ser dañada
+        // Activar invulnerabilidad temporal
         aniaInvulnerable = true;
         if (aniaInvulnerableTimer) {
             clearTimeout(aniaInvulnerableTimer);
         }
         aniaInvulnerableTimer = setTimeout(() => {
             aniaInvulnerable = false;
-            // Notificar que ya no está invulnerable
             broadcast({
                 type: 'ania_invulnerable_end'
             });
-        }, 2000); // 2 segundos de invulnerabilidad
+        }, 2000);
         
         // Verificar si el juego ha terminado
         if (aniaLives <= 0) {
@@ -68,6 +62,17 @@ export const initGameSocketController = (wss) => {
         }
     }
 
+    // Función de broadcast
+    function broadcast(obj){
+        const msg = JSON.stringify(obj);
+        wss.clients.forEach(c => {
+            if (c.readyState === 1) {
+                c.send(msg);
+            }
+        });
+    }
+
+    // Funciones de PowerUps
     function getActivePowerUpCount() {
         let count = 0;
         for (const pu of powerUps.values()) {
@@ -77,10 +82,9 @@ export const initGameSocketController = (wss) => {
     }
 
     function spawnPowerUp() {
-        // No generar si ya hay suficientes activos
         const activeCount = getActivePowerUpCount();
         if (activeCount >= MAX_ACTIVE_POWERUPS) {
-            console.log('[SERVER] spawn skipped, activeCount >=', MAX_ACTIVE_POWERUPS, 'current active:', activeCount);
+            console.log('[SERVER] spawn skipped, activeCount >=', MAX_ACTIVE_POWERUPS);
             return;
         }
         const x = 200 + Math.floor(Math.random() * 500);
@@ -94,18 +98,17 @@ export const initGameSocketController = (wss) => {
     }
 
     function startSpawnLoop() {
-        const delay = 10000 + Math.random() * 10000; // Entre 10 y 20 segundos
+        const delay = 10000 + Math.random() * 10000;
         setTimeout(() => {
             spawnPowerUp();
             startSpawnLoop();
         }, delay);
     }
-    startSpawnLoop();
 
     function startEffect(effect) {
         broadcast({ type: 'powerup_started', playerId: 'Ania', effect, duration: 5000 });
 
-        // Si el efecto es invulnerable, actualizar estado en servidor
+        // Efecto de invulnerabilidad
         if (effect === 'invulnerable') {
             aniaInvulnerable = true;
             setTimeout(() => {
@@ -132,11 +135,7 @@ export const initGameSocketController = (wss) => {
         const pu = powerUps.get(id);
         if (pu && pu.active) {
             pu.active = false;
-            console.log(`[SERVER] Destroying powerup ${id} due to ${reason}. Active count before: ${getActivePowerUpCount()}`);
-            
-            // IMPORTANTE: No eliminar del mapa, solo marcar como inactivo
-            // Esto permite que el conteo funcione correctamente
-            // powerUps.delete(id); // NO eliminar del mapa
+            console.log(`[SERVER] Destroying powerup ${id} due to ${reason}`);
             
             broadcast({ 
                 type: 'remove_powerup', 
@@ -146,49 +145,31 @@ export const initGameSocketController = (wss) => {
                 puType: pu.type 
             });
             
-            console.log(`[SERVER] Active count after destruction: ${getActivePowerUpCount()}`);
             return true;
         }
         return false;
     }
-
-    function checkObjectPowerUpCollision(objectX, objectY) {
-        // Verificar colisión con todos los powerups activos
-        for (const [id, pu] of powerUps.entries()) {
-            if (!pu.active) continue;
-            
-            // Calcular distancia entre objeto y powerup
-            const distance = Math.sqrt(
-                Math.pow(objectX - pu.x, 2) + 
-                Math.pow(objectY - pu.y, 2)
-            );
-            
-            // Radio de colisión (ajustar según necesidad)
-            const collisionRadius = 50;
-            
-            if (distance < collisionRadius) {
-                console.log(`[SERVER] Object hit powerup ${id} at distance ${distance}`);
-                destroyPowerUp(id, 'object_hit');
-                return true;
-            }
-        }
-        return false;
-    }
-
-    let indexAct = 0;
+    // Iniciar spawn de powerups
+    startSpawnLoop();
 
     setInterval(() => {
-        broadcast({
-            type: 'playerPosition',
-            Ania: ania,
-            Gancho: gancho,
-            Index: indexAct++,
-            currentObjectType: currentObjectType,
-            isObjectDropped: isObjectDropped,
-            objectDropPosition: objectDropPosition,
+        // Se envía las posiciones a todos los clientes si hubo un cambio
+        wss.clients.forEach((client) => {
+            if (client.readyState === 1) {
+                client.send(JSON.stringify({
+                    type: 'playerPosition',
+                    Ania: ania,
+                    Gancho: gancho,
+                    Index: indexAct++,
+                    currentObjectType: currentObjectType,
+                    isObjectDropped: isObjectDropped,
+                    objectDropPosition: objectDropPosition,
+                }));
+            }
         });
-    }, 33);
 
+    }, 33);
+    
     wss.on('connection', (ws) => {
         
         // Enviar estado inicial de Ania
@@ -215,28 +196,19 @@ export const initGameSocketController = (wss) => {
             type: 'initObject',
             objectType: currentObjectType,
         }));
-        
+
         ws.on('message', (message) => {
-            try {
-                const data = JSON.parse(message);
+            const data = JSON.parse(message);
 
-                if (data.type === 'request_powerups') {
-                    for (const pu of powerUps.values()) {
-                        if (pu.active) {
-                            ws.send(JSON.stringify({ 
-                                type: 'spawn_powerup', 
-                                id: pu.id, 
-                                x: pu.x, 
-                                y: pu.y, 
-                                puType: pu.type 
-                            }));
-                        }
+            if (data.type === 'updatePosition') {
+                // Actualizar posición
+                if (data.character) {
+                    // Mantener la lógica original de congelación
+                    if (powerUpActivoAnia == 'Congelación') {
+                        // Si se envía una posición cuando está congelado no se actualiza
+                        return;
                     }
-                    return;
-                }
-
-                if (data.type === 'updatePosition') { 
-                    if (data.character) { // Ania
+                    if (ania.x !== data.x || ania.y !== data.y) {
                         ania.x = data.x;
                         ania.y = data.y;
 
@@ -244,113 +216,100 @@ export const initGameSocketController = (wss) => {
                         for (const pu of powerUps.values()) {
                             if (!pu.active) continue;
                             
-                            // Usar la X inicial e Y actualizada del powerup
                             const distance = Math.sqrt(
                                 Math.pow(ania.x - pu.x, 2) + 
                                 Math.pow(ania.y - pu.y, 2)
                             );
                             
-                            if (distance < 30) { // Radio de colisión
+                            if (distance < 30) {
                                 destroyPowerUp(pu.id, 'ania_collect');
                                 startEffect(effectFromType(pu.type));
                             }
                         }
-                    } else {
+                    }
+                } else {
+                    if (gancho.x !== data.x || gancho.y !== data.y) {
                         gancho.x = data.x;
+                        gancho.y = data.y;
                     }
                 }
-                else if (data.type === 'powerup_y_positions') {
-                    // Actualizar posiciones Y de todos los powerups
-                    for (const pos of data.positions) {
-                        const pu = powerUps.get(pos.id);
-                        if (pu && pu.active) {
-                            pu.y = pos.y; // Solo actualizamos Y
-                        }
-                    }
-                }
-                else if (data.type === 'powerup_touch') {
-                    // Si el cliente avisa de toque explícito
-                    const id = String(data.id); 
-                    const pu = powerUps.get(id);
+            }
+            else if (data.type === 'powerup_y_positions') {
+                for (const pos of data.positions) {
+                    const pu = powerUps.get(pos.id);
                     if (pu && pu.active) {
-                        destroyPowerUp(id, 'touch');
-                        startEffect(effectFromType(pu.type));
-                    }
-                } 
-                else if (data.type === 'object_hit_powerup') {
-                    // Cliente reporta colisión entre objeto y powerup
-                    const powerUpId = String(data.powerUpId);
-                    const powerUpY = data.powerUpY;
-                    const objectX = data.objectX;
-                    const objectY = data.objectY;
-                    
-                    console.log(`[SERVER] Client reports object hit powerup ${powerUpId} at (${objectX}, ${powerUpY}`);
-                    
-                    // Verificar que el powerup existe y está activo
-                    const pu = powerUps.get(powerUpId);
-                    if (pu && pu.active) {
-                        // ACTUALIZAR solo la coordenada Y del powerup en el servidor
-                        pu.y = powerUpY;
-                        // Verificar proximidad (usando X original e Y actualizada)
-                        const distance = Math.sqrt(
-                            Math.pow(objectX - pu.x, 2) + 
-                            Math.pow(objectY - pu.y, 2)
-                        );
-                        
-                        if (distance < 60) { // Radio de verificación ampliado
-                            destroyPowerUp(powerUpId, 'object_collision');
-                        }
+                        pu.y = pos.y; // Solo actualizamos Y
                     }
                 }
-                else if (data.type === 'object_position') {
-                    // Cliente envía posición de objeto para verificación de colisión
-                    const objectX = data.x;
-                    const objectY = data.y;
+            }
+            else if (data.type === 'object_hit_powerup') {
+                // Cliente reporta colisión entre objeto y powerup
+                const powerUpId = String(data.powerUpId);
+                const objectX = data.objectX;
+                const objectY = data.objectY;
+            
+                // Verificar que el powerup existe y está activo
+                const pu = powerUps.get(powerUpId);
+                if (pu && pu.active) {
+                    // Verificar proximidad usando radio de colisión más realista
+                    const distance = Math.sqrt(
+                        Math.pow(objectX - pu.x, 2) + 
+                        Math.pow(objectY - pu.y, 2)
+                    );
                     
-                    // Verificar colisión con powerups
-                    checkObjectPowerUpCollision(objectX, objectY);
-                }
-                else if (data.type === 'ania_hit') {
-                    // Cliente reporta que Ania fue golpeada por un objeto
-                    console.log('[SERVER] Ania fue golpeada por un objeto');
-                    damageAnia();
-                }
-                else if (data.type === 'requestDrop') {
-                    // El gancho solicita soltar el objeto
-                    if (!isObjectDropped) {
-                        isObjectDropped = true;
-                        objectDropPosition = { 
-                            x: gancho.x,
-                            y: gancho.y + 50
-                        };
+                    const collisionRadius = 60; // Radio de colisión ajustado para objetos medianos
+                    
+                    if (distance < collisionRadius) {
+                        console.log(`[SERVER] Destruyendo powerup ${powerUpId} en (${objectX}, ${objectY})`);
+                        destroyPowerUp(powerUpId, 'object_collision');
                         
-                        console.log(`[SERVER] Soltando objeto en ${objectDropPosition.x}, ${objectDropPosition.y}`);
+                        ws.send(JSON.stringify({
+                            type: 'powerup_destroyed',
+                            id: powerUpId,
+                            reason: 'object_collision'
+                        }));
+                    }
+                }
+            }
+            else if (data.type === 'ania_hit') {
+                // Cliente reporta que Ania fue golpeada por un objeto
+                console.log('[SERVER] Ania fue golpeada por un objeto');
+                damageAnia();
+            }
+            else if (data.type === 'requestDrop') {
+                // El gancho solicita soltar el objeto
+                if (!isObjectDropped) {
+                    isObjectDropped = true;
+                    objectDropPosition = { 
+                        x: gancho.x,
+                        y: gancho.y + 50
+                    };
+                    
+                    console.log(`[SERVER] Soltando objeto en ${objectDropPosition.x}, ${objectDropPosition.y}`);
 
+                    broadcast({
+                        type: 'objectDropped',
+                        x: objectDropPosition.x,
+                        y: objectDropPosition.y,
+                        objectType: currentObjectType
+                    });
+
+                    setTimeout(() => {
+                        currentObjectType = tiposObjetos[Math.floor(Math.random() * tiposObjetos.length)];
+                        isObjectDropped = false;
+                        
                         broadcast({
-                            type: 'objectDropped',
-                            x: objectDropPosition.x,
-                            y: objectDropPosition.y,
+                            type: 'nextObject',
                             objectType: currentObjectType
                         });
-
-                        setTimeout(() => {
-                            currentObjectType = tiposObjetos[Math.floor(Math.random() * tiposObjetos.length)];
-                            isObjectDropped = false;
-                            
-                            broadcast({
-                                type: 'nextObject',
-                                objectType: currentObjectType
-                            });
-                        }, 800);
-                    }
+                    }, 800);
                 }
-            } catch (error) {
-                console.error('[SERVER] Error procesando mensaje:', error);
             }
         });
     });
 
     wss.on('close', () => {
-        console.log('[SERVER] Servidor cerrado');
-    });
-};
+
+    })
+
+}
