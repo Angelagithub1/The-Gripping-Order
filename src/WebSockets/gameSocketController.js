@@ -1,6 +1,6 @@
 export const initGameSocketController = (wss) => {
-    const ania = { x: 480, y: 270 };
-    const gancho = { x: 480, y: 80 };
+  const ania = { x: 480, y: 270 };
+  const gancho = { x: 480, y: 80 };
 
     //PowerUpActivoAnia
     //const powerUpActivoAnia = '';
@@ -13,6 +13,15 @@ export const initGameSocketController = (wss) => {
     let currentObjectType = tiposObjetos[Math.floor(Math.random() * tiposObjetos.length)];
     let isObjectDropped = false;
     let objectDropPosition = { x: 0, y: 0 };
+    // --- CRONÓMETRO ---
+    const MATCH_DURATION_MS = 60_000;
+    let matchStarted = false;
+    let matchEnded = false;
+    let endTime = 0;
+    let partida =false;
+
+    let timerIntervalId = null;   // IMPORTANTÍSIMO
+    let joinedPlayers = 0;        // para arrancar con 2
 
     function broadcast(obj){
         const msg = JSON.stringify(obj);
@@ -22,7 +31,44 @@ export const initGameSocketController = (wss) => {
             }
         });
     }
+    function startMatch() {
+      // evita dobles arranques
+      if (matchStarted) {
+        console.log("startMatch ignorado (ya empezó)");
+        return;
+      }
 
+      matchStarted = true;
+      partida= true;
+      matchEnded = false;
+      endTime = Date.now() + MATCH_DURATION_MS;
+
+      console.log("startMatch OK");
+      broadcast({ type: "matchStart", durationMs: MATCH_DURATION_MS });
+
+      // si existiera un timer anterior, lo limpias
+      if (timerIntervalId) clearInterval(timerIntervalId);
+
+      // manda timer 1 vez por segundo
+      timerIntervalId = setInterval(() => {
+        if (matchEnded) return;
+
+        const remainingMs = Math.max(0, endTime - Date.now());
+        const remainingSec = Math.ceil(remainingMs / 1000);
+
+
+      broadcast({ type: "timer", remainingSec, remainingMs });
+
+      if (remainingMs === 0) {
+        matchEnded = true;
+        console.log("matchEnd")
+        broadcast({ type: "matchEnd", reason: "timeout" });
+
+        clearInterval(timerIntervalId);
+        timerIntervalId = null;
+      }
+    }, 1000);
+  }
     
     function spawnPowerUp() {
         const x = 200 + Math.floor(Math.random() * 500); // rango simple
@@ -204,11 +250,5 @@ export const initGameSocketController = (wss) => {
 
       });
 
-
     });
-
-    /*wss.on('close', () => {
-
-    })*/
-
-}
+  }

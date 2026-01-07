@@ -126,6 +126,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
     }
     create() {
         //console.log("Ania:",this.AniaSkin, "gancho:",this.GanchoSkin);
+        console.log(">>> ENTER GAME", Date.now());
 
         this.scene.get('ConnectionMenu').escenaActual = this.scene.key;
         //Fondo
@@ -580,7 +581,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         }
 
         //Cronometro
-        this.timerText = this.add.text(this.scale.width / 2, 30, "90", {
+        this.timerText = this.add.text(this.scale.width / 2, 30, "60", {
             fontSize: "32px",       // Tamaño de la fuente
             color: "#111111",       // Color del texto
             fontWeight: "bold",     // Hacer la fuente más gruesa
@@ -590,15 +591,16 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
 
         this.timerText.setOrigin(0.5, -0.2); // Centrar el texto horizontalmente
         this.timerText.setDepth(10);         // Establecer la profundidad para asegurarse de que se dibuje encima de otros elementos
+        this.matchFinished = false;
 
         // Configurar el temporizador
-        this.remainingTime = 90; // 30 segundos
+       /* this.remainingTime = 90; // 30 segundos
         this.time.addEvent({
             delay: 1000,         // Cada segundo
             callback: this.updateTimer,
             callbackScope: this,
-            loop: true,
-        });
+            loop: rue,
+        });*/
 
         //PowerUps
         this.powerUps = this.physics.add.group();
@@ -655,6 +657,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
 
         // Mensajes entrantes: combinamos powerups, posiciones y sincronización de objetos
         this.connection.onmessage = (event) => {
+
           const data = JSON.parse(event.data);
           console.log('[WS] recibido:', data.type, data);
 
@@ -780,7 +783,49 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
           }
 
           console.warn('[WS][UNKNOWN TYPE]', data.type, data);
+          if (data.type === 'timer') {
+                const sec = data.remainingSec ?? Math.ceil((data.remainingMs ?? 0) / 1000);
+                this.timerText.setText(String(sec));
+                return;
+            }
+
+            if (data.type === 'matchEnd') {
+                this.matchFinished = true;
+                console.log("WS recibido matchEnd, cerrando socket");
+
+                //cerrar WS para que no sigan entrando playerPosition
+                try { this.connection.close(); } catch (e) {}
+
+                this.timeUp();
+                return;
+            }
         };
+       /*
+       this.connection.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+
+        // si ya terminó, ignora TODO lo que llegue
+        if (this.matchFinished) return;
+
+        if (data.type === 'playerPosition') {
+            this.ProcessMovement(data);
+            return;
+        }
+
+        if (data.type === 'timer') {
+            const sec = data.remainingSec ?? Math.ceil((data.remainingMs ?? 0) / 1000);
+            this.timerText.setText(String(sec));
+            return;
+        }
+
+        if (data.type === 'matchEnd') {
+            this.matchFinished = true;
+                this.timeUp();
+                return;
+        }
+        };
+        
+*/
     }
 
     async ProcessMovement(data) {
@@ -952,7 +997,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         }
 
     }
-
+/*
     updateTimer() {
         this.remainingTime -= 1; // Decrementar el tiempo restante
 
@@ -963,9 +1008,15 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         if (this.remainingTime <= 0) {
             this.timeUp(); // Llamar a la función para manejar el fin del tiempo
         }
-    }
+    }*/
 
     timeUp() {
+        console.log("Juego terminado");
+
+        //if (this.matchFinished) return;
+        this.matchFinished = true;
+
+        console.log("Juego terminado");
         this.finalJuego(this.Ania);
     }
 
@@ -1173,9 +1224,21 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
     }
 
     finalJuego(jugador) {
-        this.scene.start("PantallaFinal", {
-            ganador: jugador.name,
-        }); // Cambiar a la escena ResultScreen
-    }
+    // cerrar YA (no esperar al shutdown)
+       try {
+            if (this.connection) {
+            this.connection.onmessage = null;
+            this.connection.close();
+            }
+            this.matchFinished = true;
+        } catch (e) {}
+        this.time.removeAllEvents();
+        this.tweens.killAll();
 
+        // Para la escena de juego explícitamente
+        this.scene.stop('PantallaJuego');
+
+        // Y arranca la final
+        this.scene.start('PantallaFinal', { ganador: jugador.name });
+    }
 }
