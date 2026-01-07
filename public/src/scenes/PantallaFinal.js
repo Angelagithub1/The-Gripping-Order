@@ -52,6 +52,7 @@ export class PantallaFinal extends Phaser.Scene {   //Crear clase que hereda de 
         console.log(">>> ENTER VICTORY", Date.now());
 
        // this.scene.get('ConnectionMenu').escenaActual = this.scene.key;
+       //this.scene.get('ConnectionMenu').input && (this.scene.get('ConnectionMenu').input.enabled = false);
         //Fondo
         const background = this.add.image(0, 0, 'Menus').setOrigin(0); //Añadir imagen de fondo
         background.setScale(Math.max(this.scale.width / background.width, this.scale.height / background.height));
@@ -128,10 +129,22 @@ export class PantallaFinal extends Phaser.Scene {   //Crear clase que hereda de 
         botonVolver.on('pointerdown', () => { 
             this.sonidoP.play();
             botonVolver.setTexture('MenuP') }); 
-        botonVolver.on('pointerup', () => { this.scene.start('MenuPrincipal'); });
+        botonVolver.on('pointerup', async () => { 
+            console.log("BOTON PULSADO");
+            const cm = this.scene.get('ConnectionMenu');
+            cm.pendingChange = true;
+            try {
+                await fetch('/configuration/requestChangeScreen', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: this.scene.get('ConnectionMenu').username, actscene: this.scene.key, next: true })
+                });
+            } catch (error) {
+                console.error('Error al solicitar el cambio de escena:', error);
+                cm.pendingChange = false;
+            }
 
-
-                //this.scene.moveBelow("ConnectionMenu");
-            this.scene.get('ConnectionMenu').input && (this.scene.get('ConnectionMenu').input.enabled = false);
+         });
+            
     }
 }

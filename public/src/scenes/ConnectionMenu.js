@@ -8,6 +8,7 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
         this.password = '';
         this.ready = false;
         this.intentos = 0;
+        this.pendingChange = false;
     }
     create() {
 
@@ -21,7 +22,7 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
         //Verificacion si hay que cambiar de pantalla
         this.PassSceneInterval = setInterval(() => this.CanPassNextScene(), 500);
 
-        this.scene.bringToTop();
+        //this.scene.bringToTop();
 
     }
     async checkServerStatus() { //Verificar estado del servidor
@@ -170,6 +171,10 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
         }
     }
     async CanPassNextScene() {
+        if ((this.escenaActual === 'PantallaFinal' || this.escenaActual === 'MenuPrincipal') && !this.pendingChange) {
+            console.log("No se puede cambiar de escena desde PantallaFinal o MenuPrincipal");
+            return;
+        }
         if (this.escenaActual === 'PantallaJuego' || this.username == '') {
             //Si no esta en la pantalla de juego porque no se puede cambiar de alli
             //O no ha iniciado sesion
@@ -179,6 +184,7 @@ export class ConnectionMenu extends Phaser.Scene {   //Crear clase que hereda de
             //Se pregunta al servidor si se puede cambiar de escena
             const response = await fetch('/configuration/canChangeScreen');
             const data = await response.json();
+            console.log(data)
 
             if (data.canChange !== '') {
                 if (this.escenaActual == data.canChange) {
