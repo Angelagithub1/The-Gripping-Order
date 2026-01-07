@@ -2,6 +2,12 @@ export const initGameSocketController = (wss) => {
     const ania = { x: 480, y: 270 };
     const gancho = { x: 480, y: 80 };
 
+    // Estado de vidas de Ania
+    let aniaLives = 3;
+    let gameOver = false;
+    let aniaInvulnerable = false;
+    let aniaInvulnerableTimer = null;
+
     //PowerUpActivoAnia
     const powerUps = new Map(); // id -> { id, type, x, y, active }
     const poweUpTypes = ['PowerUpAmarillo', 'PowerUpVerde', 'PowerUpAzul', 'PowerUpRojo'];
@@ -21,6 +27,45 @@ export const initGameSocketController = (wss) => {
                 c.send(msg);
             }
         });
+    }
+
+    // Función para dañar a Ania
+    function damageAnia() {
+        if (gameOver || aniaInvulnerable) return;
+        
+        aniaLives--;
+        console.log(`[SERVER] Ania golpeada. Vidas restantes: ${aniaLives}`);
+        
+        // Enviar actualización de vidas a todos los clientes
+        broadcast({
+            type: 'ania_life_update',
+            lives: aniaLives,
+            invulnerable: true
+        });
+        
+        // Activar invulnerabilidad temporal después de ser dañada
+        aniaInvulnerable = true;
+        if (aniaInvulnerableTimer) {
+            clearTimeout(aniaInvulnerableTimer);
+        }
+        aniaInvulnerableTimer = setTimeout(() => {
+            aniaInvulnerable = false;
+            // Notificar que ya no está invulnerable
+            broadcast({
+                type: 'ania_invulnerable_end'
+            });
+        }, 2000); // 2 segundos de invulnerabilidad
+        
+        // Verificar si el juego ha terminado
+        if (aniaLives <= 0) {
+            gameOver = true;
+            console.log('[SERVER] Juego terminado. Ganador: Gancho');
+            broadcast({
+                type: 'game_over',
+                winner: 'Gancho',
+                reason: 'Ania se queda sin vidas'
+            });
+        }
     }
 
     function getActivePowerUpCount() {
@@ -59,6 +104,15 @@ export const initGameSocketController = (wss) => {
 
     function startEffect(effect) {
         broadcast({ type: 'powerup_started', playerId: 'Ania', effect, duration: 5000 });
+
+        // Si el efecto es invulnerable, actualizar estado en servidor
+        if (effect === 'invulnerable') {
+            aniaInvulnerable = true;
+            setTimeout(() => {
+                aniaInvulnerable = false;
+            }, 5000);
+        }
+
         setTimeout(() => {
             broadcast({ type: 'powerup_ended', playerId: 'Ania', effect });
         }, 5000);
@@ -136,6 +190,13 @@ export const initGameSocketController = (wss) => {
     }, 33);
 
     wss.on('connection', (ws) => {
+        
+        // Enviar estado inicial de Ania
+        ws.send(JSON.stringify({
+            type: 'ania_initial_state',
+            lives: aniaLives
+        }));
+        
         // Enviar powerups activos al nuevo cliente
         for (const pu of powerUps.values()) {
             if (pu.active) {
@@ -248,6 +309,11 @@ export const initGameSocketController = (wss) => {
                     
                     // Verificar colisión con powerups
                     checkObjectPowerUpCollision(objectX, objectY);
+                }
+                else if (data.type === 'ania_hit') {
+                    // Cliente reporta que Ania fue golpeada por un objeto
+                    console.log('[SERVER] Ania fue golpeada por un objeto');
+                    damageAnia();
                 }
                 else if (data.type === 'requestDrop') {
                     // El gancho solicita soltar el objeto
