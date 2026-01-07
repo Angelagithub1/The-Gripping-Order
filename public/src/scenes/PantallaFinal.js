@@ -129,22 +129,7 @@ export class PantallaFinal extends Phaser.Scene {   //Crear clase que hereda de 
         botonVolver.on('pointerdown', () => { 
             this.sonidoP.play();
             botonVolver.setTexture('MenuP') }); 
-        botonVolver.on('pointerup', async () => { 
-            console.log("BOTON PULSADO");
-            const cm = this.scene.get('ConnectionMenu');
-            cm.pendingChange = true;
-            try {
-                await fetch('/configuration/requestChangeScreen', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: this.scene.get('ConnectionMenu').username, actscene: this.scene.key, next: true })
-                });
-            } catch (error) {
-                console.error('Error al solicitar el cambio de escena:', error);
-                cm.pendingChange = false;
-            }
-
-         });
+        botonVolver.on('pointerup', () => { this.scene.start('MenuPrincipal'); });
             
     }
 }

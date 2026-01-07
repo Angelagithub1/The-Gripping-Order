@@ -125,8 +125,6 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
 
     }
     create() {
-        //console.log("Ania:",this.AniaSkin, "gancho:",this.GanchoSkin);
-        console.log(">>> ENTER GAME", Date.now());
 
         this.scene.get('ConnectionMenu').escenaActual = this.scene.key;
         //Fondo
@@ -593,14 +591,6 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.timerText.setDepth(10);         // Establecer la profundidad para asegurarse de que se dibuje encima de otros elementos
         this.matchFinished = false;
 
-        // Configurar el temporizador
-       /* this.remainingTime = 90; // 30 segundos
-        this.time.addEvent({
-            delay: 1000,         // Cada segundo
-            callback: this.updateTimer,
-            callbackScope: this,
-            loop: rue,
-        });*/
 
         //PowerUps
         this.powerUps = this.physics.add.group();
@@ -781,8 +771,6 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             this.waitingForNewObject = false;
             return;
           }
-
-          console.warn('[WS][UNKNOWN TYPE]', data.type, data);
           if (data.type === 'timer') {
                 const sec = data.remainingSec ?? Math.ceil((data.remainingMs ?? 0) / 1000);
                 this.timerText.setText(String(sec));
@@ -799,33 +787,11 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
                 this.timeUp();
                 return;
             }
+
+          console.warn('[WS][UNKNOWN TYPE]', data.type, data);
+          
         };
-       /*
-       this.connection.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-
-        // si ya terminó, ignora TODO lo que llegue
-        if (this.matchFinished) return;
-
-        if (data.type === 'playerPosition') {
-            this.ProcessMovement(data);
-            return;
-        }
-
-        if (data.type === 'timer') {
-            const sec = data.remainingSec ?? Math.ceil((data.remainingMs ?? 0) / 1000);
-            this.timerText.setText(String(sec));
-            return;
-        }
-
-        if (data.type === 'matchEnd') {
-            this.matchFinished = true;
-                this.timeUp();
-                return;
-        }
-        };
-        
-*/
+    
     }
 
     async ProcessMovement(data) {
@@ -997,18 +963,6 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         }
 
     }
-/*
-    updateTimer() {
-        this.remainingTime -= 1; // Decrementar el tiempo restante
-
-        // Actualizar el texto con el nuevo tiempo
-        this.timerText.setText(this.remainingTime);
-
-        // Verificar si el tiempo ha llegado a cero
-        if (this.remainingTime <= 0) {
-            this.timeUp(); // Llamar a la función para manejar el fin del tiempo
-        }
-    }*/
 
     timeUp() {
         console.log("Juego terminado");

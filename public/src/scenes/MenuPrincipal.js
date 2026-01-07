@@ -6,7 +6,6 @@ export class MenuPrincipal extends Phaser.Scene {   //Crear clase que hereda de 
 
     preload() {  //Se ejecuta antes de que empiece la escena
         
-        //this.scene.get('ConnectionMenu').escenaActual = this.scene.key;
         this.scene.get('ConnectionMenu').input && (this.scene.get('ConnectionMenu').input.enabled = false);
 
         //Assets de pantalla de reconexion  
@@ -48,6 +47,7 @@ export class MenuPrincipal extends Phaser.Scene {   //Crear clase que hereda de 
         this.load.audio('SonidoBotonE', 'Assets/Sonidos/BotonEncima.mp3');
         this.load.audio('SonidoBotonP', 'Assets/Sonidos/BotonPulsado.mp3');
     }
+    
     create() {   //Se ejecuta al iniciar la escena
         console.log("Menu Principal");
         //Fondo

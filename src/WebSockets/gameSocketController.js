@@ -34,7 +34,6 @@ export const initGameSocketController = (wss) => {
     function startMatch() {
       // evita dobles arranques
       if (matchStarted) {
-        console.log("startMatch ignorado (ya empezó)");
         return;
       }
 
@@ -115,7 +114,6 @@ export const initGameSocketController = (wss) => {
 
     setInterval(() => {
         
-        
         broadcast({
               type: 'playerPosition',
               Ania: ania,
@@ -128,21 +126,8 @@ export const initGameSocketController = (wss) => {
             });
           }, 33);
       
-        /*//Bucle
-        //Se envia las posiciones a todos los clientes si hubo un cambio
-        wss.clients.forEach((client) => {
-            if (client.readyState === 1) {
-                client.send(JSON.stringify({
-                    type: 'playerPosition',
-                    Ania: ania,
-                    Gancho: gancho,
-                    Index: indexAct++
-                }));
-            }
-        });
-
-    }, 33);*/
     wss.on('connection', (ws) => {
+      
         
       for (const pu of powerUps.values()) {
         if (pu.active) {
@@ -158,7 +143,7 @@ export const initGameSocketController = (wss) => {
       
       ws.on('message', (message) => {
           const data = JSON.parse(message);
-
+          startMatch();
           
         if (data.type === 'request_powerups') {
                 for (const pu of powerUps.values()) {
@@ -198,23 +183,6 @@ export const initGameSocketController = (wss) => {
                 broadcast({ type: 'remove_powerup', id: pu.id, x:pu.x, y: pu.y, puType: pu.type });
                 startEffect(effectFromType(pu.type));
             }
-
-            /*//Actualizar posicion
-            if (data.character) {
-                if (powerUpActivoAnia == 'Congelación') {
-                    //Si se envia una posicion cuando esta congelado no se actualiza
-                    return;
-                }
-                if (ania.x !== data.x || ania.y !== data.y) {
-                    ania.x = data.x;
-                    ania.y = data.y;
-
-                }
-            } else {
-                if (gancho.x !== data.x || gancho.y !== data.y) {
-                    gancho.x = data.x;
-                }
-            }*/
         } else if (data.type === 'requestDrop') { // Manejar solicitud de soltar objeto
             // El gancho solicita soltar el objeto
           if (!isObjectDropped) {

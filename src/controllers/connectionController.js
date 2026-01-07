@@ -14,6 +14,7 @@ const connectionController =() => { //Controlador para gestionar las conexiones 
             username: username,
             connected: connectedUsers.size
         })
+        
     }
     const userConnected = (req, res) =>{    //Comprobar si un usuario está conectado
         console.log(`${req.params.username} consulta su estado de conexión ${connectedUsers.has(req.params.username)}`);
