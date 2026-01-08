@@ -126,6 +126,8 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
     }
     create() {
 
+        this.frameCounter = 0; 
+
         this.scene.get('ConnectionMenu').escenaActual = this.scene.key;
         //Fondo
         const background = this.add.image(0, 0, 'BackgroundGraveyard').setOrigin(0); //Añadir imagen de fondo
@@ -628,8 +630,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.physics.add.collider(this.powerUps, this.platform7);
         this.physics.add.collider(this.powerUps, this.platform8);
 
-        this.physics.add.overlap(this.powerUps, this.objects, this.DestroyPowrUp, null, this);
-
+        this.physics.add.overlap(this.powerUps, this.objects, this.handleObjectPowerUpCollision, null, this);
         this.powerUpsLista = ['PowerUpAmarillo', 'PowerUpAzul', 'PowerUpRojo', 'PowerUpVerde'];
         this.scene.moveBelow("ConnectionMenu");
 
@@ -647,95 +648,182 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
 
         // Mensajes entrantes: combinamos powerups, posiciones y sincronización de objetos
         this.connection.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            console.log('[WS] recibido:', data.type, data);
 
-          const data = JSON.parse(event.data);
-          console.log('[WS] recibido:', data.type, data);
+            // 1) SPAWN powerup (soporta ambos formatos antiguos y nuevos)
+            const isPuType = ['PowerUpAmarillo','PowerUpAzul','PowerUpRojo','PowerUpVerde'].includes(data.type); // legado
+            const isSpawn = (data.type === 'spawn_powerup'); // nuevo formato unificado
 
-          // 1) SPAWN powerup (soporta ambos formatos antiguos y nuevos)
-          const isPuType = ['PowerUpAmarillo','PowerUpAzul','PowerUpRojo','PowerUpVerde'].includes(data.type); // legado
-          const isSpawn = (data.type === 'spawn_powerup'); // nuevo formato unificado
+            if (isPuType || isSpawn) {
+                const id       = data.id;
+                const texture  = isSpawn ? (data.puType) : data.type; // si viene 'spawn_powerup', usar data.puType
+                const x        = data.x, y = data.y;
 
-          if (isPuType || isSpawn) {
-            const id       = data.id;
-            const texture  = isSpawn ? (data.puType) : data.type; // si viene 'spawn_powerup', usar data.puType
-            const x        = data.x, y = data.y;
-
-            // DEDUPE: si ya existe ese id, no crees otro sprite
-            if (this.powerUpsById.has(id)) {
-              console.warn('[CLIENT] spawn duplicado ignorado id=', id);
-              return;
-            }
-            const sprite = this.powerUps.create(x, y, texture);
-            sprite.setOrigin(0.5).setScale(1.5).setDepth(50).setAlpha(1);
-            sprite.visible = true;
-            if (sprite.body) sprite.body.setAllowGravity(true);
-            sprite.type = texture;
-            this.powerUpsById.set(id, sprite);
-            console.log('[CLIENT] spawn guardado', id, texture, x, y);
-            return;
-          }
-
-          // 2) Movimiento
-          if (data.type === 'playerPosition') {
-            // Actualizar el tipo de objeto segun el servidor si viene y no estamos en espera
-            if (data.currentObjectType && !this.waitingForNewObject) {
-              this.currentServerObjectType = data.currentObjectType;
-            }
-            this.ProcessMovement(data);
-            return;
-          }
-
-          // 3) REMOVE powerup
-          if (data.type === 'remove_powerup') {
-            const id = data.id;
-            let sprite = this.powerUpsById.get(id);
-
-            if (sprite) {
-              console.log('[CLIENT] remove_powerup', id);
-              sprite.destroy();
-              this.powerUpsById.delete(id);
-              return;
+                // DEDUPE: si ya existe ese id, no crees otro sprite
+                if (this.powerUpsById.has(id)) {
+                console.warn('[CLIENT] spawn duplicado ignorado id=', id);
+                return;
+                }
+                const sprite = this.powerUps.create(x, y, texture);
+                sprite.setOrigin(0.5).setScale(1.5).setDepth(50).setAlpha(1);
+                sprite.visible = true;
+                if (sprite.body) sprite.body.setAllowGravity(true);
+                sprite.type = texture;
+                this.powerUpsById.set(id, sprite);
+                console.log('[CLIENT] spawn guardado', id, texture, x, y);
+                return;
             }
 
-            // Fallback por (x,y) si por algún motivo no existiera en el mapa
-            if (typeof data.x === 'number' && typeof data.y === 'number') {
-              let closest = null, best = Infinity;
-              this.powerUps.children.iterate(s => {
-                if (!s) return;
-                const dx = s.x - data.x, dy = s.y - data.y;
-                const d2 = dx*dx + dy*dy;
-                if (d2 < best) { best = d2; closest = s; }
-              });
-              if (closest) {
-                console.warn('[CLIENT] remove fallback id desconocido -> destruyendo sprite más cercano', id);
-                for (const [k, v] of this.powerUpsById.entries()) { if (v === closest) { this.powerUpsById.delete(k); break; } }
-                closest.destroy();
-              } else {
-                console.warn('[CLIENT] remove_powerup sin id en mapa y sin fallback posible', id);
-              }
+            // 2) Movimiento
+            if (data.type === 'playerPosition') {
+                // Actualizar el tipo de objeto segun el servidor si viene y no estamos en espera
+                if (data.currentObjectType && !this.waitingForNewObject) {
+                this.currentServerObjectType = data.currentObjectType;
+                }
+                this.ProcessMovement(data);
+                return;
             }
-            return;
-          }
 
-          // 4) Efectos
-          if (data.type === 'powerup_started') {
-            const j = this.Ania;
-            switch (data.effect) {
-              case 'freeze':       j.canMove = false;      break;
-              case 'double_jump':  j.canDoubleJump = true; break;
-              case 'speed':        j.masVelocidad = true;  break;
-              case 'invulnerable': j.invulnerable = true;  break;
+            // 3) REMOVE powerup
+            if (data.type === 'remove_powerup') {
+                const id = data.id;
+                let sprite = this.powerUpsById.get(id);
+
+                if (sprite) {
+                console.log('[CLIENT] remove_powerup', id);
+                sprite.destroy();
+                this.powerUpsById.delete(id);
+                return;
+                }
+
+                // Fallback por (x,y) si por algún motivo no existiera en el mapa
+                if (typeof data.x === 'number' && typeof data.y === 'number') {
+                let closest = null, best = Infinity;
+                this.powerUps.children.iterate(s => {
+                    if (!s) return;
+                    const dx = s.x - data.x, dy = s.y - data.y;
+                    const d2 = dx*dx + dy*dy;
+                    if (d2 < best) { best = d2; closest = s; }
+                });
+                if (closest) {
+                    console.warn('[CLIENT] remove fallback id desconocido -> destruyendo sprite más cercano', id);
+                    for (const [k, v] of this.powerUpsById.entries()) { if (v === closest) { this.powerUpsById.delete(k); break; } }
+                    closest.destroy();
+                } else {
+                    console.warn('[CLIENT] remove_powerup sin id en mapa y sin fallback posible', id);
+                }
+                }
+                return;
             }
-            this.sonidoPowerUp.play();
-            return;
-          }
-          if (data.type === 'powerup_ended') {
-            const j = this.Ania;
-            switch (data.effect) {
-              case 'freeze':       j.canMove = true;       break;
-              case 'double_jump':  j.canDoubleJump = false;break;
-              case 'speed':        j.masVelocidad = false; break;
-              case 'invulnerable': j.invulnerable = false; break;
+
+            if (data.type === 'powerup_destroyed') {
+                const id = data.id;
+                const sprite = this.powerUpsById.get(id);
+                
+                if (sprite) {
+                    console.log(`[CLIENT] Servidor confirma destrucción de powerup ${id}`);
+                    
+                    // Efecto visual de destrucción
+                    this.tweens.add({
+                        targets: sprite,
+                        alpha: 0,
+                        scale: 0.5,
+                        duration: 300,
+                        onComplete: () => {
+                            sprite.destroy();
+                            this.powerUpsById.delete(id);
+                        }
+                    });
+                }
+                return;
+            }
+
+            // 4) Efectos
+            if (data.type === 'powerup_started') {
+                const j = this.Ania;
+                switch (data.effect) {
+                case 'freeze':       j.canMove = false;      break;
+                case 'double_jump':  j.canDoubleJump = true; break;
+                case 'speed':        j.masVelocidad = true;  break;
+                case 'invulnerable': j.invulnerable = true;  break;
+                }
+                this.sonidoPowerUp.play();
+                return;
+            }
+            if (data.type === 'powerup_ended') {
+                const j = this.Ania;
+                switch (data.effect) {
+                case 'freeze':       j.canMove = true;       break;
+                case 'double_jump':  j.canDoubleJump = false;break;
+                case 'speed':        j.masVelocidad = false; break;
+                case 'invulnerable': j.invulnerable = false; break;
+                }
+                return;
+            }
+
+            // OBJETOS: init / objectDropped / nextObject (servidor autoritativo)
+            if (data.type === 'initObject') {
+                // servidor nos indica el tipo inicial
+                this.currentServerObjectType = data.objectType;
+                this.waitingForNewObject = !!data.isObjectDropped;
+                return;
+            }
+
+            if (data.type === 'objectDropped') {
+                // servidor confirma que el objeto cayó en (x,y)
+                console.log(`[CLIENT] Servidor: Cae el objeto en (${data.x}, ${data.y})`);
+                if (this.Gancho.objeto) {
+                    this.Gancho.objeto.Soltar = true;
+                    if (this.Gancho.objeto.body) this.Gancho.objeto.body.setAllowGravity(true);
+                    this.sonidoGanchoSuelta.play();
+                    
+                    // Ajustar posición exacta del objeto según servidor
+                    this.Gancho.objeto.x = data.x;
+                    this.Gancho.objeto.y = data.y;
+                    
+                    // Agregar logging para depuración
+                    console.log(`[CLIENT] Objeto ${this.Gancho.objeto.name} soltado en (${data.x}, ${data.y})`);
+                    
+                    // Esperar un tiempo antes de marcar como null
+                    this.time.delayedCall(800, () => {
+                        this.Gancho.objeto = null;
+                    });
+                }
+                this.waitingForNewObject = false;
+                return;
+            }
+
+            if (data.type === 'nextObject') {
+                this.currentServerObjectType = data.objectType;
+                this.waitingForNewObject = false;
+                return;
+            }
+            // Agregar manejo de actualización de vidas y game over
+            if (data.type === 'ania_life_update') {
+                this.Ania.lives = data.lives;
+                this.Ania.invulnerable = data.invulnerable;
+                
+                // Actualizar corazones en pantalla
+                const heartsCount = this.hearts.length;
+                for (let i = 0; i < heartsCount; i++) {
+                    if (i < data.lives) {
+                        this.hearts[i].setTexture('Heart');
+                    } else {
+                        this.hearts[i].setTexture('HeartEmpty');
+                    }
+                }
+                
+                // Si Ania pierde todas las vidas
+                if (data.lives <= 0) {
+                    this.finalJuego(this.Gancho);
+                }
+                return;
+            }
+            
+            if (data.type === 'ania_invulnerable_end') {
+                this.Ania.invulnerable = false;
+                return;
             }
             return;
           }
@@ -785,6 +873,14 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
                 try { this.connection.close(); } catch (e) {}
 
                 this.timeUp();
+            
+            if (data.type === 'game_over') {
+                console.log(`[CLIENT] Juego terminado. Ganador: ${data.winner}, Razón: ${data.reason}`);
+                if (data.winner === 'Gancho') {
+                    this.finalJuego(this.Gancho);
+                } else {
+                    this.finalJuego(this.Ania);
+                }
                 return;
             }
 
@@ -878,6 +974,13 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
     }
 
     update() {
+        // Incrementar contador de frames
+        this.frameCounter = (this.frameCounter || 0) + 1;
+        
+        // Enviar posiciones Y actualizadas de powerups cada 30 frames
+        if (this.frameCounter % 30 === 0) {
+            this.sendPowerUpYPositions();
+        }
 
         // Solo crear objeto si no hay uno y el servidor nos dice que crear
         if (this.Gancho.objeto == null && this.currentServerObjectType && !this.waitingForNewObject) {
@@ -984,6 +1087,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         objeto.body.setOffset(0, 0);
         objeto.name = tipoObjeto;
         objeto.Soltar = false;
+        objeto.alreadyReportedHit = false;
         this.Gancho.objeto = objeto;
     }
 
@@ -1015,6 +1119,55 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         if (objeto.Soltar == false) return; // Evitar daño si el gancho no ha soltado el objeto
         powerUp.destroy();
     }
+    
+    handleObjectPowerUpCollision(powerUp, objeto) {
+        if (objeto.Soltar === false) return; // Evitar si el gancho no ha soltado el objeto
+        
+        // Evitar múltiples detecciones para la misma colisión
+        if (objeto.alreadyReportedHit) return;
+        
+        // Buscar el ID del powerup desde el mapa
+        let powerUpId = null;
+        for (const [id, sprite] of this.powerUpsById.entries()) {
+            if (sprite === powerUp) {
+                powerUpId = id;
+                break;
+            }
+        }
+        
+        if (!powerUpId) return;
+        
+        // Marcar como ya reportado
+        objeto.alreadyReportedHit = true;
+        
+        console.log(`[CLIENT] Colisión detectada: objeto ${objeto.name} (${objeto.x}, ${objeto.y}) con powerup ${powerUpId} (${powerUp.x}, ${powerUp.y})`);
+        
+        // Calcular distancia para verificación local
+        const distance = Math.sqrt(
+            Math.pow(objeto.x - powerUp.x, 2) + 
+            Math.pow(objeto.y - powerUp.y, 2)
+        );
+        
+        console.log(`[CLIENT] Distancia: ${distance}px`);
+        
+        // Enviar mensaje al servidor sobre la colisión
+        if (this.connection && this.connection.readyState === WebSocket.OPEN) {
+            this.connection.send(JSON.stringify({
+                type: 'object_hit_powerup',
+                powerUpId: powerUpId,
+                objectX: objeto.x,
+                objectY: objeto.y
+            }));
+            
+            console.log(`[CLIENT] Reporte enviado al servidor para powerup ${powerUpId}`);
+        }
+        
+        // Remover la bandera después de un tiempo por si acaso
+        this.time.delayedCall(500, () => {
+            objeto.alreadyReportedHit = false;
+        });
+    }
+
 
     AparicionesPowerUp() {
         console.log("Funcion base PowerUp");
@@ -1039,6 +1192,25 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         powerUpActual.setOrigin(0.5, 0.5).setScale(1.5);
         powerUpActual.type = tipoPowerUp;
 
+    }
+
+    sendPowerUpYPositions() {
+        if (!this.connection || this.connection.readyState !== WebSocket.OPEN) return;
+        
+        const yPositions = [];
+        for (const [id, sprite] of this.powerUpsById.entries()) {
+            yPositions.push({
+                id: id,
+                y: sprite.y  // Solo enviamos Y
+            });
+        }
+        
+        if (yPositions.length > 0) {
+            this.connection.send(JSON.stringify({
+                type: 'powerup_y_positions',
+                positions: yPositions
+            }));
+        }
     }
 
     RecogerPowerUp(jugador, powerUp) { //Efecto al recoger Power Up (no usado cuando autoridad server)
