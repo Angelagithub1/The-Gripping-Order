@@ -211,6 +211,7 @@ export const initGameSocketController = (wss) => {
                     if (ania.x !== data.x || ania.y !== data.y) {
                         ania.x = data.x;
                         ania.y = data.y;
+                        console.log(`[SERVER] Updated Ania position to (${ania.x}, ${ania.y})`);
 
                         // Detección de recogida de powerup por proximidad (Ania)
                         for (const pu of powerUps.values()) {
