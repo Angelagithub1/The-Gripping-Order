@@ -158,7 +158,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         this.sonidoGanchoSuelta = this.sound.add('GanchoSuelta', { volume: volumenBotones });
         this.sonidoPowerUp = this.sound.add('PowerUp', { volume: volumenBotones });
 
-
+/*
         //Boton Pausa
         const botonPausa = this.add.image(850, 55, 'BotonPausaN').setScale(1.5).setInteractive().setScale(2);
         botonPausa.on('pointerover', () => {
@@ -172,10 +172,10 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         });
         botonPausa.on('pointerup', () => {
             console.log("Pausa");
-            this.passNextScene();
+            //this.passNextScene();
             
         });
-
+*/
         //Animaciones
         //Ania Normal
         this.anims.create({
@@ -649,7 +649,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         // Mensajes entrantes: combinamos powerups, posiciones y sincronización de objetos
         this.connection.onmessage = (event) => {
             const data = JSON.parse(event.data);
-            console.log('[WS] recibido:', data.type, data);
+            //console.log('[WS] recibido:', data.type, data);
 
             // 1) SPAWN powerup (soporta ambos formatos antiguos y nuevos)
             const isPuType = ['PowerUpAmarillo','PowerUpAzul','PowerUpRojo','PowerUpVerde'].includes(data.type); // legado
@@ -824,10 +824,10 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             if (data.type === 'ania_invulnerable_end') {
                 this.Ania.invulnerable = false;
                 return;
-            }
+            }/*
             return;
           }
-
+*/
           // OBJETOS: init / objectDropped / nextObject (servidor autoritativo)
           if (data.type === 'initObject') {
             // servidor nos indica el tipo inicial
@@ -883,12 +883,18 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
                 }
                 return;
             }
-
+            /*
+            if(data.type === 'Pause'){
+                this.scene.pause();
+                this.scene.launch('PauseMenu', { escenaPrevia: this.scene.key});
+            }
+*/
           console.warn('[WS][UNKNOWN TYPE]', data.type, data);
           
         };
     
     }
+}
 
     async ProcessMovement(data) {
         if(data.Index < this.IndexMessage){
@@ -955,7 +961,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             return; // Salir si la conexión no está abierta
         }
         if (this.isAnia) {
-            //console.log("Enviando posicion de ania");
+            console.log("Enviando posicion de ania");
             this.connection.send(JSON.stringify({
                 type: 'updatePosition',
                 character: true,
@@ -963,7 +969,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
                 y: this.Ania.y,
             }));
         } else {
-            //console.log("Enviando posicion de gancho");
+            console.log("Enviando posicion de gancho");
             this.connection.send(JSON.stringify({
                 type: 'updatePosition',
                 character: false,
@@ -991,7 +997,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
             this.Gancho.objeto.y = this.ganchoPoint.y;
         }
 
-        if (this.isAnia && this.Ania) {
+        if (this.isAnia) {
             //Hay un bug si ania salta y colisiona con el gancho, este le empuja fuera de la pantalla
             if (this.Ania.x < this.Ania.width / 2 + 100) {
                 console.log("Fuera");
@@ -1366,19 +1372,5 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
 
         // Y arranca la final
         this.scene.start('PantallaFinal', { ganador: jugador.name });
-    }
-
-    async passNextScene() { //Notificar al servidor que se quiere cambiar de escena
-        try {
-            const response = await fetch('/configuration/requestChangeScreen', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username: this.scene.get('ConnectionMenu').username, actscene: this.scene.key, next: 'MenuPausa' })
-            });
-        } catch (error) {
-            console.error('Error al solicitar el cambio de escena:', error);
-        }
     }
 }

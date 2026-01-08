@@ -9,7 +9,7 @@ export const initGameSocketController = (wss) => {
     let aniaInvulnerableTimer = null;
 
     //PowerUpActivoAnia
-    const powerUpActivoAnia = '';
+    //const powerUpActivoAnia = '';
     let indexAct = 0;
 
     // Sistema de PowerUps
@@ -35,7 +35,7 @@ export const initGameSocketController = (wss) => {
 
     // Función para dañar a Ania
     function damageAnia() {
-        if (gameOver || aniaInvulnerable || powerUpActivoAnia === 'Congelación') return;
+        if (gameOver || aniaInvulnerable /*|| powerUpActivoAnia === 'Congelación'*/) return;
         
         aniaLives--;
         console.log(`[SERVER] Ania golpeada. Vidas restantes: ${aniaLives}`);
@@ -263,10 +263,11 @@ export const initGameSocketController = (wss) => {
                 // Actualizar posición
                 if (data.character) {
                     // Mantener la lógica original de congelación
+                    /*
                     if (powerUpActivoAnia == 'Congelación') {
                         // Si se envía una posición cuando está congelado no se actualiza
                         return;
-                    }
+                    }*/
                     if (ania.x !== data.x || ania.y !== data.y) {
                         ania.x = data.x;
                         ania.y = data.y;
@@ -287,9 +288,9 @@ export const initGameSocketController = (wss) => {
                         }
                     }
                 } else {
-                    if (gancho.x !== data.x || gancho.y !== data.y) {
+                    if ( gancho.x !== data.x) {
                         gancho.x = data.x;
-                        gancho.y = data.y;
+                        //gancho.y = data.y;
                     }
                 }
             }
