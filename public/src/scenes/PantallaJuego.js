@@ -1142,6 +1142,7 @@ export class PantallaJuego extends Phaser.Scene {   //Crear clase que hereda de 
         }
         //Aparicion
         const margen = 30;
+        console.log("Limites Power Up: " + this.LeftWall.getBounds().right + " - " + this.RightWall.getBounds().left);
 
         const x = Phaser.Math.Between(this.LeftWall.getBounds().right, this.RightWall.getBounds().left);
         const y = Phaser.Math.Between(this.TuboGancho.getBounds().bottom, this.floor.getBounds().top - 50);
